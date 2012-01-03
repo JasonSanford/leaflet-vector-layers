@@ -1,0 +1,3 @@
+[submodule "lib/leaflet"]
+	path = lib/leaflet
+	url = git://github.com/CloudMade/Leaflet.git

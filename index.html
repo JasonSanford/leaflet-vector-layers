@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Leaflet Vector Layers - Jason Sanford</title>
+        <meta name="description" content="Display vector data from ArcGIS Server, GeoIQ, Geocommons, Arc2Earth, CartoDB and others in a Leaflet map">
+        <meta name="author" content="Jason Sanford">
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Le styles -->
+        <link href="docs-demo/css/bootstrap.css" rel="stylesheet">
+        <link href="docs-demo/css/prettify.css" rel="stylesheet">
+        <link href="docs-demo/css/docs.css" rel="stylesheet">
+        <link href="docs-demo/css/demo.css" rel="stylesheet">
+
+    </head>
+
+    <body>
+        <a href="https://github.com/JasonSanford/leaflet-vector-layers"><img style="position: fixed; top: 0; right: 0; border: 0; z-index: 10001;" src="docs-demo/img/github-fork.png" alt="Fork me on GitHub"></a>
+        <div class="topbar" data-dropdown="dropdown">
+            <div class="topbar-inner">
+                <div class="container-fluid">
+                    <a class="brand" href="./">Leaflet Vector Layers</a>
+                    <ul class="nav">
+                        <li class="active"><a href="./">Home</a></li>
+                        <li><a href="documentation">Documentation</a></li>
+                        <li class="dropdown">
+                            <a href="demos" class="dropdown-toggle">Demos</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="demos/arcgis-server">ArcGIS Server</a></li>
+                                <li><a href="demos/arc2earth">Arc2Earth</a></li>
+                                <li><a href="demos/cartodb">CartoDB</a></li>
+                                <li><a href="demos/geoiq">GeoIQ</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="tips-tricks">Tips + Tricks</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="content">
+                <h1>Leaflet Vector Layers</h1>
+                <div class="row">
+                    <div class="span5">
+                        <h2>What?</h2>
+                        <p>Leaflet Vector Layers allows you to easily add one or more vector layers from a number of different geo web services to a <a href="http://leaflet.cloudmade.com/">Leaflet</a> map.</p>
+                        <p>Currently there's support for ArcGIS Server, Arc2Earth, GeoIQ and CartoDB with <a href="https://github.com/JasonSanford/leaflet-vector-layers/issues">more planned</a>.</p>
+                        <p>Check the <a href="demos">demos</a> to see the library in action.</p>
+                    </div>
+                    <div class="span6">
+                        <h2>How?</h2>
+                        <p>Leaflet Vector Layers works by listening to map events (pan and zoom) and then fetching features within the map bounds after each event. This method works great for data sets with lots of features that you want to interact with, but not load all at once.</p>
+                        <p>Sound Chatty? Only have a handful of features? You can also load all of the data once, without listening to map pan and zoom events.</p>
+                    </div>
+                    <div class="span5">
+                        <h2>Help</h2>
+                        <p>This is an open source project so enhancements and patches are encouraged.</p>
+                        <p>So <a href="https://github.com/JasonSanford/leaflet-vector-layers">grab the code</a>, <a href="https://github.com/JasonSanford/leaflet-vector-layers/issues">report bugs</a> and <a href="mailto:jason@geojason.info">let me know what you think</a>.</p>
+                        <p><a class="btn primary" href="https://github.com/JasonSanford/leaflet-vector-layers">Leaflet Vector Layers on GitHub &raquo;</a></p>
+                    </div>
+                </div>
+                <hr>
+                <h1>Features</h1>
+                <div class="row">
+                    <div class="span7">
+                        <h2>Multi-provider Support</h2>
+                        <p><img src="docs-demo/img/providers.png" class="sample-image" /> Leaflet Vector Layers makes it easy to dynamically pull vector features from a number of different geo web service providers including <a href="http://www.esri.com/software/arcgis/arcgisserver/index.html">ArcGIS Server</a>, <a href="http://www.arc2earth.com">Arc2Earth</a>, <a href="http://cartodb.com">CartoDB</a> and <a href="http://geocommons.com">Geocommons</a>.</p>
+                        <p>If you're interested in, or know of any other providers for this library please <a href="mailto:jason@geojason.info">let me know</a>.</p>
+                    </div>
+                    <div class="span9">
+                        <h2>Easy InfoWindow Templating</h2>
+                        <p><img src="docs-demo/img/infowindow.png" class="sample-image" />The simplest way to describe features in a Leaflet map is by using the API's InfoWindow.</p>
+                        <p class="docs">Templates can be in the form of a simple string with field names mustache-wrapped (<code>{driver_name}</code>), or a function that returns HTML content for the InfoWindow. The feature's properties are passed to this function so you can do things like analyze data or <a href="demos/arcgis-server#charts-graphs">show charts and graphs</a>.</p>
+                        <p>For details on InfoWindow templating <a href="documentation/#docs-infowindow">check the documentation</a>.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span8">
+                        <h2>Dynamic Data Support</h2>
+                        <p><img src="docs-demo/img/dynamic.png" class="sample-image" />Leaflet Vector Layers makes it easy to visualize live data in a Leaflet map. Just mark the layer as dynamic and auto-updating when you create it and set the interval for how often you'd like to check for updated features.</p>
+                        <!--<p>It's also possible to only check for updated features when the map extent changes.</p>-->
+                        <p>For details on displaying dynamic data <a href="documentation/#docs-dynamic">check the documentation</a>.</p>
+                    </div>
+                    <div class="span8">
+                        <h2>Simple, Powerful Symbology</h2>
+                        <p>Creating effective map styling and symbology is key to getting your message accross to your users.</p>
+                        <p>With Leaflet Vector Layers you can style your layers with a single symbology, a unique symbol for specific attribute values or set symbols to display if a feature's attributes are within a specific range.</p>
+                        <p>For details on symbology options <a href="documentation/#docs-symbology">check the documentation</a>.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span8">
+                        <h2>Scale Dependent Rendering</h2>
+                        <p class="docs">You likely wouldn't want to show lots of features with complex geometies at lower zoom levels. Using the <code>scaleRange</code> option allows you to set the minimum and maximum zoom levels at which a layer is visible.</p>
+                    </div>
+                </div>
+                <footer> 	
+                    <p>&copy; Jason Sanford - geojason.info 2011</p>
+                </footer>
+            </div>
+        </div>
+        <script src="docs-demo/js/prettify.js" type="text/javascript"></script>
+        <script src="docs-demo/js/jquery-1.5.2.min.js" type="text/javascript"></script>
+        <script src="docs-demo/js/docs-demos.js" type="text/javascript"></script>
+        <script src="docs-demo/js/bootstrap-dropdown.js" type="text/javascript"></script>
+    </body>
+</html>

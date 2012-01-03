@@ -1,0 +1,25 @@
+h2.docs {
+    background-color: #E1E1E1;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    padding: 0 10px;
+    margin-bottom: 12px;
+}
+.docs code {
+    font-family: "Courier New", monospace;
+    background-color: inherit !important;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 0 !important;
+}
+pre.docs {
+    overflow: auto;
+    white-space: pre;
+    word-wrap: normal;
+}
+table.docs {
+    border: 1px solid #ddd;
+}
+.docs td {
+    min-width: 120px;
+}

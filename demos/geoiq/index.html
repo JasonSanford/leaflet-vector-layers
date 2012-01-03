@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Leaflet Vector Layers - GeoIQ Demo</title>
+        <meta name="description" content="Display vector data from ArcGIS Server, GeoIQ, Geocommons, Arc2Earth, CartoDB and others in a Leaflet map">
+        <meta name="author" content="Jason Sanford">
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Le styles -->
+        <link href="../../docs-demo/css/bootstrap.css" rel="stylesheet">
+        <link href="../../docs-demo/css/prettify.css" rel="stylesheet">
+        <link href="../../docs-demo/css/docs.css" rel="stylesheet">
+        <link href="../../docs-demo/css/demo.css" rel="stylesheet">
+
+    </head>
+
+    <body>
+        <a href="https://github.com/JasonSanford/google-vector-layers"><img style="position: fixed; top: 0; right: 0; border: 0; z-index: 10001;" src="../../docs-demo/img/github-fork.png" alt="Fork me on GitHub"></a>
+        <div class="topbar" data-dropdown="dropdown">
+            <div class="topbar-inner">
+                <div class="container-fluid">
+                    <a class="brand" href="../../">Leaflet Vector Layers</a>
+                    <ul class="nav">
+                        <li><a href="../../">Home</a></li>
+                        <li><a href="../../documentation">Documentation</a></li>
+                        <li class="dropdown active">
+                            <a href="demos" class="dropdown-toggle">Demos</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="../arcgis-server">ArcGIS Server</a></li>
+                                <li><a href="../arc2earth">Arc2Earth</a></li>
+                                <li><a href="../cartodb">CartoDB</a></li>
+                                <li class="active"><a href="../geoiq">GeoIQ</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="../../tips-tricks">Tips + Tricks</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="content">
+                <h1>GeoIQ</h1>
+                <h2>Ski Areas</h2>
+                <p class="docs">This simple demo shows ski areas throughout the US. We've defined a <code>scaleRange</code> so we don't show too many markers at lower zoom levels.</p>
+                <p class="docs">A very simple <code>infoWindowTemplate</code> has also been provided as well as a single <code>symbology</code> type that shows a custom marker.</p>
+                <div class="row demo">
+                    <div class="span6 height-controlled">
+                        <pre class="prettyprint">geoiq_ski_areas = new gvector.GeoIQ({
+    dataset: 164880,
+    uniqueField: "NAME",
+    scaleRange: [6, 20],
+    infoWindowTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;{NAME}&lt;/h3&gt;&lt;/div&gt;',
+    singleInfoWindow: true,
+    symbology: {
+        type: "single",
+        vectorOptions: {
+    	    icon: "../../docs-demo/img/markers/ski-lift.png"
+        }
+    }
+});</pre>
+                    </div>
+                    <div class="span10 height-controlled">
+                        <div id="map-container-1" class="map">
+                            <div class="layer-buttons">
+                                <div class="row layer-button-row"><a href="javascript:geoiq_ski_areas.setMap(map1);" class="btn success">Layer On</a> <a href="javascript:geoiq_ski_areas.setMap(null);" class="btn danger">Layer Off</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h2>US FOSS4G Registrants</h2>
+                <p class="docs">This demo shows how to use a <code>range</code> symbology type to symbolize more FOSS4G registrants with a darker shade of blue.</p>
+                <p class="docs">We're also using the <code>showAll</code> parameter to fetch all features at once, since we're initially zoomed out to a level where we can see almost the entire dataset. There's no sense in re-fetching this (quite large) dataset more than once.</p>
+                <p>Keep in mind that it could take a few seconds to load this dataset due to its large size.</p>
+                <div class="row demo">
+                    <div class="span6 height-controlled">
+                        <pre class="prettyprint">geoiq_foss4g_reg = new gvector.GeoIQ({
+        dataset: 147336,
+        uniqueField: "state",
+        showAll: true,
+        infoWindowTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;{state}&lt;/h3&gt;&lt;table class="condensed-table"&gt;&lt;tr&gt;&lt;th&gt;Registrants&lt;/th&gt;&lt;td&gt;{count}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Percent of Total&lt;/th&gt;&lt;td&gt;{percent}&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;',
+        singleInfoWindow: true,
+        symbology: {
+            type: "range",
+            property: "count",
+            ranges: [
+                {
+                    range: [1, 1],
+                    vectorOptions: {
+                        fillColor: "#F1EEF6",
+                        fillOpacity: 0.85,
+                        strokeColor: "#333",
+                        strokeWeight: 1,
+                        strokeOpacity: 1
+                    }
+                },
+                {
+                    range: [2, 10],
+                    vectorOptions: {
+                        fillColor: "#BDC9E1",
+                        fillOpacity: 0.85,
+                        strokeColor: "#333",
+                        strokeWeight: 1,
+                        strokeOpacity: 1
+                    }
+                },
+                {
+                    range: [11, 20],
+                    vectorOptions: {
+                        fillColor: "#74A9CF",
+                        fillOpacity: 0.85,
+                        strokeColor: "#333",
+                        strokeWeight: 1,
+                        strokeOpacity: 1
+                    }
+                },
+                {
+                    range: [21, 126],
+                    vectorOptions: {
+                        fillColor: "#0570B0",
+                        fillOpacity: 0.85,
+                        strokeColor: "#333",
+                        strokeWeight: 1,
+                        strokeOpacity: 1
+                    }
+                }
+            ]
+        }
+    });
+});</pre>
+                    </div>
+                    <div class="span10 height-controlled">
+                        <div id="map-container-2" class="map">
+                            <div class="layer-buttons">
+                                <div class="row layer-button-row"><a href="javascript:geoiq_foss4g_reg.setMap(map2);" class="btn success">Layer On</a> <a href="javascript:geoiq_foss4g_reg.setMap(null);" class="btn danger">Layer Off</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h2>Mecklenburg County Parks</h2>
+                <p class="docs">This example has features styled using the <code>unique</code> symbology type where values of a particular attribute ("prktype" in this example) have a specific style.</p>
+                <p class="docs">We're also using a function based <code>infoWindowTemplate</code> to format our data so it's a little easier to read - In this case convert attributes to Proper Case instead of UPPER CASE.</p>
+                <div class="row demo">
+                    <div class="span6 height-controlled">
+                        <pre class="prettyprint">geoiq_parks = new gvector.GeoIQ({
+    dataset: 181235,
+    uniqueField: "prkid",
+    infoWindowTemplate: function(properties) {
+        var properCase = function(s) {
+            return s.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        };
+        var html = '&lt;div class="iw-content"&gt;&lt;h3&gt;' + properCase(properties.name) + '&lt;/h3&gt;&lt;table class="condensed-table"&gt;';
+        html += '&lt;tr&gt;&lt;th&gt;Address&lt;/th&gt;&lt;td&gt;' + properCase(properties.prkaddr) + '&lt;/td&gt;&lt;/tr&gt;';
+        html += '&lt;tr&gt;&lt;th&gt;Size&lt;/th&gt;&lt;td&gt;' + properties.prksize + ' acres&lt;/td&gt;&lt;/tr&gt;';
+        return html += '&lt;/table&gt;&lt;/div&gt;';
+    },
+    symbology: {
+        type: "unique",
+        property: "prktype",
+        values: [
+            {
+                value: "REGIONAL PARK",
+                vectorOptions: {
+                    icon: "../../docs-demo/img/markers/park.png"
+                }
+            },
+            {
+                value: "NEIGHBORHOOD PARK",
+                vectorOptions: {
+                    icon: "../../docs-demo/img/markers/park.png"
+                }
+            },
+            {
+                value: "COMMUNITY PARK",
+                vectorOptions: {
+                    icon: "../../docs-demo/img/markers/park.png"
+                }
+            },
+            {
+                value: "NATURE PRESERVE",
+                vectorOptions: {
+                    icon: "../../docs-demo/img/markers/nature-preserve.png"
+                }
+            },
+            {
+                value: "RECREATION CENTER",
+                vectorOptions: {
+                    icon: "../../docs-demo/img/markers/recreation-center.png"
+                }
+            },
+            {
+                value: "GOLF COURSE",
+                vectorOptions: {
+                    icon: "../../docs-demo/img/markers/golf.png"
+                }
+            }
+        ]
+    }
+});</pre>
+                    </div>
+                    <div class="span10 height-controlled">
+                        <div id="map-container-3" class="map">
+                            <div class="layer-buttons">
+                                <div class="row layer-button-row"><a href="javascript:geoiq_parks.setMap(map3);" class="btn success">Layer On</a> <a href="javascript:geoiq_parks.setMap(null);" class="btn danger">Layer Off</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <footer> 	
+                    <p>&copy; Jason Sanford - geojason.info 2011</p>
+                </footer>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=true"></script>
+        <script src="../../docs-demo/js/prettify.js" type="text/javascript"></script>
+        <script src="../../docs-demo/js/jquery-1.5.2.min.js" type="text/javascript"></script>
+        <script src="../../docs-demo/js/docs-demos.js" type="text/javascript"></script>
+        <script src="../../docs-demo/js/bootstrap-dropdown.js" type="text/javascript"></script>
+        <script src="../../dist/gvector.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            var map1, map2, map3;
+            var geoiq_ski_areas, geoiq_foss4g_reg, geoiq_parks;
+            $(document).ready(function() {
+            
+                map1 = new google.maps.Map(document.getElementById("map-container-1"), {
+                    center: new google.maps.LatLng(39.67, -106.12),
+                    zoom: 8,
+                    mapTypeId: google.maps.MapTypeId.TERRAIN,
+                    noClear: true
+                });
+                
+                map2 = new google.maps.Map(document.getElementById("map-container-2"), {
+                    center: new google.maps.LatLng(48.48458423172101, -114.5575),
+                    zoom: 3,
+                    mapTypeId: google.maps.MapTypeId.TERRAIN,
+                    noClear: true
+                });
+                
+                map3 = new google.maps.Map(document.getElementById("map-container-3"), {
+                    center: new google.maps.LatLng(35.2357, -80.842),
+                    zoom: 13,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    noClear: true
+                });
+                
+                geoiq_ski_areas = new gvector.GeoIQ({
+                	dataset: 164880,
+                	uniqueField: "NAME",
+                	scaleRange: [6, 20],
+                	infoWindowTemplate: '<div class="iw-content"><h3>{NAME}</h3></div>',
+                	singleInfoWindow: true,
+                	symbology: {
+                	    type: "single",
+                	    vectorOptions: {
+                		    icon: "../../docs-demo/img/markers/ski-lift.png"
+                	    }
+                	}
+                });
+                
+                geoiq_foss4g_reg = new gvector.GeoIQ({
+                    dataset: 147336,
+                    uniqueField: "state",
+                    showAll: true,
+                    infoWindowTemplate: '<div class="iw-content"><h3>{state}</h3><table class="condensed-table"><tr><th>Registrants</th><td>{count}</td></tr><tr><th>Percent of Total</th><td>{percent}</td></tr></table></div>',
+                    singleInfoWindow: true,
+                    symbology: {
+                        type: "range",
+                        property: "count",
+                        ranges: [
+                            {
+                                range: [1, 1],
+                                vectorOptions: {
+                                    fillColor: "#F1EEF6",
+                                    fillOpacity: 0.85,
+                                    strokeColor: "#333",
+                                    strokeWeight: 1,
+                                    strokeOpacity: 1
+                                }
+                            },
+                            {
+                                range: [2, 10],
+                                vectorOptions: {
+                                    fillColor: "#BDC9E1",
+                                    fillOpacity: 0.85,
+                                    strokeColor: "#333",
+                                    strokeWeight: 1,
+                                    strokeOpacity: 1
+                                }
+                            },
+                            {
+                                range: [11, 20],
+                                vectorOptions: {
+                                    fillColor: "#74A9CF",
+                                    fillOpacity: 0.85,
+                                    strokeColor: "#333",
+                                    strokeWeight: 1,
+                                    strokeOpacity: 1
+                                }
+                            },
+                            {
+                                range: [21, 126],
+                                vectorOptions: {
+                                    fillColor: "#0570B0",
+                                    fillOpacity: 0.85,
+                                    strokeColor: "#333",
+                                    strokeWeight: 1,
+                                    strokeOpacity: 1
+                                }
+                            }
+                        ]
+                    }
+                });
+                
+                geoiq_parks = new gvector.GeoIQ({
+                    dataset: 181235,
+                    uniqueField: "prkid",
+                    infoWindowTemplate: function(properties) {
+                        var properCase = function(s) {
+                            return s.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+                        };
+                        var html = '<div class="iw-content"><h3>' + properCase(properties.name) + '</h3><table class="condensed-table">';
+                        html += '<tr><th>Address</th><td>' + properCase(properties.prkaddr) + '</td></tr>';
+                        html += '<tr><th>Size</th><td>' + properties.prksize + ' acres</td></tr>';
+                        return html += '</table></div>';
+                    },
+                    symbology: {
+                        type: "unique",
+                        property: "prktype",
+                        values: [
+                            {
+                                value: "REGIONAL PARK",
+                                vectorOptions: {
+                                    icon: "../../docs-demo/img/markers/park.png"
+                                }
+                            },
+                            {
+                                value: "NEIGHBORHOOD PARK",
+                                vectorOptions: {
+                                    icon: "../../docs-demo/img/markers/park.png"
+                                }
+                            },
+                            {
+                                value: "COMMUNITY PARK",
+                                vectorOptions: {
+                                    icon: "../../docs-demo/img/markers/park.png"
+                                }
+                            },
+                            {
+                                value: "NATURE PRESERVE",
+                                vectorOptions: {
+                                    icon: "../../docs-demo/img/markers/nature-preserve.png"
+                                }
+                            },
+                            {
+                                value: "RECREATION CENTER",
+                                vectorOptions: {
+                                    icon: "../../docs-demo/img/markers/recreation-center.png"
+                                }
+                            },
+                            {
+                                value: "GOLF COURSE",
+                                vectorOptions: {
+                                    icon: "../../docs-demo/img/markers/golf.png"
+                                }
+                            }
+                        ]
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

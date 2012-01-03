@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Leaflet Vector Layers - Jason Sanford</title>
+        <meta name="description" content="Display vector data from ArcGIS Server, GeoIQ, Geocommons, Arc2Earth, CartoDB and others in a Leaflet map">
+        <meta name="author" content="Jason Sanford">
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Le styles -->
+        <link href="../docs-demo/css/bootstrap.css" rel="stylesheet">
+        <link href="../docs-demo/css/prettify.css" rel="stylesheet">
+        <link href="../docs-demo/css/docs.css" rel="stylesheet">
+        <link href="../docs-demo/css/demo.css" rel="stylesheet">
+
+    </head>
+
+    <body>
+        <a href="https://github.com/JasonSanford/leaflet-vector-layers"><img style="position: fixed; top: 0; right: 0; border: 0; z-index: 10001;" src="../docs-demo/img/github-fork.png" alt="Fork me on GitHub"></a>
+        <div class="topbar" data-dropdown="dropdown">
+            <div class="topbar-inner">
+                <div class="container-fluid">
+                    <a class="brand" href="../">Leaflet Vector Layers</a>
+                    <ul class="nav">
+                        <li><a href="../">Home</a></li>
+                        <li class="active"><a href="./">Documentation</a></li>
+                        <li class="dropdown">
+                            <a href="../demos" class="dropdown-toggle">Demos</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="../demos/arcgis-server">ArcGIS Server</a></li>
+                                <li><a href="../demos/arc2earth">Arc2Earth</a></li>
+                                <li><a href="../demos/cartodb">CartoDB</a></li>
+                                <li><a href="../demos/geoiq">GeoIQ</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="../tips-tricks">Tips + Tricks</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="sidebar">
+                <div class="well">
+                    <h5>Classes</h5>
+                    <ul>
+                        <li><a href="#docs-ags">lvector.AGS</a></li>
+                        <li><a href="#docs-geoiq">lvector.GeoIQ</a></li>
+                        <li><a href="#docs-cartodb">lvector.CartoDB</a></li>
+                    </ul>
+                    <h5>Other Reference</h5>
+                    <ul>
+                        <li><a href="#docs-symbology">Symbology Options</a></li>
+                        <li><a href="#docs-popup">Popup Template</a></li>
+                        <li><a href="#docs-dynamic">Dynamic Data</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="content">
+                <h1>Classes</h1>
+                
+                <h2 class="docs" id="docs-ags">lvector.AGS <small>ArcGIS Server</small></h2>
+                
+                <p>This class creates a layer that processes and displays features from an ArcGIS Server. You can also use this class to create a layer from any services that implement Esri's Geo REST specification, like <a href="http://www.arc2earth.com/">Arc2Earth</a>.</p>
+                
+                <h3>Usage Example</h3>
+                <pre class="prettyprint docs">var myAGSLayer = new lvector.AGS({
+    url: "http://maps.rtd-denver.com/ArcGIS/rest/services/BusLocations/MapServer/0",
+    fields: "*",
+    uniqueField: "OBJECTID",
+    scaleRange: [13, 20],
+    popupTemplate: "&lt;h3&gt;Bus #{BUS_NUMBER}&lt;/h3&gt;&lt;p&gt;Speed: {SPEED} mph&lt;/p&gt;"                
+});</pre>
+                <h3>Constructor</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Constructor</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>lvector.AGS( &lt;<a href="#docs-ags-options">AGS options</a>&gt; options )</code></td><td>Instantiates an AGS layer with an object literal with AGS options described below.</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3 id="docs-ags-options">Options</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Option</th><th>Type</th><th>Default Value</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>url</code></td><td><code>String</code></td><td><code>null</code></td><td><strong>Required</strong> -  A url for a specific layer in an ArcGIS Server service.</td></tr>
+                        <tr><td><code>map</code></td><td><code>Object <a href="http://leaflet.cloudmade.com/reference.html#map-class">L.Map object</a></code></td><td><code>null</code></td><td>The Leaflet <code>Map</code> object where the layer will be added. The layer can be added to the map later with the <code>setMap</code> method.</td></tr>
+                        <tr><td><code>scaleRange</code></td><td><code>Array</code></td><td><code>null</code></td><td>An array with two number values that represent the minimum and maximum scales the layer is visible. For example: <code>[14, 17]</code></td></tr>
+                        <tr><td><code>dynamic</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not the layer contains dynamic data. If true, feature geometry and attributes will be checked for changes after extent change and/or after a defined interval. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>
+                        <tr><td><code>autoUpdate</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not to auto-update a dynamic layer. If true, feature geometry and attributes will be updated at an interval set by the <code>autoUpdateInterval</code> option. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>
+                        <tr><td><code>autoUpdateInterval</code></td><td><code>Integer</code></td><td><code>null</code></td><td>The interval (in milliseconds) between checks for updated feature geometry and attributes when the <code>autoUpdate</code> option is set to <code>true</code>. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>
+                        <tr><td><code>popupTemplate</code></td><td><code>String|Function</code></td><td><code>null</code></td><td>A template for creating the content of a <a href="http://leaflet.cloudmade.com/reference.html#popup">Leaflet Popup</a> when a feature is clicked. For details check the <a href="#docs-popup">Popup Template documentation</a>.</td></tr>
+                        <tr><td><code>singlePopup</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not to show a single Popup for a layer when features are clicked. This keeps the map from getting cluttered when multiple features are clicked.</td></tr>
+                        <tr><td><code>symbology</code></td><td><code>Object <a href="#docs-symbology">symbology options</a></code></td><td><code>null</code></td><td>The symbology options for the layer. Features can be rendered with a single symbology or can also be symbolized based on an attribute using unique values or a value range. For details check the <a href="#docs-symbology">symbology options documentation</a>.</td></tr>
+                        <tr><td><code>showAll</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>If true, all features will be fetched and shown once, not after a map extent change. This is helpful for layers with only a handful of features.</td></tr>
+                        <tr><td><code>fields</code></td><td><code>String</code></td><td><code>null</code></td><td>A list of comma separated fields to be returned with the features. For example <code>"OBJECTID,OWNER_NAME"</code> returns two fields and <code>"*"</code> returns all fields.</td></tr>
+                        <tr><td><code>uniqueField</code></td><td><code>String</code></td><td><code>null</code></td><td>A field in the returned data that can be considered unique. This isn't required but is very helpful in determining which features are already on the map when the map extent changes.</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3>Methods</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Method</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>setMap( &lt;L.Map&gt; Map )</code></td><td>Adds the layer to a map. Remove the layer by passing <code>null</code>.</td></tr>
+                        <tr><td><code>getMap()</code></td><td>Gets the map (if any) that the layer has been added to.</td></tr>
+                    </tbody>
+                </table>
+                
+                <h2 class="docs" id="docs-geoiq">lvector.GeoIQ <small>GeoIQ - Geocommons</small></h2>
+                
+                <p>This class creates a layer that processes and displays features from a GeoIQ dataset.</p>
+                                
+                <h3>Usage Example</h3>
+                <pre class="prettyprint docs">var myGeoIQLayer = new lvector.GeoIQ({
+    dataset: 164880,
+    uniqueField: "NAME",
+    scaleRange: [6, 20],
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;{NAME}&lt;/h3&gt;&lt;/div&gt;',
+    singlePopup: true,
+    symbology: {
+        type: "single",
+        vectorOptions: {
+    	    icon: "../../docs-demo/img/markers/ski-lift.png"
+        }
+    }
+});</pre>
+                <h3>Constructor</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Constructor</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>lvector.GeoIQ( &lt;<a href="#docs-geoiq-options">GeoIQ options</a>&gt; options )</code></td><td>Instantiates a GeoIQ layer with an object literal with GeoIQ options described below.</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3 id="docs-geoiq-options">Options</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Option</th><th>Type</th><th>Default Value</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>dataset</code></td><td><code>Number</code></td><td><code>null</code></td><td><strong>Required</strong> -  A dataset id for a GeoIQ/Geocommons dataset.</td></tr>
+                        <tr><td><code>map</code></td><td><code>Object <a href="http://leaflet.cloudmade.com/reference.html#map-class">L.Map object</a></code></td><td><code>null</code></td><td>The Leaflet <code>Map</code> object where the layer will be added. The layer can be added to the map later with the <code>setMap</code> method.</td></tr>
+                        <tr><td><code>scaleRange</code></td><td><code>Array</code></td><td><code>null</code></td><td>An array with two number values that represent the minimum and maximum scales the layer is visible. For example: <code>[14, 17]</code></td></tr>
+                        <tr><td><code>dynamic</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not the layer contains dynamic data. If true, feature geometry and attributes will be checked for changes after extent change and/or after a defined interval. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>
+                        <tr><td><code>autoUpdate</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not to auto-update a dynamic layer. If true, feature geometry and attributes will be updated at an interval set by the <code>autoUpdateInterval</code> option. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>
+                        <tr><td><code>autoUpdateInterval</code></td><td><code>Integer</code></td><td><code>null</code></td><td>The interval (in milliseconds) between checks for updated feature geometry and attributes when the <code>autoUpdate</code> option is set to <code>true</code>. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>
+                        <tr><td><code>popupTemplate</code></td><td><code>String|Function</code></td><td><code>null</code></td><td>A template for creating the content of a <a href="http://leaflet.cloudmade.com/reference.html#popup">Leaflet Popup</a> when a feature is clicked. For details check the <a href="#docs-popup">Popup Template documentation</a>.</td></tr>
+                        <tr><td><code>singlePopup</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not to show a single Popup for a layer when features are clicked. This keeps the map from getting cluttered when multiple features are clicked.</td></tr>
+                        <tr><td><code>symbology</code></td><td><code>Object <a href="#docs-symbology">symbology options</a></code></td><td><code>null</code></td><td>The symbology options for the layer. Features can be rendered with a single symbology or can also be symbolized based on an attribute using unique values or a value range. For details check the <a href="#docs-symbology">symbology options documentation</a>.</td></tr>
+                        <tr><td><code>showAll</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>If true, all features will be fetched and shown once, not after a map extent change. This is helpful for layers with only a handful of features.</td></tr>
+                        <tr><td><code>uniqueField</code></td><td><code>String</code></td><td><code>null</code></td><td>A field in the returned data that can be considered unique. This isn't required but is very helpful in determining which features are already on the map when the map extent changes.</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3>Methods</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Method</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>setMap( &lt;L.Map&gt; Map )</code></td><td>Adds the layer to a map. Remove the layer by passing <code>null</code>.</td></tr>
+                        <tr><td><code>getMap()</code></td><td>Gets the map (if any) that the layer has been added to.</td></tr>
+                    </tbody>
+                </table>
+                
+                <h2 class="docs" id="docs-cartodb">lvector.CartoDB <small>CartoDB</small></h2>
+                
+                <p>This class creates a layer that processes and displays features from a CartoDB table.</p>
+                
+                <h3>Usage Example</h3>
+                <pre class="prettyprint docs">var myCartoDBLayer = new lvector.CartoDB({
+    user: "geojason",
+    table: "man_hole",
+    scaleRange: [16, 20],
+    symbology: {
+        type: "single",
+        vectorOptions: {
+            icon: "../../docs-demo/img/markers/manhole.png"
+        }
+    },
+    popupTemplate: '&lt;h3&gt;Man Hole&lt;/h3&lt;p&gt;Depth: {mh_depth}&lt;/p&gt;',
+    singlePopup: true
+});</pre>
+                <h3>Constructor</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Constructor</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>lvector.CartoDB( &lt;<a href="#docs-cartodb-options">CartoDB options</a>&gt; options )</code></td><td>Instantiates a CartoDB layer with an object literal with CartoDB options described below.</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3 id="docs-cartodb-options">Options</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Option</th><th>Type</th><th>Default Value</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>user</code></td><td><code>String</code></td><td><code>null</code></td><td><strong>Required</strong> -  The CartoDB user that owns the table to be displayed. For example a CartoDB map viewed via a URL like <code>http://geojason.cartodb.com/map</code>, "geojason" is the CartoDB user.</td></tr>
+                        <tr><td><code>table</code></td><td><code>String</code></td><td><code>null</code></td><td><strong>Required</strong> -  The CartoDB table name for the data to be displayed.</td></tr>
+                        <tr><td><code>map</code></td><td><code>Object <a href="http://leaflet.cloudmade.com/reference.html#map-class">L.Map object</a></code></td><td><code>null</code></td><td>The Leaflet <code>Map</code> object where the layer will be added. The layer can be added to the map later with the <code>setMap</code> method.</td></tr>
+                        <tr><td><code>scaleRange</code></td><td><code>Array</code></td><td><code>null</code></td><td>An array with two number values that represent the minimum and maximum scales the layer is visible. For example: <code>[14, 17]</code></td></tr>
+                        <tr><td><code>dynamic</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not the layer contains dynamic data. If true, feature geometry and attributes will be checked for changes after extent change and/or after a defined interval. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>
+                        <tr><td><code>autoUpdate</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not to auto-update a dynamic layer. If true, feature geometry and attributes will be updated at an interval set by the <code>autoUpdateInterval</code> option. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>
+                        <tr><td><code>autoUpdateInterval</code></td><td><code>Integer</code></td><td><code>null</code></td><td>The interval (in milliseconds) between checks for updated feature geometry and attributes when the <code>autoUpdate</code> option is set to <code>true</code>. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>
+                        <tr><td><code>popupTemplate</code></td><td><code>String|Function</code></td><td><code>null</code></td><td>A template for creating the content of a <a href="http://leaflet.cloudmade.com/reference.html#popup">Leaflet Popup</a> when a feature is clicked. For details check the <a href="#docs-popup">Popup Template documentation</a>.</td></tr>
+                        <tr><td><code>singlePopup</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not to show a single Popup for a layer when features are clicked. This keeps the map from getting cluttered when multiple features are clicked.</td></tr>
+                        <tr><td><code>symbology</code></td><td><code>Object <a href="#docs-symbology">symbology options</a></code></td><td><code>null</code></td><td>The symbology options for the layer. Features can be rendered with a single symbology or can also be symbolized based on an attribute using unique values or a value range. For details check the <a href="#docs-symbology">symbology options documentation</a>.</td></tr>
+                        <tr><td><code>showAll</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>If true, all features will be fetched and shown once, not after a map extent change. This is helpful for layers with only a handful of features.</td></tr>
+                        <tr><td><code>fields</code></td><td><code>String</code></td><td><code>"*"</code></td><td>A list of comma separated fields to be returned with the features. By default all fields are returned.</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3>Methods</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Method</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>setMap( &lt;L.Map&gt; Map )</code></td><td>Adds the layer to a map. Remove the layer by passing <code>null</code>.</td></tr>
+                        <tr><td><code>getMap()</code></td><td>Gets the map (if any) that the layer has been added to.</td></tr>
+                    </tbody>
+                </table>
+                
+                <hr>
+                
+                <h1>Other Reference</h1>
+                
+                <h2 class="docs" id="docs-symbology">Symbology</h2>
+                
+                <p class="docs">Symbology for a layer can be defined a few different ways including <code>single</code>, <code>unique</code> and <code>range</code>. If no symbology is defined the default Leaflet vector styles will be used.</p>
+                
+                <p class="docs">When instantiating a new layer, use one of the options below when setting the <code>symbology</code> option value.</p>
+                
+                <h3>single</h3>
+                
+                <p class="docs">The <code>single</code> type displays all features with the same symbology.</p>
+                
+                <pre class="prettyprint docs">{
+    type: "single", // Defines the symbology as a single type of representation for all features
+    vectorOptions: { // Leaflet Path options for all features
+        fillColor: "#46461f",
+        fillOpacity: 0.5,
+        strokeWeight: 4,
+        strokeColor: "#ff7800"
+    }    
+}</pre>
+                
+                <h3>unique</h3>
+                
+                <p class="docs">The <code>unique</code> type displays features with the same attibute values with the same symbology. This is helpful when you have a handful of discrete values for which you want to define symbology.</p>
+                
+                <p>Check the <a href="../demos/arcgis-server/#districts">districts example</a> on the <a href="../demos/arcgis-server/">ArcGIS Server demo page</a> and view source to see it in action.</p>
+                
+                <pre class="prettyprint docs">{
+    type: "unique", // Defines the symbology as a unique type where features with an attribute of a specific value are symbolized the same way
+    property: "DISTRICT", // The property (field, attribute) to use for defining unique values and styles
+    values: [ // An array of values to set symbology. Each value has a specific symbology
+        {
+            value: "A", // If feature.properties.DISTRICT == "A"
+            vectorOptions: { // Use these Leaflet Path options for features matching
+                fillColor: "#6600FF",
+                fillOpacity: 0.6,
+                strokeColor: "#666666",
+                strokeOpacity: 0.8,
+                strokeWeight: 1
+            }
+        },
+        {
+            value: "B",
+            vectorOptions: {
+                fillColor: "#660066",
+                fillOpacity: 0.6,
+                strokeColor: "#666666",
+                strokeOpacity: 0.8,
+                strokeWeight: 1
+            }
+        },
+        {
+            value: "C",
+            vectorOptions: {
+                fillColor: "#FF9900",
+                fillOpacity: 0.6,
+                strokeColor: "#666666",
+                strokeOpacity: 0.8,
+                strokeWeight: 1
+            }
+        }
+    ]
+}</pre>
+                
+                <h3>range</h3>
+                
+                <p class="docs">The <code>range</code> type tests values to see if they are within a specified range and symbolizes them accordingly. This is helpful for datasets that have values with lots of individual values like population counts per county in the US or in this example, vehicle speeds.</p>
+                
+                <pre class="prettyprint docs">{
+    type: "range", // Defines the symbology as a range type where values above a minimum and below a maximum value are symbolized the same way
+    property: "SPEED", // The property (field, attribute) to use for defining range values and styles
+    ranges: [ // An array of value ranges to set symbology. Each value range has a specific symbology.
+        {
+            range: [1, 20], // if feature.properties.SPEED &gt;= 1 AND feature.properties.SPEED &lt;= 20
+            vectorOptions: { // Use these Leaflet Path options for features with values in this range
+                icon: "../../docs-demo/img/markers/bus-brown.png"
+            }
+        },{
+            range: [21, 100],
+            vectorOptions: {
+                icon: "../../docs-demo/img/markers/bus-green.png"
+            }
+        }
+    ]
+}</pre>
+                
+                <h2 class="docs" id="docs-popup">Popup Templates</h2>
+                
+                <p class="docs">To create content to show Popups when features are clicked we can use the <code>popupTemplate</code> option. a popupTemplate can be set two ways:</p>
+                
+                <ul class="docs">
+                    <li>A string with property names wrapped in curly brackets (<code>{road_name}</code>) to act as placeholders for the values</li>
+                    <li>A function that returns a string that will be used as the Popup content. This function is passed the feature properties so that these properties can be used any number of ways to create Popup content. You could do things like create a chart with Google's Chart API or format ALL CAPS text to Proper Case.</li>
+                </ul>
+                
+                <h3>String Based</h3>
+                
+                <p>A simple popupTemplate might look like:</p>
+                
+                <pre class="prettyprint docs">"&lt;h3&gt;{road_name}&lt;/h3&gt;&lt;p&gt;Speed Limit: {speed_limit} mph&lt;/p&gt;"</pre>
+                
+                <p>which gets transformed to:</p>
+                
+                <pre class="prettyprint docs">"&lt;h3&gt;S Bemis St&lt;/h3&gt;&lt;p&gt;Speed Limit: 25 mph&lt;/p&gt;"</pre>
+                
+                <h3>Function Based</h3>
+                
+                <p>For more flexibility we can use a function to do some more complex operations with our feature properties for customized output. A function for a popupTemplate might look like:</p>
+                
+                <pre class="prettyprint docs">function(properties) {
+    /* Assuming "properties" is an object like:
+    {
+        ROAD_NAME: "S Bemis St",
+        SPEED_LIMIT: 25
+    }
+    */
+    
+    var output = "&lt;h3&gt;State Road&lt;/h3&gt;";
+    
+    for (var prop in properties) {
+        output += prop.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + ": " + properties[prop] + "&lt;br /&gt;";
+    }
+    return output;
+}</pre>
+                
+                <p class="docs">This function iterates through each property in properties and formats each to Proper Case for better looking output.</p>
+                
+                <pre class="prettyprint docs">"&lt;h3&gt;State Road&lt;/h3&gt;Road Name: S Bemis St&lt;br /&gt;Speed Limit: 25&lt;br /&gt;"</pre>
+                
+                <h2 class="docs" id="docs-dynamic">Dynamic Data</h2>
+                                
+                <p class="docs">To create a dynamic layer simply set the <code>dynamic</code> option to <code>true</code>. Using this option alone (without <code>autoUpdate</code> and <code>autoUpdateInterval</code>) will check for feature geometry and property changes when the map extent changes. If geometry changes are found the feature is altered on the map. If properties changes are found any Popups associated with this feature are updated to reflect this change.</p>
+                                
+                <h3>Auto-update</h3>
+                
+                <p class="docs">Using the <code>autoUpdate</code> and <code>autoUpdateInterval</code> options we can set a layer to automatically fetch new features every x seconds, even when the map extent hasn't changed. Set the <code>autoUpdate</code> option to <code>true</code> and <code>autoUpdateInterval</code> to the amount of time (in milliseconds) for how often you want features fetched. To create a dynamic layer that auto-updates every 5 seconds you might create your layer like:</p>
+                
+                <pre class="prettyprint docs">var myAGSLayer = new lvector.AGS({
+    url: "http://maps.rtd-denver.com/ArcGIS/rest/services/BusLocations/MapServer/0",
+    fields: "*",
+    uniqueField: "OBJECTID",
+    dynamic: true,
+    autoUpdate: true,
+    autoUpdateInterval: 5000
+});</pre>
+                
+                <footer>
+                    <p>&copy; Jason Sanford - geojason.info 2011</p>
+                </footer>
+                
+            </div>
+        </div>
+        <script src="../docs-demo/js/prettify.js" type="text/javascript"></script>
+        <script src="../docs-demo/js/jquery-1.5.2.min.js" type="text/javascript"></script>
+        <script src="../docs-demo/js/docs-demos.js" type="text/javascript"></script>
+        <script src="../docs-demo/js/bootstrap-dropdown.js" type="text/javascript"></script>
+    </body>
+</html>

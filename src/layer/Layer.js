@@ -65,14 +65,13 @@ lvector.Layer = lvector.Class.extend({
                     me._getFeatures();
                 }, this.options.autoUpdateInterval);
             }
-            google.maps.event.trigger(this.options.map, "zoom_changed");
-            google.maps.event.trigger(this.options.map, "idle");
+            this.options.map.fire("moveend").fire("zoomend");
         }
     },
     
     _hide: function() {
         if (this._idleListener) {
-            google.maps.event.removeListener(this._idleListener);
+            this.options.map.off("moveend", this._idleListener);
         }
         if (this._zoomChangeListener) {
             google.maps.event.removeListener(this._zoomChangeListener);
@@ -145,16 +144,43 @@ lvector.Layer = lvector.Class.extend({
     //
     _addZoomChangeListener: function() {
         //
-        // "this" means something different inside "google.maps.event.addListener" so assign it to "me"
+        // "this" means something different inside the on method. Assign it to "me".
         //
         var me = this;
         
+        this.options.map.on("zoomend", me._zoomChangeListener, me);
+    },
+    
+    _zoomChangeListener: function() {
         //
         // Whenever the map's zoom changes, check the layer's visibility (this.options.visibleAtScale)
         //
-        this._zoomChangeListener = google.maps.event.addListener(this.options.map, "zoom_changed", function() {
-            me._checkLayerVisibility();
-        });
+        this._checkLayerVisibility();
+    },
+    
+    //
+    // This gets fired when the map is panned or zoomed
+    //
+    _idleListener: function() {
+        if (this.options.visibleAtScale) {
+            //
+            // Do they use the showAll parameter to load all features once?
+            //
+            if (this.options.showAll) {
+                //
+                // Have we already loaded these features
+                //
+                if (!this._gotAll) {
+                    //
+                    // Grab the features and note that we've already loaded them (no need to _getFeatures again
+                    //
+                    this._getFeatures();
+                    this._gotAll = true;
+                }
+            } else {
+                this._getFeatures();
+            }
+        }
     },
     
     //
@@ -162,34 +188,14 @@ lvector.Layer = lvector.Class.extend({
     //
     _addIdleListener: function() {
         //
-        // "this" means something different inside "google.maps.event.addListener" so assign it to "me"
+        // "this" means something different inside the on method. Assign it to "me".
         //
         var me = this;
         
         //
         // Whenever the map idles (pan or zoom) get the features in the current map extent
         //
-        this._idleListener = google.maps.event.addListener(this.options.map, "idle", function() {
-            if (me.options.visibleAtScale) {
-                //
-                // Do they use the showAll parameter to load all features once?
-                //
-                if (me.options.showAll) {
-                    //
-                    // Have we already loaded these features
-                    //
-                    if (!me._gotAll) {
-                        //
-                        // Grab the features and note that we've already loaded them (no need to _getFeatures again
-                        //
-                        me._getFeatures();
-                        me._gotAll = true;
-                    }
-                } else {
-                    me._getFeatures();
-                }
-            }
-        });
+        this.options.map.on("moveend", this._idleListener, me);
     },
     
     //
@@ -235,7 +241,7 @@ lvector.Layer = lvector.Class.extend({
     //
     // Set the InfoWindow content for the feature
     //
-    _setInfoWindowContent: function(feature) {
+    _setPopupContent: function(feature) {
         //
         // Store previous InfoWindow content so we can check to see if it changed. If it didn't no sense changing the content as this has an ugly flashing effect.
         //
@@ -292,7 +298,7 @@ lvector.Layer = lvector.Class.extend({
     //
     // Show the feature's (or layer's) InfoWindow
     //
-    _showInfoWindow: function(feature, evt) {
+    _showPopup: function(feature, evt) {
         //
         // Set the content
         //
@@ -534,7 +540,7 @@ lvector.Layer = lvector.Class.extend({
                         latlngs.push(new L.LatLng(geometry.rings[i][i2][1], geometry.rings[i][i2][0]));
                     }
                     latlngss.push(latlngs);
-                    vectors.push(latlngss, new L.Polygon(opts));
+                    vectors.push(new L.Polygon(latlngss, opts));
                 }
             } else {
                 //

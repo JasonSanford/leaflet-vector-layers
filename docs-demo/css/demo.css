@@ -40,12 +40,12 @@ h2 small {
     -webkit-box-shadow: 5px 5px 5px #d2d2d2;
     box-shadow: 5px 5px 5px #d2d2d2;
 }
-.map .layer-buttons {
+.layer-buttons {
     position: absolute;
     bottom: 0;
     right: 0;
-    margin-right: 10px;
-    margin-bottom: 20px;
+    margin-right: 8px;
+    margin-bottom: 15px;
     z-index: 100;
     float: right;
 }

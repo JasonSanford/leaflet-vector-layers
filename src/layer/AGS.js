@@ -231,7 +231,7 @@ lvector.AGS = lvector.Layer.extend({
             url += "&inSR=4326" + // request geometry in WGS 84 Lat/Lng.
             "&spatialRel=esriSpatialRelIntersects" + // Find stuff that intersects this envelope
             "&geometryType=esriGeometryEnvelope" + // Our "geometry" url param will be an envelope
-            "&geometry=" + this._buildBoundsString(this.options.map.getBounds()); // Build envelope geometry
+            "&geometry=" + this.options.map.getBounds().toBBoxString(); // Build envelope geometry
         }
         
         // JSONP request
@@ -321,10 +321,10 @@ lvector.AGS = lvector.Layer.extend({
                     
                     // Show the vector or vectors on the map
                     if (data.features[i].vector) {
-                        data.features[i].vector.setMap(this.options.map);
+                        this.options.map.addLayer(data.features[i].vector);
                     } else if (data.features[i].vectors && data.features[i].vectors.length) {
                         for (var i3 = 0; i3 < data.features[i].vectors.length; i3++) {
-                            data.features[i].vectors[i3].setMap(this.options.map);
+                            this.options.map.addLayer(data.features[i].vectors[i3]);
                         }
                     }
                     
@@ -336,7 +336,7 @@ lvector.AGS = lvector.Layer.extend({
                         var me = this;
                         var feature = data.features[i];
                         
-                        this._setInfoWindowContent(feature);
+                        this._setPopupContent(feature);
                         
                         (function(feature){
                             if (feature.vector) {

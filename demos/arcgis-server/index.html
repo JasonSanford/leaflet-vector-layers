@@ -128,7 +128,8 @@
                 </footer>
             </div>
         </div>
-        <script type="text/javascript" src="../../lib/leaflet/dist/leaflet.js"></script>
+        <!--<script src="../../lib/leaflet/dist/leaflet.js"type="text/javascript"></script>-->
+        <script src="../../lib/leaflet/debug/leaflet-include.js"type="text/javascript"></script>
         <script src="../../docs-demo/js/prettify.js" type="text/javascript"></script>
         <script src="../../docs-demo/js/jquery-1.5.2.min.js" type="text/javascript"></script>
         <script src="../../docs-demo/js/docs-demos.js" type="text/javascript"></script>
@@ -170,21 +171,24 @@
                     layers: [
                         new L.TileLayer("http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg", {
                             maxZoom: 18,
-                            //subdomains: ["otile1", "otile2", "otile3", "otile4"],
-                            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+                            attribution: 'Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
                         })
                     ]
                 });
                 
-                /*map3 = new google.maps.Map(document.getElementById("map-container-3"), {
-                    center: new google.maps.LatLng(29.005243760843864, -82.10365950241086),
-                    zoom: 6,
+                map4 = new L.Map("map-container-4", {
+                    center: new L.LatLng(38.742931954586204, -104.8893040336609),
+                    zoom: 7,
                     minZoom: 4,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    noClear: true
+                    layers: [
+                        new L.TileLayer("http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg", {
+                            maxZoom: 18,
+                            attribution: 'Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+                        })
+                    ]
                 });
                 
-                map4 = new google.maps.Map(document.getElementById("map-container-4"), {
+                /*map4 = new google.maps.Map(document.getElementById("map-container-4"), {
                     center: new google.maps.LatLng(38.742931954586204, -104.8893040336609),
                     zoom: 7,
                     minZoom: 4,
@@ -380,7 +384,15 @@
                     singleInfoWindow: true*/
                 });
                 
-                /*ags_weather = new lvector.AGS({
+                var customMarker = L.Icon.extend({
+                    iconUrl: "../../docs-demo/img/markers/cold.png",
+                    shadowUrl: null,
+                    iconSize: new L.Point(32, 37),
+                    iconAnchor: new L.Point(16, 37),
+                    popupAnchor: new L.Point(-3, -76)
+                });
+                
+                ags_weather = new lvector.AGS({
                     url: "http://ags2.dtsagile.com/ArcGIS/rest/services/LiveFeeds/WxStations/MapServer/0",
                     fields: "*",
                     scaleRange: [6, 20],
@@ -403,26 +415,26 @@
                             {
                                 range: [-50, 0],
                                 vectorOptions: {
-                                    icon: "../../docs-demo/img/markers/cold.png"
+                                    icon: new customMarker()
                                 }
                             },
                             {
                                 range: [0.000001, 14.9999999],
                                 vectorOptions: {
-                                    icon: "../../docs-demo/img/markers/moderate.png"
+                                    icon: new customMarker("../../docs-demo/img/markers/moderate.png")
                                 }
                             },
                             {
                                 range: [15, 60],
                                 vectorOptions: {
-                                    icon: "../../docs-demo/img/markers/hot.png"
+                                    icon: new customMarker("../../docs-demo/img/markers/hot.png")
                                 }
                             }
                         ]
                     }
                 });
                 
-                ags_winter = new lvector.AGS({
+                /*ags_winter = new lvector.AGS({
                     url: "http://rmgsc.cr.usgs.gov/ArcGIS/rest/services/nhss_weat/MapServer/0",
                     fields: "*",
                     uniqueField: "OBJECTID",

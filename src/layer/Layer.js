@@ -92,7 +92,7 @@ lvector.Layer = lvector.Class.extend({
     _hideVectors: function() {
         for (var i = 0; i < this._vectors.length; i++) {
             if (this._vectors[i].vector) {
-                this._vectors[i].vector.setMap(null);
+                this.options.map.removeLayer(this._vectors[i].vector);
                 if (this._vectors[i].infoWindow) {
                     this._vectors[i].infoWindow.close()
                 } else if (this.infoWindow && this.infoWindow.get("associatedFeature") && this.infoWindow.get("associatedFeature") == this._vectors[i]) {
@@ -102,7 +102,7 @@ lvector.Layer = lvector.Class.extend({
             }
             if (this._vectors[i].vectors && this._vectors[i].vectors.length) {
                 for (var i2 = 0; i2 < this._vectors[i].vectors.length; i2++) {
-                    this._vectors[i].vectors[i2].setMap(null);
+                    this.options.map.removeLayer(this._vectors[i].vectors[i2]);
                     if (this._vectors[i].vectors[i2].infoWindow) {
                         this._vectors[i].vectors[i2].infoWindow.close();
                     } else if (this.infoWindow && this.infoWindow.get("associatedFeature") && this.infoWindow.get("associatedFeature") == this._vectors[i]) {
@@ -120,11 +120,11 @@ lvector.Layer = lvector.Class.extend({
     _showVectors: function() {
         for (var i = 0; i < this._vectors.length; i++) {
             if (this._vectors[i].vector) {
-                this._vectors[i].vector.setMap(this.options.map);
+                this.options.map.addLayer(this._vectors[i].vector);
             }
             if (this._vectors[i].vectors && this._vectors[i].vectors.length) {
                 for (var i2 = 0; i2 < this._vectors[i].vectors.length; i2++) {
-                    this._vectors[i].vectors[i2].setMap(this.options.map);
+                    this.options.map.addLayer(this._vectors[i].vectors[i2]);
                 }
             }
         }

@@ -188,21 +188,17 @@
                     ]
                 });
                 
-                /*map4 = new google.maps.Map(document.getElementById("map-container-4"), {
-                    center: new google.maps.LatLng(38.742931954586204, -104.8893040336609),
-                    zoom: 7,
-                    minZoom: 4,
-                    mapTypeId: google.maps.MapTypeId.TERRAIN,
-                    noClear: true
-                });
-                
-                map5 = new google.maps.Map(document.getElementById("map-container-5"), {
-                    center: new google.maps.LatLng(39.69618575505994, -97.06703840866088),
+                map5 = new L.Map("map-container-5", {
+                    center: new L.LatLng(39.69618575505994, -97.06703840866088),
                     zoom: 4,
                     minZoom: 3,
-                    mapTypeId: google.maps.MapTypeId.TERRAIN,
-                    noClear: true
-                });*/
+                    layers: [
+                        new L.TileLayer("http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg", {
+                            maxZoom: 18,
+                            attribution: 'Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+                        })
+                    ]
+                });
                 
                 ags_light_rail = new lvector.AGS({
                     url: "http://maps.rtd-denver.com/ArcGIS/rest/services/SystemMapLiteGoogleVectors/MapServer/1",
@@ -434,14 +430,14 @@
                     }
                 });
                 
-                /*ags_winter = new lvector.AGS({
+                ags_winter = new lvector.AGS({
                     url: "http://rmgsc.cr.usgs.gov/ArcGIS/rest/services/nhss_weat/MapServer/0",
                     fields: "*",
                     uniqueField: "OBJECTID",
                     where: "EVENT LIKE 'WINTER%'",
                     scaleRange: [3, 15],
                     showAll: true,
-                    infoWindowTemplate: function(properties) {*/
+                    //infoWindowTemplate: function(properties) {
                         //var html = '<div class="iw-content"><h3>' + properties.EVENT.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</h3><table class="condensed-table">';
                         //for (var prop in properties) {
                             //if (["FIPS", "OBJECTID", "EVENT", "SHAPE.area", "SHAPE_Length"].indexOf(prop) < 0) {
@@ -453,7 +449,7 @@
                             //}
                         //}
                         //return html + '</table></div>';
-                    /*},
+                    //},
                     symbology: {
                         type: "single",
                         vectorOptions: {
@@ -464,7 +460,7 @@
                             color: "#666"
                         }
                     }
-                });*/
+                });
                 
             });
         </script>

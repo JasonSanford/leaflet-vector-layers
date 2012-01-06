@@ -365,17 +365,15 @@ lvector.Layer = lvector.Class.extend({
         //
         var me = this;
         
+        //
+        // Don't ask about the InfoWindow.open timeout, I'm not sure why it fails if you open it immediately
+        //
+        setTimeout(function() {
+            ownsInfoWindow.infoWindow.open(me.options.map, isLineOrPolygon ? new google.maps.Marker({position: evt.latLng}) : feature.vector);
+        }, 200);*/
         ownsPopup.popup.setLatLng(event.latlng || event.target.getLatLng());
         ownsPopup.popup.setContent(feature.popupContent);
         this.options.map.addLayer(ownsPopup.popup);
-    },
-    
-    //
-    // Build a string to pass in a URL for a bbox url parameter (&bbox=-81,35,-80,36)
-    //
-    _buildBoundsString: function(gBounds) {
-        var gBoundsParts = gBounds.toUrlValue().split(",");
-        return gBoundsParts[1] + "," + gBoundsParts[0] + "," + gBoundsParts[3] + "," + gBoundsParts[2];
     },
     
     //
@@ -390,7 +388,7 @@ lvector.Layer = lvector.Class.extend({
         //
         // Esri calls them attributes. GeoJSON calls them properties.
         //
-        var atts = feature.attributes || feature.properties
+        var atts = feature.attributes || feature.properties;
         
         //
         // Is there a symbology set for this layer?

@@ -49,7 +49,7 @@ lvector.GeoIQ = lvector.Layer.extend({
             "&callback=" + this._globalPointer + "._processFeatures" + // Need this for JSONP
             "&limit=999"; // Don't limit our results
         if (!this.options.showAll) {
-            url += "&bbox=" + this._buildBoundsString(this.options.map.getBounds()) + // Build bbox geometry
+            url += "&bbox=" + this.options.map.getBounds().toBBoxString() + // Build bbox geometry
                 "&intersect=full"; // Return features that intersect this bbox, not just fully contained
         }
         
@@ -109,7 +109,7 @@ lvector.GeoIQ = lvector.Layer.extend({
                                     // Check to see if it's a point feature, these are the only ones we're updating for now
                                     if (!isNaN(data.features[i].geometry.coordinates[0]) && !isNaN(data.features[i].geometry.coordinates[1])) {
                                         this._vectors[i2].geometry = data.features[i].geometry;
-                                        this._vectors[i2].vector.setPosition(new google.maps.LatLng(this._vectors[i2].geometry.coordinates[1], this._vectors[i2].geometry.coordinates[0]));
+                                        this._vectors[i2].vector.setLatLng(new L.LatLng(this._vectors[i2].geometry.coordinates[1], this._vectors[i2].geometry.coordinates[0]));
                                     }
                                     
                                 }
@@ -119,7 +119,7 @@ lvector.GeoIQ = lvector.Layer.extend({
                                 if (propertiesChanged) {
                                     this._vectors[i2].properties = data.features[i].properties;
                                     if (this.options.popupTemplate) {
-                                        this._setInfoWindowContent(this._vectors[i2]);
+                                        this._setPopupContent(this._vectors[i2]);
                                     }
                                     if (this.options.symbology && this.options.symbology.type != "single") {
                                         if (this._vectors[i2].vector) {
@@ -149,10 +149,10 @@ lvector.GeoIQ = lvector.Layer.extend({
                     
                     // Show the vector or vectors on the map
                     if (data.features[i].vector) {
-                        data.features[i].vector.setMap(this.options.map);
+                        this.options.map.addLayer(data.features[i].vector);
                     } else if (data.features[i].vectors && data.features[i].vectors.length) {
                         for (var i3 = 0; i3 < data.features[i].vectors.length; i3++) {
-                            data.features[i].vectors[i3].setMap(this.options.map);
+                            this.options.map.addLayer(data.features[i].vectors[i3]);
                         }
                     }
                     
@@ -164,17 +164,17 @@ lvector.GeoIQ = lvector.Layer.extend({
                         var me = this;
                         var feature = data.features[i];
                         
-                        this._setInfoWindowContent(feature);
+                        this._setPopupContent(feature);
                         
                         (function(feature){
                             if (feature.vector) {
-                                google.maps.event.addListener(feature.vector, "click", function(evt) {
-                                    me._showInfoWindow(feature, evt);
+                                feature.vector.on("click", function(event) {
+                                    me._showPopup(feature, event);
                                 });
                             } else if (feature.vectors) {
                                 for (var i3 = 0, len = feature.vectors.length; i3 < len; i3++) {
-                                    google.maps.event.addListener(feature.vectors[i3], "click", function(evt) {
-                                        me._showInfoWindow(feature, evt);
+                                    feature.vectors[i3].on("click", function(event) {
+                                        me._showPopup(feature, event);
                                     });
                                 }
                             }

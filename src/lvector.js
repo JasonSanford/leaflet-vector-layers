@@ -51,4 +51,13 @@
             }
         });
     }
+    
+    L.Popup = L.Popup.extend({
+        _close: function () {
+            if (this._opened) {
+    		    this._map.closePopup();
+    		    this._map.removeLayer(this);
+    	    }
+        }
+    });
 }(this));

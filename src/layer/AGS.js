@@ -287,7 +287,7 @@ lvector.AGS = lvector.Layer.extend({
                                     // Check to see if it's a point feature, these are the only ones we're updating for now
                                     if (!isNaN(data.features[i].geometry.x) && !isNaN(data.features[i].geometry.y)) {
                                         this._vectors[i2].geometry = data.features[i].geometry;
-                                        this._vectors[i2].vector.setPosition(new google.maps.LatLng(this._vectors[i2].geometry.y, this._vectors[i2].geometry.x));
+                                        this._vectors[i2].vector.setLatLng(new L.LatLng(this._vectors[i2].geometry.y, this._vectors[i2].geometry.x));
                                     }
                                     
                                 }
@@ -340,13 +340,19 @@ lvector.AGS = lvector.Layer.extend({
                         
                         (function(feature){
                             if (feature.vector) {
-                                google.maps.event.addListener(feature.vector, "click", function(evt) {
+                                /*google.maps.event.addListener(feature.vector, "click", function(evt) {
                                     me._showInfoWindow(feature, evt);
+                                });*/
+                                feature.vector.on("click", function(event) {
+                                    me._showPopup(feature, event);
                                 });
                             } else if (feature.vectors) {
                                 for (var i3 = 0, len = feature.vectors.length; i3 < len; i3++) {
-                                    google.maps.event.addListener(feature.vectors[i3], "click", function(evt) {
+                                    /*google.maps.event.addListener(feature.vectors[i3], "click", function(evt) {
                                         me._showInfoWindow(feature, evt);
+                                    });*/
+                                    feature.vectors[i3].on("click", function(event) {
+                                        me._showPopup(feature, event);
                                     });
                                 }
                             }

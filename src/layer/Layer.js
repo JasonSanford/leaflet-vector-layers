@@ -17,7 +17,7 @@ lvector.Layer = lvector.Class.extend({
         autoUpdate: false,
         autoUpdateInterval: null,
         popupTemplate: null,
-        singleInfoWindow: false,
+        singlePopup: false,
         symbology: null,
         showAll: false
     },
@@ -243,16 +243,16 @@ lvector.Layer = lvector.Class.extend({
     //
     _setPopupContent: function(feature) {
         //
-        // Store previous InfoWindow content so we can check to see if it changed. If it didn't no sense changing the content as this has an ugly flashing effect.
+        // Store previous Popup content so we can check to see if it changed. If it didn't no sense changing the content as this has an ugly flashing effect.
         //
-        var previousContent = feature.iwContent
+        var previousContent = feature.popupContent
         
         //
         // Esri calls them attributes. GeoJSON calls them properties.
         //
         var atts = feature.attributes || feature.properties
         
-        var iwContent;
+        var popupContent;
         
         //
         // Check to see if it's a string-based popupTemplate or function
@@ -261,20 +261,20 @@ lvector.Layer = lvector.Class.extend({
             //
             // Store the string-based popupTemplate
             //
-            iwContent = this.options.popupTemplate;
+            popupContent = this.options.popupTemplate;
             
             //
             // Loop through the properties and replace mustache-wrapped property names with actual values
             //
             for (var prop in atts) {
                 var re = new RegExp("{" + prop + "}", "g");
-                iwContent = iwContent.replace(re, atts[prop]);
+                popupContent = popupContent.replace(re, atts[prop]);
             }
         } else if (typeof this.options.popupTemplate == "function") {
             //
-            // It's a function-based infoWindowTempmlate, so just call this function and pass properties
+            // It's a function-based popupTempmlate, so just call this function and pass properties
             //
-            iwContent = this.options.popupTemplate(atts);
+            popupContent = this.options.popupTemplate(atts);
         } else {
             //
             // Ummm, that's all we support. Seeya!
@@ -283,69 +283,73 @@ lvector.Layer = lvector.Class.extend({
         }
         
         //
-        // Store the InfoWindow content
+        // Store the Popup content
         //
-        feature.iwContent = iwContent;
+        feature.popupContent = popupContent;
         
         //
-        // If the feature's InfoWindow already exists and the previous content is differentt than the current content, set the content
+        // Check to see if popupContent has changed and if so setContent
         //
-        if (feature.infoWindow && !(feature.iwContent == previousContent)) {
-            feature.infoWindow.setContent(feature.iwContent);
+        if (feature.popup) {
+            // The Popup is associated with a feature
+            if (feature.popupContent !== previousContent) {
+                feature.popup.setContent(feature.popupContent);
+            }
+        } else if (this.popup) {
+            // The Popup is associated with the layer (singlePopup: true)
+            if (this.popupContent !== previousContent) {
+                this.popup.setContent(this.popupContent);
+            }
         }
     },
     
     //
-    // Show the feature's (or layer's) InfoWindow
+    // Show the feature's (or layer's) Popup
     //
-    _showPopup: function(feature, evt) {
-        //
-        // Set the content
-        //
-        var infoWindowOptions = {
-            content: feature.iwContent
-        };
+    _showPopup: function(feature, event) {
+        var popupOptions = {};
         
         //
-        // Create a variable to hold a reference to the object that owns the InfoWindow so we can show it later
+        // Create a variable to hold a reference to the object that owns the Popup so we can show it later
         //
-        var ownsInfoWindow;
+        var ownsPopup;
         
         //
-        // If the layer isn't set to show a single InfoWindow
+        // If the layer isn't set to show a single Popup
         //
-        if (!this.options.singleInfoWindow) {
+        if (!this.options.singlePopup) {
             //
-            // Create an InfoWindow and store it in the feature
+            // Create a Popup and store it in the feature
             //
-            feature.infoWindow = new google.maps.InfoWindow(infoWindowOptions);
-            ownsInfoWindow = feature;
+            feature.popup = new L.Popup(popupOptions, feature.vector);
+            ownsPopup = feature;
         } else {
-            if (this.infoWindow) {
+            if (this.popup) {
                 //
                 // If the layer already has an InfoWindow created, close and delete it
                 //
-                this.infoWindow.close();
-                this.infoWindow = null;
+                //this.infoWindow.close();
+                this.options.map.removeLayer(this.popup);
+                this.popup = null;
             }
             
             //
-            // Create a new InfoWindow
+            // Create a new Popup
             //
-            this.infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+            this.popup = new L.Popup(popupOptions, feature.vector);
             
             //
-            // Store the associated feature reference in the InfoWindow so we can close and clear it later
+            // Store the associated feature reference in the Popup so we can close and clear it later
             //
-            this.infoWindow.set("associatedFeature", feature);
+            this.popup.associatedFeature = feature;
             
-            ownsInfoWindow = this;
+            ownsPopup = this;
         }
         
         //
         // InfoWindows on Lines and Polygons are opened slightly different, make note of it
         //
-        var isLineOrPolygon = false;
+        /*var isLineOrPolygon = false;
         if (feature.vector) {
             if (feature.vector.getPaths || feature.vector.getPath) {
                 isLineOrPolygon = true;
@@ -361,12 +365,9 @@ lvector.Layer = lvector.Class.extend({
         //
         var me = this;
         
-        //
-        // Don't ask about the InfoWindow.open timeout, I'm not sure why it fails if you open it immediately
-        //
-        setTimeout(function() {
-            ownsInfoWindow.infoWindow.open(me.options.map, isLineOrPolygon ? new google.maps.Marker({position: evt.latLng}) : feature.vector);
-        }, 200);
+        ownsPopup.popup.setLatLng(event.latlng || event.target.getLatLng());
+        ownsPopup.popup.setContent(feature.popupContent);
+        this.options.map.addLayer(ownsPopup.popup);
     },
     
     //

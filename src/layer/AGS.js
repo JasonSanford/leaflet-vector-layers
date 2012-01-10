@@ -158,28 +158,34 @@ lvector.AGS = lvector.Layer.extend({
         switch (symbol.type) {
             case "esriSMS":
             case "esriPMS":
-                //TODO marker symbologys have an url prop as well but requires extra hops to server for all icons
+                var customMarker = L.Icon.extend({
+                    iconUrl: "data:" + symbol.contentType + ";base64," + symbol.imageData,
+                    shadowUrl: null,
+                    iconSize: new L.Point(symbol.width, symbol.height),
+                    iconAnchor: new L.Point((symbol.width / 2) + symbol.xoffset, (symbol.height / 2) + symbol.yoffset),
+                    popupAnchor: new L.Point(0, -(symbol.height / 2))
+                });
                 var url = "data:image/gif;base64," + symbol.imageData;
-                vectorOptions.icon = url;
+                vectorOptions.icon = new customMarker();
                 break;
         
             case "esriSLS":
                 //we can only do solid lines in GM (true in latest build?)
-                vectorOptions.strokeWeight = symbol.width;
-                vectorOptions.strokeColor = this._parseColor(symbol.color);
-                vectorOptions.strokeOpacity = this._parseAlpha(symbol.color[3]);
+                vectorOptions.weight = symbol.width;
+                vectorOptions.color = this._parseColor(symbol.color);
+                vectorOptions.opacity = this._parseAlpha(symbol.color[3]);
                 break;
             
             case "esriSFS":
                 //solid or hollow only
                 if (symbol.outline) {                    
-                    vectorOptions.strokeWeight = symbol.outline.width;
-                    vectorOptions.strokeColor = this._parseColor(symbol.outline.color);
-                    vectorOptions.strokeOpacity = this._parseAlpha(symbol.outline.color[3]);
+                    vectorOptions.weight = symbol.outline.width;
+                    vectorOptions.color = this._parseColor(symbol.outline.color);
+                    vectorOptions.opacity = this._parseAlpha(symbol.outline.color[3]);
                 } else {
-                    vectorOptions.strokeWeight = 0;
-                    vectorOptions.strokeColor = "#000000";
-                    vectorOptions.strokeOpacity = 0.0;
+                    vectorOptions.weight = 0;
+                    vectorOptions.color = "#000000";
+                    vectorOptions.opacity = 0.0;
                 }
                 if (symbol.style != "esriSFSNull") {
                     vectorOptions.fillColor = this._parseColor(symbol.color);

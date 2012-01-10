@@ -316,6 +316,18 @@ lvector.Layer = lvector.Class.extend({
     //
     _showPopup: function(feature, event) {
         //
+        // Popups on Lines and Polygons are opened slightly different, make note of it
+        //
+        var isLineOrPolygon = event.latlng;
+        
+        // Set the popupAnchor if a marker was clicked
+        if (!isLineOrPolygon) {
+            L.Util.extend(this.options.popupOptions, {
+                offset: event.target.options.icon.popupAnchor
+            });
+        }
+        
+        //
         // Create a variable to hold a reference to the object that owns the Popup so we can show it later
         //
         var ownsPopup;
@@ -351,32 +363,7 @@ lvector.Layer = lvector.Class.extend({
             ownsPopup = this;
         }
         
-        //
-        // InfoWindows on Lines and Polygons are opened slightly different, make note of it
-        //
-        /*var isLineOrPolygon = false;
-        if (feature.vector) {
-            if (feature.vector.getPaths || feature.vector.getPath) {
-                isLineOrPolygon = true;
-            }
-        } else if (feature.vectors && feature.vectors.length) {
-            if (feature.vectors[0].getPaths || feature.vectors[0].getPath) {
-                isLineOrPolygon = true
-            }
-        }
-        
-        //
-        // "this" means something different inside of the setTimeout function so assigned it to "me"
-        //
-        var me = this;
-        
-        //
-        // Don't ask about the InfoWindow.open timeout, I'm not sure why it fails if you open it immediately
-        //
-        setTimeout(function() {
-            ownsInfoWindow.infoWindow.open(me.options.map, isLineOrPolygon ? new google.maps.Marker({position: evt.latLng}) : feature.vector);
-        }, 200);*/
-        ownsPopup.popup.setLatLng(event.latlng || event.target.getLatLng());
+        ownsPopup.popup.setLatLng(isLineOrPolygon ? event.latlng : event.target.getLatLng());
         ownsPopup.popup.setContent(feature.popupContent);
         this.options.map.addLayer(ownsPopup.popup);
     },
@@ -491,7 +478,7 @@ lvector.Layer = lvector.Class.extend({
     //
     _esriJsonGeometryToLeaflet: function(geometry, opts) {
         //
-        // Create a variable for a single vector and for multi part vectors. The Google Maps API has no real support for these so we keep them in an array.
+        // Create a variable for a single vector and for multi part vectors.
         //
         var vector, vectors;
         

@@ -124,14 +124,19 @@
                     ]
                 });
                 
-                /*map1 = new google.maps.Map(document.getElementById("map-container-1"), {
-                    center: new google.maps.LatLng(39.67, -106.12),
-                    zoom: 8,
-                    mapTypeId: google.maps.MapTypeId.TERRAIN,
-                    noClear: true
+                map2 = new L.Map("map-container-2", {
+                    center: new L.LatLng(48.48458423172101, -114.5575),
+                    zoom: 3,
+                    layers: [
+                        new L.TileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
+                            maxZoom: 18,
+                            subdomains: ["otile1", "otile2", "otile3", "otile4"],
+                            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+                        })
+                    ]
                 });
                 
-                map2 = new google.maps.Map(document.getElementById("map-container-2"), {
+                /*map2 = new google.maps.Map(document.getElementById("map-container-2"), {
                     center: new google.maps.LatLng(48.48458423172101, -114.5575),
                     zoom: 3,
                     mapTypeId: google.maps.MapTypeId.TERRAIN,
@@ -158,7 +163,7 @@
                 	uniqueField: "NAME",
                 	scaleRange: [6, 20],
                 	popupTemplate: '<div class="iw-content"><h3>{NAME}</h3></div>',
-                	//singlePopup: true,
+                	singlePopup: true,
                 	symbology: {
                 	    type: "single",
                 	    vectorOptions: {
@@ -167,21 +172,61 @@
                 	}
                 });
                 
-                /*geoiq_ski_areas = new gvector.GeoIQ({
-                	dataset: 164880,
-                	uniqueField: "NAME",
-                	scaleRange: [6, 20],
-                	infoWindowTemplate: '<div class="iw-content"><h3>{NAME}</h3></div>',
-                	singleInfoWindow: true,
-                	symbology: {
-                	    type: "single",
-                	    vectorOptions: {
-                		    icon: "../../docs-demo/img/markers/ski-lift.png"
-                	    }
-                	}
+                geoiq_foss4g_reg = new lvector.GeoIQ({
+                    dataset: 147336,
+                    uniqueField: "state",
+                    showAll: true,
+                    popupTemplate: '<div class="iw-content"><h3>{state}</h3><table class="condensed-table"><tr><th>Registrants</th><td>{count}</td></tr><tr><th>Percent of Total</th><td>{percent}</td></tr></table></div>',
+                    singlePopup: true,
+                    symbology: {
+                        type: "range",
+                        property: "count",
+                        ranges: [
+                            {
+                                range: [1, 1],
+                                vectorOptions: {
+                                    fillColor: "#F1EEF6",
+                                    fillOpacity: 0.85,
+                                    color: "#333",
+                                    weight: 1,
+                                    opacity: 1
+                                }
+                            },
+                            {
+                                range: [2, 10],
+                                vectorOptions: {
+                                    fillColor: "#BDC9E1",
+                                    fillOpacity: 0.85,
+                                    color: "#333",
+                                    weight: 1,
+                                    opacity: 1
+                                }
+                            },
+                            {
+                                range: [11, 20],
+                                vectorOptions: {
+                                    fillColor: "#74A9CF",
+                                    fillOpacity: 0.85,
+                                    color: "#333",
+                                    weight: 1,
+                                    opacity: 1
+                                }
+                            },
+                            {
+                                range: [21, 126],
+                                vectorOptions: {
+                                    fillColor: "#0570B0",
+                                    fillOpacity: 0.85,
+                                    color: "#333",
+                                    weight: 1,
+                                    opacity: 1
+                                }
+                            }
+                        ]
+                    }
                 });
                 
-                geoiq_foss4g_reg = new gvector.GeoIQ({
+                /*geoiq_foss4g_reg = new gvector.GeoIQ({
                     dataset: 147336,
                     uniqueField: "state",
                     showAll: true,
@@ -196,9 +241,9 @@
                                 vectorOptions: {
                                     fillColor: "#F1EEF6",
                                     fillOpacity: 0.85,
-                                    strokeColor: "#333",
-                                    strokeWeight: 1,
-                                    strokeOpacity: 1
+                                    color: "#333",
+                                    weight: 1,
+                                    opacity: 1
                                 }
                             },
                             {
@@ -206,9 +251,9 @@
                                 vectorOptions: {
                                     fillColor: "#BDC9E1",
                                     fillOpacity: 0.85,
-                                    strokeColor: "#333",
-                                    strokeWeight: 1,
-                                    strokeOpacity: 1
+                                    color: "#333",
+                                    weight: 1,
+                                    opacity: 1
                                 }
                             },
                             {
@@ -216,9 +261,9 @@
                                 vectorOptions: {
                                     fillColor: "#74A9CF",
                                     fillOpacity: 0.85,
-                                    strokeColor: "#333",
-                                    strokeWeight: 1,
-                                    strokeOpacity: 1
+                                    color: "#333",
+                                    weight: 1,
+                                    opacity: 1
                                 }
                             },
                             {
@@ -226,9 +271,9 @@
                                 vectorOptions: {
                                     fillColor: "#0570B0",
                                     fillOpacity: 0.85,
-                                    strokeColor: "#333",
-                                    strokeWeight: 1,
-                                    strokeOpacity: 1
+                                    color: "#333",
+                                    weight: 1,
+                                    opacity: 1
                                 }
                             }
                         ]

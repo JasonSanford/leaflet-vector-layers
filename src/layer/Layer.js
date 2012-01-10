@@ -33,13 +33,18 @@ lvector.Layer = lvector.Class.extend({
         if (map && this.options.map) {
             return;
         }
-        this.options.map = map;
-        if (map && this.options.scaleRange && this.options.scaleRange instanceof Array && this.options.scaleRange.length === 2) {
-            var z = this.options.map.getZoom();
-            var sr = this.options.scaleRange;
-            this.options.visibleAtScale = (z >= sr[0] && z <= sr[1]);
+        if (map) {
+            this.options.map = map;
+            if (this.options.scaleRange && this.options.scaleRange instanceof Array && this.options.scaleRange.length === 2) {
+                var z = this.options.map.getZoom();
+                var sr = this.options.scaleRange;
+                this.options.visibleAtScale = (z >= sr[0] && z <= sr[1]);
+            }
+            this._show();
+        } else {
+            this._hide();
+            this.options.map = map;
         }
-        this[map ? "_show" : "_hide"]();
     },
     
     //
@@ -74,7 +79,7 @@ lvector.Layer = lvector.Class.extend({
             this.options.map.off("moveend", this._idleListener);
         }
         if (this._zoomChangeListener) {
-            google.maps.event.removeListener(this._zoomChangeListener);
+            this.options.map.off("zoomend", this._zoomChangeListener);
         }
         if (this._autoUpdateInterval) {
             clearInterval(this._autoUpdateInterval);
@@ -90,24 +95,26 @@ lvector.Layer = lvector.Class.extend({
     // Hide the vectors in the layer. This might get called if the layer is still on but out of scaleRange.
     //
     _hideVectors: function() {
+        // TODO: There's probably an easier way to first check for "singlePopup" option then just remove the one
+        //       instead of checking for "assocatedFeatures"
         for (var i = 0; i < this._vectors.length; i++) {
             if (this._vectors[i].vector) {
                 this.options.map.removeLayer(this._vectors[i].vector);
-                if (this._vectors[i].infoWindow) {
-                    this._vectors[i].infoWindow.close()
-                } else if (this.infoWindow && this.infoWindow.get("associatedFeature") && this.infoWindow.get("associatedFeature") == this._vectors[i]) {
-                    this.infoWindow.close();
-                    this.infoWindow = null;
+                if (this._vectors[i].popup) {
+                    this.options.map.removeLayer(this._vectors[i].popup);
+                } else if (this.popup && this.popup.associatedFeature && this.popup.associatedFeature == this._vectors[i]) {
+                    this.options.map.removeLayer(this.popup);
+                    this.popup = null;
                 }
             }
             if (this._vectors[i].vectors && this._vectors[i].vectors.length) {
                 for (var i2 = 0; i2 < this._vectors[i].vectors.length; i2++) {
                     this.options.map.removeLayer(this._vectors[i].vectors[i2]);
-                    if (this._vectors[i].vectors[i2].infoWindow) {
-                        this._vectors[i].vectors[i2].infoWindow.close();
-                    } else if (this.infoWindow && this.infoWindow.get("associatedFeature") && this.infoWindow.get("associatedFeature") == this._vectors[i]) {
-                        this.infoWindow.close();
-                        this.infoWindow = null;
+                    if (this._vectors[i].vectors[i2].popup) {
+                        this.options.map.removeLayer(this._vectors[i].vectors[i2].popup);
+                    } else if (this.popup && this.popup.associatedFeature && this.popup.associatedFeature == this._vectors[i]) {
+                        this.options.map.removeLayer(this.popup);
+                        this.popup = null;
                     }
                 }
             }
@@ -239,7 +246,7 @@ lvector.Layer = lvector.Class.extend({
     },
     
     //
-    // Set the InfoWindow content for the feature
+    // Set the Popup content for the feature
     //
     _setPopupContent: function(feature) {
         //
@@ -326,9 +333,8 @@ lvector.Layer = lvector.Class.extend({
         } else {
             if (this.popup) {
                 //
-                // If the layer already has an InfoWindow created, close and delete it
+                // If the layer already has an Popup created, close and delete it
                 //
-                //this.infoWindow.close();
                 this.options.map.removeLayer(this.popup);
                 this.popup = null;
             }
@@ -627,7 +633,7 @@ lvector.Layer = lvector.Class.extend({
             case "GeometryCollection":
                 vectors = [];
                 for (var i = 0, len = geometry.geometries.length; i < len; i++) {
-                    vectors.push(this._geoJsonGeometryToGoogle(geometry.geometries[i], opts));
+                    vectors.push(this._geoJsonGeometryToLeaflet(geometry.geometries[i], opts));
                 }
                 break;
         }

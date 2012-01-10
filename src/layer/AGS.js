@@ -165,7 +165,6 @@ lvector.AGS = lvector.Layer.extend({
                     iconAnchor: new L.Point((symbol.width / 2) + symbol.xoffset, (symbol.height / 2) + symbol.yoffset),
                     popupAnchor: new L.Point(0, -(symbol.height / 2))
                 });
-                var url = "data:image/gif;base64," + symbol.imageData;
                 vectorOptions.icon = new customMarker();
                 break;
         

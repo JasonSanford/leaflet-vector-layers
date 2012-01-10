@@ -49,7 +49,7 @@
                 <h1>GeoIQ</h1>
                 <h2>Ski Areas</h2>
                 <p class="docs">This simple demo shows ski areas throughout the US. We've defined a <code>scaleRange</code> so we don't show too many markers at lower zoom levels.</p>
-                <p class="docs">A very simple <code>infoWindowTemplate</code> has also been provided as well as a single <code>symbology</code> type that shows a custom marker.</p>
+                <p class="docs">A very simple <code>popupTemplate</code> has also been provided as well as a single <code>symbology</code> type that shows a custom marker.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
                         <pre class="prettyprint"></pre>
@@ -84,7 +84,7 @@
                 
                 <h2>Mecklenburg County Parks</h2>
                 <p class="docs">This example has features styled using the <code>unique</code> symbology type where values of a particular attribute ("prktype" in this example) have a specific style.</p>
-                <p class="docs">We're also using a function based <code>infoWindowTemplate</code> to format our data so it's a little easier to read - In this case convert attributes to Proper Case instead of UPPER CASE.</p>
+                <p class="docs">We're also using a function based <code>popupTemplate</code> to format our data so it's a little easier to read - In this case convert attributes to Proper Case instead of UPPER CASE.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
                         <pre class="prettyprint"></pre>
@@ -136,19 +136,17 @@
                     ]
                 });
                 
-                /*map2 = new google.maps.Map(document.getElementById("map-container-2"), {
-                    center: new google.maps.LatLng(48.48458423172101, -114.5575),
-                    zoom: 3,
-                    mapTypeId: google.maps.MapTypeId.TERRAIN,
-                    noClear: true
-                });
-                
-                map3 = new google.maps.Map(document.getElementById("map-container-3"), {
-                    center: new google.maps.LatLng(35.2357, -80.842),
+                map3 = new L.Map("map-container-3", {
+                    center: new L.LatLng(35.2357, -80.842),
                     zoom: 13,
-                    mapTypeId: google.maps.MapTypeId.ROADMAP,
-                    noClear: true
-                });*/
+                    layers: [
+                        new L.TileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
+                            maxZoom: 18,
+                            subdomains: ["otile1", "otile2", "otile3", "otile4"],
+                            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+                        })
+                    ]
+                });
                 
                 var customMarker = L.Icon.extend({
                     iconUrl: "../../docs-demo/img/markers/ski-lift.png",
@@ -226,72 +224,18 @@
                     }
                 });
                 
-                /*geoiq_foss4g_reg = new gvector.GeoIQ({
-                    dataset: 147336,
-                    uniqueField: "state",
-                    showAll: true,
-                    infoWindowTemplate: '<div class="iw-content"><h3>{state}</h3><table class="condensed-table"><tr><th>Registrants</th><td>{count}</td></tr><tr><th>Percent of Total</th><td>{percent}</td></tr></table></div>',
-                    singleInfoWindow: true,
-                    symbology: {
-                        type: "range",
-                        property: "count",
-                        ranges: [
-                            {
-                                range: [1, 1],
-                                vectorOptions: {
-                                    fillColor: "#F1EEF6",
-                                    fillOpacity: 0.85,
-                                    color: "#333",
-                                    weight: 1,
-                                    opacity: 1
-                                }
-                            },
-                            {
-                                range: [2, 10],
-                                vectorOptions: {
-                                    fillColor: "#BDC9E1",
-                                    fillOpacity: 0.85,
-                                    color: "#333",
-                                    weight: 1,
-                                    opacity: 1
-                                }
-                            },
-                            {
-                                range: [11, 20],
-                                vectorOptions: {
-                                    fillColor: "#74A9CF",
-                                    fillOpacity: 0.85,
-                                    color: "#333",
-                                    weight: 1,
-                                    opacity: 1
-                                }
-                            },
-                            {
-                                range: [21, 126],
-                                vectorOptions: {
-                                    fillColor: "#0570B0",
-                                    fillOpacity: 0.85,
-                                    color: "#333",
-                                    weight: 1,
-                                    opacity: 1
-                                }
-                            }
-                        ]
-                    }
-                });*/
-                
-                //geoiq_parks = new gvector.GeoIQ({
-                    //dataset: 181235,
-                    //uniqueField: "prkid",
-                    //infoWindowTemplate: function(properties) {
-                        //var properCase = function(s) {
-                        //    return s.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-                        //};
-                        //var html = '<div class="iw-content"><h3>' + properCase(properties.name) + '</h3><table class="condensed-table">';
-                        //html += '<tr><th>Address</th><td>' + properCase(properties.prkaddr) + '</td></tr>';
-                        //html += '<tr><th>Size</th><td>' + properties.prksize + ' acres</td></tr>';
-                        //return html += '</table></div>';
-                    /*},
+                geoiq_parks = new lvector.GeoIQ({
+                    dataset: 181235,
+                    uniqueField: "prkid",
+                    popupTemplate: function(properties) {
+                        var properCase = function(s) {
+                            return s.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+                        };
+                        var html = '<div class="iw-content"><h3>' + properCase(properties.name) + '</h3><table class="condensed-table">';
+                        html += '<tr><th>Address</th><td>' + properCase(properties.prkaddr) + '</td></tr>';
+                        html += '<tr><th>Size</th><td>' + properties.prksize + ' acres</td></tr>';
+                        return html += '</table></div>';
+                    },
                     symbology: {
                         type: "unique",
                         property: "prktype",
@@ -299,42 +243,42 @@
                             {
                                 value: "REGIONAL PARK",
                                 vectorOptions: {
-                                    icon: "../../docs-demo/img/markers/park.png"
+                                    icon: new customMarker("../../docs-demo/img/markers/park.png")
                                 }
                             },
                             {
                                 value: "NEIGHBORHOOD PARK",
                                 vectorOptions: {
-                                    icon: "../../docs-demo/img/markers/park.png"
+                                    icon: new customMarker("../../docs-demo/img/markers/park.png")
                                 }
                             },
                             {
                                 value: "COMMUNITY PARK",
                                 vectorOptions: {
-                                    icon: "../../docs-demo/img/markers/park.png"
+                                    icon: new customMarker("../../docs-demo/img/markers/park.png")
                                 }
                             },
                             {
                                 value: "NATURE PRESERVE",
                                 vectorOptions: {
-                                    icon: "../../docs-demo/img/markers/nature-preserve.png"
+                                    icon: new customMarker("../../docs-demo/img/markers/nature-preserve.png")
                                 }
                             },
                             {
                                 value: "RECREATION CENTER",
                                 vectorOptions: {
-                                    icon: "../../docs-demo/img/markers/recreation-center.png"
+                                    icon: new customMarker("../../docs-demo/img/markers/recreation-center.png")
                                 }
                             },
                             {
                                 value: "GOLF COURSE",
                                 vectorOptions: {
-                                    icon: "../../docs-demo/img/markers/golf.png"
+                                    icon: new customMarker("../../docs-demo/img/markers/golf.png")
                                 }
                             }
                         ]
                     }
-                });*/
+                });
             });
         </script>
     </body>

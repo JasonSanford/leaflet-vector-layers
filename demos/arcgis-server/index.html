@@ -77,7 +77,7 @@
                 <hr>
                 <h2 id="charts-graphs">Senior Citizens</h2>
                 <p class="docs">This example has features styled using the <code>range</code> symbology type where values of a particular attribute ("MED_AGE" in this example) within a specific range have a specific style. Polygons with lighter shades have a population with a lower median age while the darker polygons have an older population.</p>
-                <p class="docs">Also, instead of a string-based <code>infoWindowTempate</code>, we're using a function that is passed feature attributes and returns a string for populating the infoWindow. This way we can do more complex things with our attributes, like create charts.</p>
+                <p class="docs">Also, instead of a string-based <code>popupTemplate</code>, we're using a function that is passed feature attributes and returns a string for populating the Popup. This way we can do more complex things with our attributes, like create charts.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
                         <pre class="prettyprint"></pre>
@@ -92,7 +92,7 @@
                 <hr>
                 <h2>Current Weather</h2>
                 <p class="docs">This example shows live weather data and symbolizes markers based on temerature with the <code>range</code> symbology type. Blue markers are at or below freezing. Green markers indicate moderate temperatures and warmer stations have red markers. You might need to pan and zoom around a bit to see temperature variance.</p>
-                <p class="docs">We're also using a function based <code>infoWindowTemplate</code> to convert Celcius readings to Farenheit.</p>
+                <p class="docs">We're also using a function based <code>popupTemplate</code> to convert Celcius readings to Farenheit.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
                         <pre class="prettyprint"></pre>
@@ -109,7 +109,7 @@
                 
                 <h2>Winter Weather</h2>
                 <p class="docs">This example pulls from an ArcGIS Server instance that produces weather warnings and watches. Here we're using the <code>where</code> parameter to only show winter weather related watches and warnings (<code>"EVENT LIKE 'WINTER%'"</code>).</p>
-                <p class="docs">Again, this demo uses a function based <code>infoWindowTemplate</code>. In this case the function iterates through each property in properties and formats each to Proper Case for better looking output and skips properties that we don't want to display ("FIPS", "OBJECTID", "EVENT", "SHAPE.area", "SHAPE_Length").</p>
+                <p class="docs">Again, this demo uses a function based <code>popupTemplate</code>. In this case the function iterates through each property in properties and formats each to Proper Case for better looking output and skips properties that we don't want to display ("FIPS", "OBJECTID", "EVENT", "SHAPE.area", "SHAPE_Length").</p>
                 <p>Note that this demo might appear to be non-functional if there are no current winter weather warnings. I'll try to remember to change this demo to show thurerstorm warnings when the weather warms up.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
@@ -299,10 +299,10 @@
                                 }
                             }
                         ]
-                    }/*,
-                    infoWindowTemplate: '<div class="iw-content"><h3>District {DISTRICT}</h3><table><tr><th>Links</th><td><a target="_blank" href="{MAP}">Map</a>, <a href="{URL}" target="_blank">Director\'s Website</a></td></tr></table></div>',
-                    singleInfoWindow: true
-                */});
+                    },
+                    popupTemplate: '<div class="iw-content"><h3>District {DISTRICT}</h3><table><tr><th>Links</th><td><a target="_blank" href="{MAP}">Map</a>, <a href="{URL}" target="_blank">Director\'s Website</a></td></tr></table></div>',
+                    singlePopup: true
+                });
                 
                 ags_census = new lvector.AGS({
                     url: "http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Census_USA/MapServer/3",
@@ -360,8 +360,8 @@
                                 }
                             }
                         ]    
-                    }/*,
-                    infoWindowTemplate: function(atts) {
+                    },
+                    popupTemplate: function(atts) {
                         var totPop = atts.POP2000;
                         
                         var percent_under_5 = (atts.AGE_UNDER5/totPop) * 100,
@@ -373,10 +373,13 @@
                             percent_50_64 = (atts.AGE_50_64/totPop) * 100,
                             percent_65_up = (atts.AGE_65_UP/totPop) * 100;
                         
-                        var imageURL = "http://chart.googleapis.com/chart?cht=p&chs=285x150&chl=%3C5|5%20-%2017|18%20-%2021|22%20-%2029|30%20-%2039|40%20-%2049|50%20-%2064|%3E64&chdl=" + parseInt(percent_under_5) + "%|" + parseInt(percent_5_17) + "%|" + parseInt(percent_18_21) + "%|" + parseInt(percent_22_29) + "%|" + parseInt(percent_30_39) + "%|" + parseInt(percent_40_49) + "%|" + parseInt(percent_50_64) + "%|" + parseInt(percent_65_up) + "&chd=t:" + percent_under_5 + "," + percent_5_17 + "," + percent_18_21 + "," + percent_22_29 + "," + percent_30_39 + "," + percent_40_49 + "," + percent_50_64 + "," + percent_65_up;
+                        var imageURL = "http://chart.googleapis.com/chart?cht=p&chs=280x150&chl=%3C5|5%20-%2017|18%20-%2021|22%20-%2029|30%20-%2039|40%20-%2049|50%20-%2064|%3E64&chdl=" + parseInt(percent_under_5) + "%|" + parseInt(percent_5_17) + "%|" + parseInt(percent_18_21) + "%|" + parseInt(percent_22_29) + "%|" + parseInt(percent_30_39) + "%|" + parseInt(percent_40_49) + "%|" + parseInt(percent_50_64) + "%|" + parseInt(percent_65_up) + "&chd=t:" + percent_under_5 + "," + percent_5_17 + "," + percent_18_21 + "," + percent_22_29 + "," + percent_30_39 + "," + percent_40_49 + "," + percent_50_64 + "," + percent_65_up;
                         return '<div class="iw-content"><h3>' + atts.NAME + ' County, ' + atts.STATE_NAME + '</h3><h4>Median Age: ' + atts.MED_AGE + '</h4><img style="height:150px;width:285px;" src="' + imageURL + '" /></div>';
                     },
-                    singleInfoWindow: true*/
+                    popupOptions: {
+                        maxWidth: 350
+                    },
+                    singlePopup: true
                 });
                 
                 var customMarker = L.Icon.extend({
@@ -410,19 +413,19 @@
                             {
                                 range: [-50, 0],
                                 vectorOptions: {
-                                    //icon: new customMarker()
+                                    icon: new customMarker()
                                 }
                             },
                             {
                                 range: [0.000001, 14.9999999],
                                 vectorOptions: {
-                                    //icon: new customMarker("../../docs-demo/img/markers/moderate.png")
+                                    icon: new customMarker("../../docs-demo/img/markers/moderate.png")
                                 }
                             },
                             {
                                 range: [15, 60],
                                 vectorOptions: {
-                                    //icon: new customMarker("../../docs-demo/img/markers/hot.png")
+                                    icon: new customMarker("../../docs-demo/img/markers/hot.png")
                                 }
                             }
                         ]
@@ -436,19 +439,19 @@
                     where: "EVENT LIKE 'WINTER%'",
                     scaleRange: [3, 15],
                     showAll: true,
-                    //infoWindowTemplate: function(properties) {
-                        //var html = '<div class="iw-content"><h3>' + properties.EVENT.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</h3><table class="condensed-table">';
-                        //for (var prop in properties) {
-                            //if (["FIPS", "OBJECTID", "EVENT", "SHAPE.area", "SHAPE_Length"].indexOf(prop) < 0) {
-                                //if (prop == "WEB") {
-                                    //html += '<tr><th>Link</th><td><a href="' + properties[prop] + '" target="_blank">' + properties.EVENT.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</a></td></tr>';
-                                //} else {
-                                    //html += '<tr><th>' + prop.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</th><td>' + properties[prop] + '</td></tr>';
-                                //}
-                            //}
-                        //}
-                        //return html + '</table></div>';
-                    //},
+                    popupTemplate: function(properties) {
+                        var html = '<div class="iw-content"><h3>' + properties.EVENT.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</h3><table class="condensed-table">';
+                        for (var prop in properties) {
+                            if (["FIPS", "OBJECTID", "EVENT", "SHAPE.area", "SHAPE_Length"].indexOf(prop) < 0) {
+                                if (prop == "WEB") {
+                                    html += '<tr><th>Link</th><td><a href="' + properties[prop] + '" target="_blank">' + properties.EVENT.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</a></td></tr>';
+                                } else {
+                                    html += '<tr><th>' + prop.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '</th><td>' + properties[prop] + '</td></tr>';
+                                }
+                            }
+                        }
+                        return html + '</table></div>';
+                    },
                     symbology: {
                         type: "single",
                         vectorOptions: {

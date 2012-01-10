@@ -17,6 +17,7 @@ lvector.Layer = lvector.Class.extend({
         autoUpdate: false,
         autoUpdateInterval: null,
         popupTemplate: null,
+        popupOptions: {},
         singlePopup: false,
         symbology: null,
         showAll: false
@@ -314,8 +315,6 @@ lvector.Layer = lvector.Class.extend({
     // Show the feature's (or layer's) Popup
     //
     _showPopup: function(feature, event) {
-        var popupOptions = {};
-        
         //
         // Create a variable to hold a reference to the object that owns the Popup so we can show it later
         //
@@ -328,7 +327,7 @@ lvector.Layer = lvector.Class.extend({
             //
             // Create a Popup and store it in the feature
             //
-            feature.popup = new L.Popup(popupOptions, feature.vector);
+            feature.popup = new L.Popup(this.options.popupOptions, feature.vector);
             ownsPopup = feature;
         } else {
             if (this.popup) {
@@ -342,7 +341,7 @@ lvector.Layer = lvector.Class.extend({
             //
             // Create a new Popup
             //
-            this.popup = new L.Popup(popupOptions, feature.vector);
+            this.popup = new L.Popup(this.options.popupOptions, feature.vector);
             
             //
             // Store the associated feature reference in the Popup so we can close and clear it later

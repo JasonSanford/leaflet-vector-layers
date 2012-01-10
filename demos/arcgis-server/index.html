@@ -122,6 +122,23 @@
                         </div>
                     </div>
                 </div>
+                
+                <hr>
+                
+                <h2>Nashua Sewer</h2>
+                <p class="docs"></p>
+                <div class="row demo">
+                    <div class="span6 height-controlled">
+                        <pre class="prettyprint"></pre>
+                    </div>
+                    <div class="span10 height-controlled">
+                        <div id="map-container-6" class="map"></div>
+                        <div class="layer-buttons">
+                            <div class="row layer-button-row"><a href="javascript:ags_manholes.setMap(map6);" class="btn success">ManHoles On</a> <a href="javascript:ags_manholes.setMap(null);" class="btn danger">ManHoles Off</a></div>
+                            <div class="row layer-button-row" style="float:right;"><a href="javascript:ags_sewerlines.setMap(map6);" class="btn success">Lines On</a> <a href="javascript:ags_sewerlines.setMap(null);" class="btn danger">Lines Off</a></div>
+                        </div>
+                    </div>
+                </div>
         
                 <footer> 	
                     <p>&copy; Jason Sanford - geojason.info 2011</p>
@@ -195,6 +212,18 @@
                         new L.TileLayer("http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg", {
                             maxZoom: 18,
                             attribution: 'Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+                        })
+                    ]
+                });
+                
+                map6 = new L.Map("map-container-6", {
+                    center: new L.LatLng(42.76522, -71.46746),
+                    zoom: 17,
+                    layers: [
+                        new L.TileLayer("http://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg", {
+                            maxZoom: 18,
+                            subdomains: ["oatile1", "oatile2", "oatile3", "oatile4"],
+                            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>.'
                         })
                     ]
                 });
@@ -462,6 +491,23 @@
                             color: "#666"
                         }
                     }
+                });
+                
+                ags_manholes = new lvector.AGS({
+                    url: "http://gis.nashuanh.gov/ArcGIS/rest/services/NashuaFlex1/MapServer/30",
+                    fields: "*",
+                    uniqueField: "OBJECTID",
+                    where: "SNODE_TYPE!='PLUG' AND SNODE_TYPE!='TEE' AND SNODE_TYPE!='JOINT' AND SNODE_TYPE!='BEND' AND SNODE_TYPE!='PS-PVT'",
+                    esriOptions: true,
+                    popupTemplate: '<div class="iw-content"><h3>{SNODE_TYPE}</h3></div>',
+                    singlePopup: true
+                });
+                
+                ags_sewerlines = new lvector.AGS({
+                    url: "http://gis.nashuanh.gov/ArcGIS/rest/services/NashuaFlex1/MapServer/31",
+                    fields: "*",
+                    uniqueField: "OBJECTID",
+                    esriOptions: true
                 });
                 
             });

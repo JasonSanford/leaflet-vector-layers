@@ -60,8 +60,24 @@
                     <div class="span10 height-controlled">
                         <div id="map-container-1" class="map"></div>
                         <div class="layer-buttons">
-                            <div class="row layer-button-row"><a href="javascript:ags_a2e_light_rail_stations.setMap(map1);" class="btn success">Stations On</a> <a href="javascript:ags_a2e_light_rail_stations.setMap(null);" class="btn danger">Stations Off</a></div>
-                            <div class="row layer-button-row" style="float: right;"><a href="javascript:ags_a2e_light_rail_lines.setMap(map1);" class="btn success">Lines On</a> <a href="javascript:ags_a2e_light_rail_lines.setMap(null);" class="btn danger">Lines Off</a></div>
+                            <div class="row layer-button-row"><a href="javascript:a2e_light_rail_stations.setMap(map1);" class="btn success">Stations On</a> <a href="javascript:a2e_light_rail_stations.setMap(null);" class="btn danger">Stations Off</a></div>
+                            <div class="row layer-button-row" style="float: right;"><a href="javascript:a2e_light_rail_lines.setMap(map1);" class="btn success">Lines On</a> <a href="javascript:a2e_light_rail_lines.setMap(null);" class="btn danger">Lines Off</a></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h2>VGI</h2>
+                <p class="docs"></p>
+                <div class="row demo">
+                    <div class="span6 height-controlled">
+                        <pre class="prettyprint"></pre>
+                    </div>
+                    <div class="span10 height-controlled">
+                        <div id="map-container-2" class="map"></div>
+                        <div class="layer-buttons">
+                            <div class="row layer-button-row"><a href="javascript:a2e_vgi.setMap(map2);" class="btn success">Layer On</a> <a href="javascript:a2e_vgi.setMap(null);" class="btn danger">Layer Off</a></div>
                         </div>
                     </div>
                 </div>
@@ -92,8 +108,8 @@
         <script src="../../docs-demo/js/bootstrap-dropdown.js" type="text/javascript"></script>
         <script src="../../debug/lvector-include.js" type="text/javascript"></script>
         <script type="text/javascript">
-            var map1;
-            var ags_a2e_light_rail_lines, ags_a2e_light_rail_stations;
+            var map1, map2;
+            var a2e_light_rail_lines, a2e_light_rail_stations, a2e_vgi;
             
             $(document).ready(function() {
                 
@@ -109,7 +125,19 @@
                     ]
                 });
                 
-                ags_a2e_light_rail_lines = new lvector.AGS({
+                map2 = new L.Map("map-container-2", {
+                    center: new L.LatLng(39.74154151936245, -104.99968229904174),
+                    zoom: 14,
+                    layers: [
+                        new L.TileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
+                            maxZoom: 18,
+                            subdomains: ["otile1", "otile2", "otile3", "otile4"],
+                            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+                        })
+                    ]
+                });
+                
+                a2e_light_rail_lines = new lvector.AGS({
                     url: "http://sync.arc2earth.com/6442491/ArcGIS/rest/services/tfs/2447511/FeatureServer/0",
                     esriOptions: true,
                     showAll: true,
@@ -118,12 +146,22 @@
                     singlePopup: true
                 });
                 
-                ags_a2e_light_rail_stations = new lvector.AGS({
+                a2e_light_rail_stations = new lvector.AGS({
                     url: "http://sync.arc2earth.com/6442491/ArcGIS/rest/services/tfs/2447610/FeatureServer/0",
                     esriOptions: true,
                     uniqueField: "global_fid",
                     popupTemplate: '<div class="iw-content"><h3>{NAME}</h3><table class="condensed-table"><tr><th>Address</th><td>{ADDRESS}</td></tr><tr><th># Parking Spaces</th><td>{AUTOS}</td></tr><tr><th># Bike Racks</th><td>{RACKS}</td></tr><tr><th># Bike Lockers</th><td>{LOCKERS}</td></tr><tr><th># Shelters</th><td>{SHELTERS}</td></tr></table></div>',
                     singlePopup: true
+                });
+                
+                a2e_vgi = new lvector.A2E({
+                    url: "http://sync.arc2earth.com/6442491/ArcGIS/rest/services/tfs/2447544/FeatureServer/0",
+                    esriOptions: true,
+                    uniqueField: "global_fid",
+                    popupTemplate: '<div class="iw-content"><h3>{Name}</h3></div>',
+                    singlePopup: true,
+                    dynamic: true,
+                    autoUpdate: true
                 });
                 
             });

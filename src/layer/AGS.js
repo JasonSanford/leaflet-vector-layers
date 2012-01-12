@@ -255,7 +255,7 @@ lvector.AGS = lvector.Layer.extend({
         
         // Check to see if the _lastQueriedBounds is the same as the new bounds
         // If true, don't bother querying again.
-        if (this._lastQueriedBounds && this._lastQueriedBounds.equals(bounds) && !this._autoUpdateInterval) {
+        if (this._lastQueriedBounds && this._lastQueriedBounds.equals(bounds) && !this.options.autoUpdate) {
             return;
         }
         
@@ -293,6 +293,11 @@ lvector.AGS = lvector.Layer.extend({
                                     if (!isNaN(data.features[i].geometry.x) && !isNaN(data.features[i].geometry.y)) {
                                         this._vectors[i2].geometry = data.features[i].geometry;
                                         this._vectors[i2].vector.setLatLng(new L.LatLng(this._vectors[i2].geometry.y, this._vectors[i2].geometry.x));
+                                        if (this._vectors[i2].popup) {
+                                            this._vectors[i2].popup.setLatLng(new L.LatLng(this._vectors[i2].geometry.y, this._vectors[i2].geometry.x));
+                                        } else if (this.popup && this.popup.associatedFeature == this._vectors[i2]) {
+                                            this.popup.setLatLng(new L.LatLng(this._vectors[i2].geometry.y, this._vectors[i2].geometry.x));
+                                        }
                                     }
                                     
                                 }
@@ -302,10 +307,16 @@ lvector.AGS = lvector.Layer.extend({
                                 if (propertiesChanged) {
                                     this._vectors[i2].attributes = data.features[i].attributes;
                                     if (this.options.popupTemplate) {
-                                        this._setInfoWindowContent(this._vectors[i2]);
+                                        this._setPopupContent(this._vectors[i2]);
                                     }
                                     if (this.options.symbology && this.options.symbology.type != "single") {
-                                        this._vectors[i2].vector.setOptions(this._getFeatureVectorOptions(this._vectors[i2]));
+                                        if (this._vectors[i2].vector.setStyle) {
+                                            // It's a LineString or Polygon, so use setStyle
+                                            this._vectors[i2].vector.setStyle(this._getFeatureVectorOptions(this._vectors[i2]));
+                                        } else if (this._vectors[i2].vector.setIcon) {
+                                            // It's a Point, so use setStyle
+                                            this._vectors[i2].vector.setIcon(this._getFeatureVectorOptions(this._vectors[i2]).icon);
+                                        }
                                     }
                                 }
                             

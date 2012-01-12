@@ -303,7 +303,7 @@ lvector.Layer = lvector.Class.extend({
             if (feature.popupContent !== previousContent) {
                 feature.popup.setContent(feature.popupContent);
             }
-        } else if (this.popup) {
+        } else if (this.popup && this.popup.associatedFeature == feature) {
             // The Popup is associated with the layer (singlePopup: true)
             if (feature.popupContent !== previousContent) {
                 this.popup.setContent(feature.popupContent);

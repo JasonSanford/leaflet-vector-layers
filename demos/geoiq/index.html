@@ -52,7 +52,27 @@
                 <p class="docs">A very simple <code>popupTemplate</code> has also been provided as well as a single <code>symbology</code> type that shows a custom marker.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint"></pre>
+                        <pre class="prettyprint">var customMarker = L.Icon.extend({
+    iconUrl: "../../docs-demo/img/markers/ski-lift.png",
+    shadowUrl: null,
+    iconSize: new L.Point(32, 37),
+    iconAnchor: new L.Point(16, 37),
+    popupAnchor: new L.Point(0, -35)
+});
+
+geoiq_ski_areas = new lvector.GeoIQ({
+	dataset: 164880,
+	uniqueField: "NAME",
+	scaleRange: [6, 20],
+	popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;{NAME}&lt;/h3&gt;&lt;/div&gt;',
+	singlePopup: true,
+	symbology: {
+	    type: "single",
+	    vectorOptions: {
+		    icon: new customMarker()
+	    }
+	}
+});</pre>
                     </div>
                     <div class="span10 height-controlled">
                         <div id="map-container-1" class="map"></div>
@@ -70,7 +90,59 @@
                 <p>Keep in mind that it could take a few seconds to load this dataset due to its large size.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint"></pre>
+                        <pre class="prettyprint">geoiq_foss4g_reg = new lvector.GeoIQ({
+    dataset: 147336,
+    uniqueField: "state",
+    showAll: true,
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;{state}&lt;/h3&gt;&lt;table class="condensed-table"&gt;&lt;tr&gt;&lt;th&gt;Registrants&lt;/th&gt;&lt;td&gt;{count}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Percent of Total&lt;/th&gt;&lt;td&gt;{percent}&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;',
+    singlePopup: true,
+    symbology: {
+        type: "range",
+        property: "count",
+        ranges: [
+            {
+                range: [1, 1],
+                vectorOptions: {
+                    fillColor: "#F1EEF6",
+                    fillOpacity: 0.85,
+                    color: "#333",
+                    weight: 1,
+                    opacity: 1
+                }
+            },
+            {
+                range: [2, 10],
+                vectorOptions: {
+                    fillColor: "#BDC9E1",
+                    fillOpacity: 0.85,
+                    color: "#333",
+                    weight: 1,
+                    opacity: 1
+                }
+            },
+            {
+                range: [11, 20],
+                vectorOptions: {
+                    fillColor: "#74A9CF",
+                    fillOpacity: 0.85,
+                    color: "#333",
+                    weight: 1,
+                    opacity: 1
+                }
+            },
+            {
+                range: [21, 126],
+                vectorOptions: {
+                    fillColor: "#0570B0",
+                    fillOpacity: 0.85,
+                    color: "#333",
+                    weight: 1,
+                    opacity: 1
+                }
+            }
+        ]
+    }
+});</pre>
                     </div>
                     <div class="span10 height-controlled">
                         <div id="map-container-2" class="map"></div>
@@ -87,7 +159,61 @@
                 <p class="docs">We're also using a function based <code>popupTemplate</code> to format our data so it's a little easier to read - In this case convert attributes to Proper Case instead of UPPER CASE.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint"></pre>
+                        <pre class="prettyprint">geoiq_parks = new lvector.GeoIQ({
+    dataset: 181235,
+    uniqueField: "prkid",
+    popupTemplate: function(properties) {
+        var properCase = function(s) {
+            return s.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        };
+        var html = '&lt;div class="iw-content"&gt;&lt;h3&gt;' + properCase(properties.name) + '&lt;/h3&gt;&lt;table class="condensed-table"&gt;';
+        html += '&lt;tr&gt;&lt;th&gt;Address&lt;/th&gt;&lt;td&gt;' + properCase(properties.prkaddr) + '&lt;/td&gt;&lt;/tr&gt;';
+        html += '&lt;tr&gt;&lt;th&gt;Size&lt;/th&gt;&lt;td&gt;' + properties.prksize + ' acres&lt;/td&gt;&lt;/tr&gt;';
+        return html += '&lt;/table&gt;&lt;/div&gt;';
+    },
+    symbology: {
+        type: "unique",
+        property: "prktype",
+        values: [
+            {
+                value: "REGIONAL PARK",
+                vectorOptions: {
+                    icon: new customMarker("../../docs-demo/img/markers/park.png")
+                }
+            },
+            {
+                value: "NEIGHBORHOOD PARK",
+                vectorOptions: {
+                    icon: new customMarker("../../docs-demo/img/markers/park.png")
+                }
+            },
+            {
+                value: "COMMUNITY PARK",
+                vectorOptions: {
+                    icon: new customMarker("../../docs-demo/img/markers/park.png")
+                }
+            },
+            {
+                value: "NATURE PRESERVE",
+                vectorOptions: {
+                    icon: new customMarker("../../docs-demo/img/markers/nature-preserve.png")
+                }
+            },
+            {
+                value: "RECREATION CENTER",
+                vectorOptions: {
+                    icon: new customMarker("../../docs-demo/img/markers/recreation-center.png")
+                }
+            },
+            {
+                value: "GOLF COURSE",
+                vectorOptions: {
+                    icon: new customMarker("../../docs-demo/img/markers/golf.png")
+                }
+            }
+        ]
+    }
+});</pre>
                     </div>
                     <div class="span10 height-controlled">
                         <div id="map-container-3" class="map"></div>
@@ -116,6 +242,7 @@
                 map1 = new L.Map("map-container-1", {
                     center: new L.LatLng(39.67, -106.12),
                     zoom: 8,
+                    minZoom: 4,
                     layers: [
                         new L.TileLayer("http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg", {
                             maxZoom: 18,

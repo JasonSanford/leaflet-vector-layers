@@ -49,10 +49,59 @@
                 <h1>CartoDB</h1>
                 <h2>Sewer Network</h2>
                 <p>This demo shows a point an a line table from <a href="http://cartodb.com">CartoDB</a>, sewer lines and man holes. The man holes are displayed using a simple symbology while the sewer lines use the range symbology. Pipes up to 8" in diameter are shown with a thinner green line, while larger pipes are shown with a thicker orange line.</p>
-                <p class="docs">We're also using the <code>singleInfoWindow</code> option here so that only one InfoWindow is shown for each layer. This keeps the map from getting cluttered when selecting lots of features.</p>
+                <p class="docs">We're also using the <code>singlePopup</code> option here so that only one Popup is shown for each layer. This keeps the map from getting cluttered when selecting lots of features.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint"></pre>
+                        <pre class="prettyprint">cartodb_sewer_line = new lvector.CartoDB({
+    user: "geojason",
+    table: "sewer_line",
+    scaleRange: [15, 20],
+    symbology: {
+        type: "range",
+        property: "pipe_dia",
+        ranges: [
+            {
+                range: [0, 8],
+                vectorOptions: {
+                    weight: 4,
+                    color: "#46461f",
+                    opacity: 0.8
+                }
+            },{
+                range: [8.00001, 100],
+                vectorOptions: {
+                    weight: 8,
+                    color: "#ff7800",
+                    opacity: 0.8
+                }
+            }
+        ]
+    },
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;Sewer Line&lt;/h3&gt;&lt;table class="condensed-table"&gt;&lt;tr&gt;&lt;th&gt;Diameter&lt;/th&gt;&lt;td&gt;{pipe_dia} in.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Material&lt;/th&gt;&lt;td&gt;{pipe_mat}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Flows To&lt;/th&gt;&lt;td&gt;{wwtp} WWTP&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;',
+    singlePopup: true
+});
+
+var customMarker = L.Icon.extend({
+    iconUrl: "../../docs-demo/img/markers/manhole.png",
+    shadowUrl: null,
+    iconSize: new L.Point(16, 16),
+    iconAnchor: new L.Point(8, 8),
+    popupAnchor: new L.Point(1, -8)
+});
+
+cartodb_man_hole = new lvector.CartoDB({
+    user: "geojason",
+    table: "man_hole",
+    scaleRange: [16, 20],
+    symbology: {
+        type: "single",
+        vectorOptions: {
+            icon: new customMarker("../../docs-demo/img/markers/manhole.png")
+        }
+    },
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;Man Hole&lt;/h3&gt;&lt;table class="condensed-table"&gt;&lt;tr&gt;&lt;th&gt;Diameter&lt;/th&gt;&lt;td&gt;{mh_dia} ft.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Depth&lt;/th&gt;&lt;td&gt;{mh_depth} ft.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Address&lt;/th&gt;&lt;td&gt;{street_add}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Flows To&lt;/th&gt;&lt;td&gt;{wwtp} WWTP&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;',
+    singlePopup: true
+});</pre>
                     </div>
                     <div class="span10 height-controlled">
                         <div id="map-container-1" class="map"></div>
@@ -69,7 +118,50 @@
                 <p class="docs">Keep in mind when performing geometric functions with SQL, your output geometry must be in a field named <code>the_geom</code> to return proper GeoJSON.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint"></pre>
+                        <pre class="prettyprint">cartodb_flood_zones = new lvector.CartoDB({
+    user: "geojason",
+    table: "flood_zones",
+    fields: "cartodb_id,label,st_simplify(the_geom,0.000008) the_geom",
+    scaleRange: [14, 20],
+    symbology: {
+        type: "unique",
+        property: "label",
+        values: [
+            {
+                value: "AE",
+                vectorOptions: {
+                    fillColor: "#2f952f",
+                    fillOpacity: 0.6,
+                    weight: 1,
+                    color: "#fff",
+                    opacity: 0
+                }
+            },
+            {
+                value: "AE-FW",
+                vectorOptions: {
+                    fillColor: "#004a00",
+                    fillOpacity: 0.6,
+                    weight: 1,
+                    color: "#fff",
+                    opacity: 0
+                }
+            },
+            {
+                value: "0.2% Annual Chance",
+                vectorOptions: {
+                    fillColor: "#aaff7a",
+                    fillOpacity: 0.6,
+                    weight: 1,
+                    color: "#fff",
+                    opacity: 0
+                }
+            }
+        ],
+    },
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;Flood Zone&lt;/h3&gt;&lt;table class="condensed-table"&gt;&lt;tr&gt;&lt;th&gt;Type&lt;/th&gt;&lt;td&gt;{label}&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;',
+    singlePopup: true
+});</pre>
                     </div>
                     <div class="span10 height-controlled">
                         <div id="map-container-2" class="map"></div>

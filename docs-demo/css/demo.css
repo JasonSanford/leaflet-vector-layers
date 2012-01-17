@@ -67,3 +67,6 @@ h2 small {
     margin: 0 0 4px 0;
     line-height: inherit;
 }
+ul.docs li, ol.docs li{
+    color: #404040 !important;
+}

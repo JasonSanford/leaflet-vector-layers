@@ -55,7 +55,22 @@
                 <p class="docs">For both of these layers we're using the <code>esriOptions</code> option. When set to <code>true</code> the ArcGIS Server instance is queried to set other options like <code>scaleRange</code> and <code>symbology</code>. This can be particularly helpful if you've spent a lot of time styling your layers in ArcMap and don't want to replicate with Google's vector configurations.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint"></pre>
+                        <pre class="prettyprint">a2e_light_rail_lines = new lvector.A2E({
+    url: "http://sync.arc2earth.com/6442491/ArcGIS/rest/services/tfs/2447511/FeatureServer/0",
+    esriOptions: true,
+    showAll: true,
+    where: "ROUTE != '101'",
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;{ROUTE}&lt;/h3&gt;&lt;/div&gt;',
+    singlePopup: true
+});
+
+a2e_light_rail_stations = new lvector.A2E({
+    url: "http://sync.arc2earth.com/6442491/ArcGIS/rest/services/tfs/2447610/FeatureServer/0",
+    esriOptions: true,
+    uniqueField: "global_fid",
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;{NAME}&lt;/h3&gt;&lt;table class="condensed-table"&gt;&lt;tr&gt;&lt;th&gt;Address&lt;/th&gt;&lt;td&gt;{ADDRESS}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;# Parking Spaces&lt;/th&gt;&lt;td&gt;{AUTOS}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;# Bike Racks&lt;/th&gt;&lt;td&gt;{RACKS}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;# Bike Lockers&lt;/th&gt;&lt;td&gt;{LOCKERS}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;# Shelters&lt;/th&gt;&lt;td&gt;{SHELTERS}&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;',
+    singlePopup: true
+});</pre>
                     </div>
                     <div class="span10 height-controlled">
                         <div id="map-container-1" class="map"></div>
@@ -68,11 +83,28 @@
                 
                 <hr>
                 
-                <h2>VGI</h2>
-                <p class="docs"></p>
+                <h2 id="live-feature-updates">Live Feature Updates</h2>
+                <p class="docs">This example shows an Arc2Earth Sync layer that is updated in near-real time. To accomplish this we set the <code>dynamic</code> and <code>autoUpdate</code> parameters to <code>true</code>.</p>
+                <p>To see this in action you should:</p>
+                <ol class="docs">
+                    <li>Turn the layer below on</li>
+                    <li>Open up a new browser window and view <a target="_blank" href="https://www.arcgis.com/home/webmap/viewer.html?webmap=e1cdc4855ea54edf8ff9451e32fff5cb">this ArcGIS.com map</a></li>
+                    <li>Be sure you can see both the ArcGIS.com map and the map below</li>
+                    <li>Make an edit the the ArcGIS.com map</li>
+                    <li>Watch the feature update live (&lt;1 sec) in the map below</li>
+                </ol>
+                <p>Changing the feature's type (Sewer Issue, Tree Issue, etc) should change symbology and geometry changes (moving the point) should change the same feature's location below.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint"></pre>
+                        <pre class="prettyprint">a2e_vgi = new lvector.A2E({
+    url: "http://sync.arc2earth.com/6442491/ArcGIS/rest/services/tfs/2447544/FeatureServer/0",
+    esriOptions: true,
+    uniqueField: "global_fid",
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;{Name}&lt;/h3&gt;&lt;/div&gt;',
+    singlePopup: true,
+    dynamic: true,
+    autoUpdate: true
+});</pre>
                     </div>
                     <div class="span10 height-controlled">
                         <div id="map-container-2" class="map"></div>
@@ -137,7 +169,7 @@
                     ]
                 });
                 
-                a2e_light_rail_lines = new lvector.AGS({
+                a2e_light_rail_lines = new lvector.A2E({
                     url: "http://sync.arc2earth.com/6442491/ArcGIS/rest/services/tfs/2447511/FeatureServer/0",
                     esriOptions: true,
                     showAll: true,
@@ -146,7 +178,7 @@
                     singlePopup: true
                 });
                 
-                a2e_light_rail_stations = new lvector.AGS({
+                a2e_light_rail_stations = new lvector.A2E({
                     url: "http://sync.arc2earth.com/6442491/ArcGIS/rest/services/tfs/2447610/FeatureServer/0",
                     esriOptions: true,
                     uniqueField: "global_fid",

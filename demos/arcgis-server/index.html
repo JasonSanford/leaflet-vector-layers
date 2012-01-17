@@ -51,7 +51,21 @@
                 <p class="docs">This example has a simple, single symbology and uses the <code>showAll</code> parameter to fetch all features at once since there are only a handful.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint"></pre>
+                        <pre class="prettyprint">ags_light_rail = new lvector.AGS({
+    url: "http://maps.rtd-denver.com/ArcGIS/rest/services/SystemMapLiteGoogleVectors/MapServer/1",
+    fields: "*",
+    scaleRange: [13, 20],
+    showAll: true,
+    symbology: {
+        type: "single",
+        vectorOptions: {
+            weight: 4,
+            opacity: 0.8,
+            color: "#004a00"
+        }    
+    },
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;Light Rail Line&lt;/h3&gt;&lt;table class="condensed-table"&gt;&lt;tr&gt;&lt;th&gt;Route&lt;/th&gt;&lt;td&gt;{ROUTE}&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;'
+});</pre>
                     </div>
                     <div class="span10 height-controlled">
                         <div id="map-container-1" class="map"></div>
@@ -65,7 +79,94 @@
                 <p class="docs">This example has features styled using the <code>unique</code> symbology type where values of a particular attribute ("DISTRICT" in this example) have a specific style. We also supply a <code>where</code> parameter to keep the feature count to a minimum for this demo.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint"></pre>
+                        <pre class="prettyprint">ags_districts = new lvector.AGS({
+    url: "http://maps.rtd-denver.com/ArcGIS/rest/services/DirectorDistricts/MapServer/1",
+    fields: "OBJECTID,DISTRICT,URL,MAP",
+    showAll: true,
+    scaleRange: [8, 14],
+    where: "DISTRICT NOT IN('I','J','K','L','M','N','O')",
+    symbology: {
+        type: "unique",
+        property: "DISTRICT",
+        values: [
+            {
+                value: "A",
+                vectorOptions: {
+                    fillColor: "#6600FF",
+                    fillOpacity: 0.6,
+                    color: "#666666",
+                    opacity: 0.8,
+                    weight: 1
+                }
+            }, {
+                value: "B",
+                vectorOptions: {
+                    fillColor: "#660066",
+                    fillOpacity: 0.6,
+                    color: "#666666",
+                    opacity: 0.8,
+                    weight: 1
+                }
+            }, {
+                value: "C",
+                vectorOptions: {
+                    fillColor: "#FF9900",
+                    fillOpacity: 0.6,
+                    color: "#666666",
+                    opacity: 0.8,
+                    weight: 1
+                }
+            }, {
+                value: "D",
+                vectorOptions: {
+                    fillColor: "#00FFFF",
+                    fillOpacity: 0.6,
+                    color: "#666666",
+                    opacity: 0.8,
+                    weight: 1
+                }
+            }, {
+                value: "E",
+                vectorOptions: {
+                    fillColor: "#FFFF00",
+                    fillOpacity: 0.6,
+                    color: "#666666",
+                    opacity: 0.8,
+                    weight: 1
+                }
+            }, {
+                value: "F",
+                vectorOptions: {
+                    fillColor: "#003333",
+                    fillOpacity: 0.6,
+                    color: "#666666",
+                    opacity: 0.8,
+                    weight: 1
+                }
+            }, {
+                value: "G",
+                vectorOptions: {
+                    fillColor: "#ff7800",
+                    fillOpacity: 0.6,
+                    color: "#666666",
+                    opacity: 0.8,
+                    weight: 1
+                }
+            }, {
+                value: "H",
+                vectorOptions: {
+                    fillColor: "#46461f",
+                    fillOpacity: 0.6,
+                    color: "#666666",
+                    opacity: 0.8,
+                    weight: 1
+                }
+            }
+        ]
+    },
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;District {DISTRICT}&lt;/h3&gt;&lt;table&gt;&lt;tr&gt;&lt;th&gt;Links&lt;/th&gt;&lt;td&gt;&lt;a target="_blank" href="{MAP}"&gt;Map&lt;/a&gt;, &lt;a href="{URL}" target="_blank"&gt;Director\'s Website&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;',
+    singlePopup: true
+});</pre>
                     </div>
                     <div class="span10 height-controlled">
                         <div id="map-container-2" class="map"></div>
@@ -80,7 +181,83 @@
                 <p class="docs">Also, instead of a string-based <code>popupTemplate</code>, we're using a function that is passed feature attributes and returns a string for populating the Popup. This way we can do more complex things with our attributes, like create charts.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint"></pre>
+                        <pre class="prettyprint">ags_census = new lvector.AGS({
+    url: "http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Census_USA/MapServer/3",
+    fields: "ObjectID,NAME,STATE_NAME,POP2000,MED_AGE,AGE_UNDER5,AGE_5_17,AGE_18_21,AGE_22_29,AGE_30_39,AGE_40_49,AGE_50_64,AGE_65_UP",
+    uniqueField: "ObjectID",
+    scaleRange: [6, 20],
+    symbology: {
+        type: "range",
+        property: "MED_AGE",
+        ranges: [
+            {
+                range: [0, 32],
+                vectorOptions: {
+                    weight: 1,
+                    color: "#666666",
+                    opacity: 0.5,
+                    fillOpacity: 0.8,
+                    fillColor: "#FFFFCC"
+                }
+            },{
+                range: [32.0000001, 40],
+                vectorOptions: {
+                    weight: 1,
+                    color: "#666666",
+                    opacity: 0.5,
+                    fillOpacity: 0.8,
+                    fillColor: "#C2E699"
+                }
+            },{
+                range: [44.0000001, 50],
+                vectorOptions: {
+                    weight: 1,
+                    color: "#666666",
+                    opacity: 0.5,
+                    fillOpacity: 0.8,
+                    fillColor: "#78C679"
+                }
+            },{
+                range: [50.0000001, 100],
+                vectorOptions: {
+                    weight: 1,
+                    color: "#666666",
+                    opacity: 0.5,
+                    fillOpacity: 0.8,
+                    fillColor: "#238443"
+                }
+            },{
+                range: [35.0000001, 48],
+                vectorOptions: {
+                    weight: 1,
+                    color: "#666666",
+                    opacity: 0.5,
+                    fillOpacity: 0.8,
+                    fillColor: "#C2E699"
+                }
+            }
+        ]    
+    },
+    popupTemplate: function(atts) {
+        var totPop = atts.POP2000;
+        
+        var percent_under_5 = (atts.AGE_UNDER5/totPop) * 100,
+            percent_5_17 = (atts.AGE_5_17/totPop) * 100,
+            percent_18_21 = (atts.AGE_18_21/totPop) * 100,
+            percent_22_29 = (atts.AGE_22_29/totPop) * 100,
+            percent_30_39 = (atts.AGE_30_39/totPop) * 100,
+            percent_40_49 = (atts.AGE_40_49/totPop) * 100,
+            percent_50_64 = (atts.AGE_50_64/totPop) * 100,
+            percent_65_up = (atts.AGE_65_UP/totPop) * 100;
+        
+        var imageURL = "http://chart.googleapis.com/chart?cht=p&chs=280x150&chl=%3C5|5%20-%2017|18%20-%2021|22%20-%2029|30%20-%2039|40%20-%2049|50%20-%2064|%3E64&chdl=" + parseInt(percent_under_5) + "%|" + parseInt(percent_5_17) + "%|" + parseInt(percent_18_21) + "%|" + parseInt(percent_22_29) + "%|" + parseInt(percent_30_39) + "%|" + parseInt(percent_40_49) + "%|" + parseInt(percent_50_64) + "%|" + parseInt(percent_65_up) + "&chd=t:" + percent_under_5 + "," + percent_5_17 + "," + percent_18_21 + "," + percent_22_29 + "," + percent_30_39 + "," + percent_40_49 + "," + percent_50_64 + "," + percent_65_up;
+        return '&lt;div class="iw-content"&gt;&lt;h3&gt;' + atts.NAME + ' County, ' + atts.STATE_NAME + '&lt;/h3&gt;&lt;h4&gt;Median Age: ' + atts.MED_AGE + '&lt;/h4&gt;&lt;img style="height:150px;width:285px;" src="' + imageURL + '" /&gt;&lt;/div&gt;';
+    },
+    popupOptions: {
+        maxWidth: 350
+    },
+    singlePopup: true
+});</pre>
                     </div>
                     <div class="span10 height-controlled">
                         <div id="map-container-3" class="map"></div>
@@ -95,13 +272,13 @@
                 <p>This lets your write less code and use the symbology and scale dependent rendering you've spent many hours developing with ArcGIS Desktop.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint">ags_311 = new gvector.AGS({
+                        <pre class="prettyprint">ags_311 = new lvector.AGS({
     url: "http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/SanFrancisco/311Incidents/FeatureServer/0",
     fields: "*",
     uniqueField: "objectid",
     esriOptions: true,
-    infoWindowTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;{address}&lt;/h3&gt;&lt;table class="condensed-table"&gt;&lt;tr&gt;&lt;th&gt;Date/Time&lt;/th&gt;&lt;td&gt;{req_date} {req_time}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Request Type&lt;/th&gt;&lt;td&gt;{req_type}&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;',
-    singleInfoWindow: true
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;{address}&lt;/h3&gt;&lt;table class="condensed-table"&gt;&lt;tr&gt;&lt;th&gt;Date/Time&lt;/th&gt;&lt;td&gt;{req_date} {req_time}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Request Type&lt;/th&gt;&lt;td&gt;{req_type}&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;',
+    singlePopup: true
 });</pre>
                     </div>
                     <div class="span10 height-controlled">
@@ -120,7 +297,37 @@
                 <p>Note that this demo might appear to be non-functional if there are no current winter weather warnings. I'll try to remember to change this demo to show thurerstorm warnings when the weather warms up.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint"></pre>
+                        <pre class="prettyprint">ags_winter = new lvector.AGS({
+    url: "http://rmgsc.cr.usgs.gov/ArcGIS/rest/services/nhss_weat/MapServer/0",
+    fields: "*",
+    uniqueField: "OBJECTID",
+    where: "EVENT LIKE 'WINTER%'",
+    scaleRange: [3, 15],
+    showAll: true,
+    popupTemplate: function(properties) {
+        var html = '&lt;div class="iw-content"&gt;&lt;h3&gt;' + properties.EVENT.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '&lt;/h3&gt;&lt;table class="condensed-table"&gt;';
+        for (var prop in properties) {
+            if (["FIPS", "OBJECTID", "EVENT", "SHAPE.area", "SHAPE_Length"].indexOf(prop) &lt; 0) {
+                if (prop == "WEB") {
+                    html += '&lt;tr&gt;&lt;th&gt;Link&lt;/th&gt;&lt;td&gt;&lt;a href="' + properties[prop] + '" target="_blank"&gt;' + properties.EVENT.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;';
+                } else {
+                    html += '&lt;tr&gt;&lt;th&gt;' + prop.replace(/_/gi, " ").replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + '&lt;/th&gt;&lt;td&gt;' + properties[prop] + '&lt;/td&gt;&lt;/tr&gt;';
+                }
+            }
+        }
+        return html + '&lt;/table&gt;&lt;/div&gt;';
+    },
+    symbology: {
+        type: "single",
+        vectorOptions: {
+            fillColor: "#ffffff",
+            fillOpacity: 0.75,
+            weight: 1,
+            opacity: 1,
+            color: "#666"
+        }
+    }
+});</pre>
                     </div>
                     <div class="span10 height-controlled">
                         <div id="map-container-5" class="map"></div>
@@ -198,7 +405,7 @@
                 map5 = new L.Map("map-container-5", {
                     center: new L.LatLng(39.69618575505994, -97.06703840866088),
                     zoom: 4,
-                    minZoom: 3,
+                    minZoom: 4,
                     layers: [
                         new L.TileLayer("http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg", {
                             maxZoom: 18,

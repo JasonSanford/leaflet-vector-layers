@@ -1,6 +1,6 @@
 var deps = {
     Core: {
-        src: ['gvector.js',
+        src: ['lvector.js',
               'core/Util.js',
               'core/Class.js'],
         desc: 'The core of the library, including OOP, base layer properties, etc.'
@@ -19,7 +19,7 @@ var deps = {
         deps: ['Layer']
     },
     
-    AGS: {
+    A2E: {
         src: ['layer/A2E.js'],
         desc: 'The Arc2Earth layer.',
         heading: 'Arc2Earth',

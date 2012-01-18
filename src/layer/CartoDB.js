@@ -82,7 +82,7 @@ lvector.CartoDB = lvector.Layer.extend({
         
         // Check to see if the _lastQueriedBounds is the same as the new bounds
         // If true, don't bother querying again.
-        if (this._lastQueriedBounds && this._lastQueriedBounds.equals(bounds) && !this._autoUpdateInterval) {
+        if (this._lastQueriedBounds && this._lastQueriedBounds.equals(bounds) && !this.options.autoUpdate) {
             return;
         }
         
@@ -127,17 +127,17 @@ lvector.CartoDB = lvector.Layer.extend({
                                 var propertiesChanged = this._getPropertiesChanged(this._vectors[i2].properties, data.features[i].properties);
                                 
                                 if (propertiesChanged) {
-                                    this._vectors[i2].properties = data.features[i].properties;
+                                    this._vectors[i2].attributes = data.features[i].attributes;
                                     if (this.options.popupTemplate) {
                                         this._setPopupContent(this._vectors[i2]);
                                     }
                                     if (this.options.symbology && this.options.symbology.type != "single") {
-                                        if (this._vectors[i2].vector) {
-                                            this._vectors[i2].vector.setOptions(this._getFeatureVectorOptions(this._vectors[i2]));
-                                        } else if (this._vectors[i2].vectors) {
-                                            for (var i3 = 0, len = this._vectors[i2].vectors.length; i3 < len; i3++) {
-                                                this._vectors[i2].vectors[i3].setOptions(this._getFeatureVectorOptions(this._vectors[i2]));
-                                            }
+                                        if (this._vectors[i2].vector.setStyle) {
+                                            // It's a LineString or Polygon, so use setStyle
+                                            this._vectors[i2].vector.setStyle(this._getFeatureVectorOptions(this._vectors[i2]));
+                                        } else if (this._vectors[i2].vector.setIcon) {
+                                            // It's a Point, so use setStyle
+                                            this._vectors[i2].vector.setIcon(this._getFeatureVectorOptions(this._vectors[i2]).icon);
                                         }
                                     }
                                 }

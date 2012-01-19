@@ -127,17 +127,29 @@ lvector.CartoDB = lvector.Layer.extend({
                                 var propertiesChanged = this._getPropertiesChanged(this._vectors[i2].properties, data.features[i].properties);
                                 
                                 if (propertiesChanged) {
-                                    this._vectors[i2].attributes = data.features[i].attributes;
+                                    this._vectors[i2].properties = data.features[i].properties;
                                     if (this.options.popupTemplate) {
                                         this._setPopupContent(this._vectors[i2]);
                                     }
                                     if (this.options.symbology && this.options.symbology.type != "single") {
-                                        if (this._vectors[i2].vector.setStyle) {
-                                            // It's a LineString or Polygon, so use setStyle
-                                            this._vectors[i2].vector.setStyle(this._getFeatureVectorOptions(this._vectors[i2]));
-                                        } else if (this._vectors[i2].vector.setIcon) {
-                                            // It's a Point, so use setStyle
-                                            this._vectors[i2].vector.setIcon(this._getFeatureVectorOptions(this._vectors[i2]).icon);
+                                        if (this._vectors[i2].vectors) {
+                                            for (var i3 = 0, len3 = this._vectors[i2].vectors.length; i3 < len3; i3++) {
+                                                if (this._vectors[i2].vectors[i3].setStyle) {
+                                                    // It's a LineString or Polygon, so use setStyle
+                                                    this._vectors[i2].vectors[i3].setStyle(this._getFeatureVectorOptions(this._vectors[i2]));
+                                                } else if (this._vectors[i2].vectors[i3].setIcon) {
+                                                    // It's a Point, so use setIcon
+                                                    this._vectors[i2].vectors[i3].setIcon(this._getFeatureVectorOptions(this._vectors[i2]).icon);
+                                                }
+                                            }
+                                        } else if (this._vectors[i2].vector) {
+                                            if (this._vectors[i2].vector.setStyle) {
+                                                // It's a LineString or Polygon, so use setStyle
+                                                this._vectors[i2].vector.setStyle(this._getFeatureVectorOptions(this._vectors[i2]));
+                                            } else if (this._vectors[i2].vector.setIcon) {
+                                                // It's a Point, so use setIcon
+                                                this._vectors[i2].vector.setIcon(this._getFeatureVectorOptions(this._vectors[i2]).icon);
+                                            }
                                         }
                                     }
                                 }

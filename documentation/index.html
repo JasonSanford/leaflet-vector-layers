@@ -49,6 +49,7 @@
                     <h5>Classes</h5>
                     <ul>
                         <li><a href="#docs-ags">lvector.AGS</a></li>
+                        <li><a href="#docs-a2e">lvector.A2E</a></li>
                         <li><a href="#docs-geoiq">lvector.GeoIQ</a></li>
                         <li><a href="#docs-cartodb">lvector.CartoDB</a></li>
                     </ul>
@@ -62,6 +63,8 @@
             </div>
             <div class="content">
                 <h1>Classes</h1>
+                
+                <!-- ArcGIS Server -->
                 
                 <h2 class="docs" id="docs-ags">lvector.AGS <small>ArcGIS Server</small></h2>
                 
@@ -116,6 +119,70 @@
                         <tr><td><code>getMap()</code></td><td>Gets the map (if any) that the layer has been added to.</td></tr>
                     </tbody>
                 </table>
+                
+                <!-- End ArcGIS Server -->
+                
+                <!-- Arc2Earth -->
+                                
+                <h2 class="docs" id="docs-a2e">lvector.A2E <small>Arc2Earth</small></h2>
+                                
+                <p>This class creates a layer that processes and displays features from an Arc2Earth Sync instance.</p>
+                
+                <h3>Usage Example</h3>
+                <pre class="prettyprint docs">var myA2ELayer = new lvector.A2E({
+    url: "http://sync.arc2earth.com/6442491/ArcGIS/rest/services/tfs/2447544/FeatureServer/0",
+    esriOptions: true,
+    uniqueField: "global_fid",
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;{Name}&lt;/h3&gt;&lt;/div&gt;',
+    singlePopup: true,
+    dynamic: true,
+    autoUpdate: true
+});</pre>
+                <h3>Constructor</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Constructor</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>lvector.A2E( &lt;<a href="#docs-a2e-options">A2E options</a>&gt; options )</code></td><td>Instantiates an A2E layer with an object literal with A2E options described below.</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3 id="docs-ags-options">Options</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Option</th><th>Type</th><th>Default Value</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>url</code></td><td><code>String</code></td><td><code>null</code></td><td><strong>Required</strong> -  A url for a specific layer in an ArcGIS Server service.</td></tr>
+                        <tr><td><code>map</code></td><td><code>Object <a href="http://maps.googleapis.com/">google.maps.Map object</a></code></td><td><code>null</code></td><td>The Google Maps API <code>Map</code> object where the layer will be added. The layer can be added to the map later with the <code>setMap</code> method.</td></tr>
+                        <tr><td><code>scaleRange</code></td><td><code>Array</code></td><td><code>null</code></td><td>An array with two number values that represent the minimum and maximum scales the layer is visible. For example: <code>[14, 17]</code></td></tr>
+                        <tr><td><code>dynamic</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not the layer contains dynamic data. If true, feature geometry and attributes will be checked for changes after extent change and/or when a <a href="http://www.pubnub.com/">PubNub</a> message is sent to the client.</td></tr>
+                        <tr><td><code>autoUpdate</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not to auto-update a dynamic layer. If true, feature geometry and attributes will be updated in near real-time by subscribing to <a href="http://www.pubnub.com/">PubNub events</a>.</td></tr>
+                        <tr><td><code>popupTemplate</code></td><td><code>String|Function</code></td><td><code>null</code></td><td>A template for creating the content of a <a href="http://leaflet.cloudmade.com/reference.html#popup">Leaflet Popup</a> when a feature is clicked. For details check the <a href="#docs-popup">Popup Template documentation</a>.</td></tr>
+                        <tr><td><code>singlePopup</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not to show a single Popup for a layer when features are clicked. This keeps the map from getting cluttered when multiple features are clicked.</td></tr>
+                        <tr><td><code>symbology</code></td><td><code>Object <a href="#docs-symbology">symbology options</a></code></td><td><code>null</code></td><td>The symbology options for the layer. Features can be rendered with a single symbology or can also be symbolized based on an attribute using unique values or a value range. For details check the <a href="#docs-symbology">symbology options documentation</a>.</td></tr>
+                        <tr><td><code>showAll</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>If true, all features will be fetched and shown once, not after a map extent change. This is helpful for layers with only a handful of features.</td></tr>
+                        <tr><td><code>fields</code></td><td><code>String</code></td><td><code>null</code></td><td>A list of comma separated fields to be returned with the features. For example <code>"OBJECTID,OWNER_NAME"</code> returns two fields and <code>"*"</code> returns all fields.</td></tr>
+                        <tr><td><code>uniqueField</code></td><td><code>String</code></td><td><code>null</code></td><td>A field in the returned data that can be considered unique. This isn't required but is very helpful in determining which features are already on the map when the map extent changes.</td></tr>
+                        <tr><td><code>esriOptions</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not to request <code>scaleRange</code> and <code>symbology</code> settings from the Arc2Earth Sync back-end. Layers loaded from ArcGIS Desktop into Arc2Earth Sync will retain <code>scaleRange</code> and <code>symbology</code> settings from ArcGIS Desktop.</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3>Methods</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Method</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>setMap( &lt;google.maps.Map&gt; Map )</code></td><td>Adds the layer to a map. Remove the layer by passing <code>null</code>.</td></tr>
+                        <tr><td><code>getMap()</code></td><td>Gets the map (if any) that the layer has been added to.</td></tr>
+                    </tbody>
+                </table>
+                
+                <!-- End Arc2Earth -->
+                
+                <!-- GeoIQ -->
                 
                 <h2 class="docs" id="docs-geoiq">lvector.GeoIQ <small>GeoIQ - Geocommons</small></h2>
                 
@@ -176,6 +243,10 @@
                     </tbody>
                 </table>
                 
+                <!-- End GeoIQ -->
+                
+                <!-- CartoDB -->
+                
                 <h2 class="docs" id="docs-cartodb">lvector.CartoDB <small>CartoDB</small></h2>
                 
                 <p>This class creates a layer that processes and displays features from a CartoDB table.</p>
@@ -235,6 +306,8 @@
                         <tr><td><code>getMap()</code></td><td>Gets the map (if any) that the layer has been added to.</td></tr>
                     </tbody>
                 </table>
+                
+                <!-- End CartoDB -->
                 
                 <hr>
                 

@@ -10,24 +10,6 @@
     root.lvector = {
         VERSION: '1.0.0',
 
-        ROOT_URL: (function () {
-            var scripts = document.getElementsByTagName('script'),
-                lvectorRe = /^(.*\/)lvector\-?([\w\-]*)\.js.*$/;
-
-            var i, len, src, matches;
-
-            for (i = 0, len = scripts.length; i < len; i++) {
-                src = scripts[i].src;
-                matches = src.match(lvectorRe);
-
-                if (matches) {
-                    if (matches[2] === 'include') { break; }
-                    return matches[1];
-                }
-            }
-            return '../../dist/';
-        }()),
-
         noConflict: function () {
             root.lvector = this._originallvector;
             return this;
@@ -36,6 +18,7 @@
         _originallvector: root.lvector
     };
     
+    // TODO: Remove if LatLngBounds.equals method gets pull into core.
     if (!L.LatLngBounds.equals) {
         L.LatLngBounds = L.LatLngBounds.extend({
             equals: function(/*LatLngBounds*/ bounds) {

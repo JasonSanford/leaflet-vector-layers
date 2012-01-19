@@ -3,8 +3,8 @@
  Leaflet Vector Layers is a library for showing geometry objects
  from multiple geoweb services in a Leaflet map
 */
-(function(a){a.lvector={VERSION:"1.0.0",ROOT_URL:function(){var a=document.getElementsByTagName("script"),e=/^(.*\/)lvector\-?([\w\-]*)\.js.*$/,c,d,f;c=0;for(d=a.length;c<d;c++)if(f=a[c].src,f=f.match(e)){if(f[2]==="include")break;return f[1]}return"../../dist/"}(),noConflict:function(){a.lvector=this._originallvector;return this},_originallvector:a.lvector};if(!L.LatLngBounds.equals)L.LatLngBounds=L.LatLngBounds.extend({equals:function(a){var e=!1;a!==null&&(e=this._southWest.lat==a.getSouthWest().lat&&
-this._southWest.lng==a.getSouthWest().lng&&this._northEast.lat==a.getNorthEast().lat&&this._northEast.lng==a.getNorthEast().lng);return e}});L.Popup=L.Popup.extend({_close:function(){this._opened&&(this._map.closePopup(),this._map.removeLayer(this))}})})(this);/*
+(function(a){a.lvector={VERSION:"1.0.0",noConflict:function(){a.lvector=this._originallvector;return this},_originallvector:a.lvector};if(!L.LatLngBounds.equals)L.LatLngBounds=L.LatLngBounds.extend({equals:function(a){var e=!1;a!==null&&(e=this._southWest.lat==a.getSouthWest().lat&&this._southWest.lng==a.getSouthWest().lng&&this._northEast.lat==a.getNorthEast().lat&&this._northEast.lng==a.getNorthEast().lng);return e}});L.Popup=L.Popup.extend({_close:function(){this._opened&&(this._map.closePopup(),
+this._map.removeLayer(this))}})})(this);/*
  Using portions of Leaflet code (https://github.com/CloudMade/Leaflet)
 */
 lvector.Util={extend:function(a){for(var b=Array.prototype.slice.call(arguments,1),e=0,c=b.length,d;e<c;e++){d=b[e]||{};for(var f in d)d.hasOwnProperty(f)&&(a[f]=d[f])}return a},setOptions:function(a,b){a.options=lvector.Util.extend({},a.options,b)}};/*

@@ -156,7 +156,7 @@
                     </thead>
                     <tbody>
                         <tr><td><code>url</code></td><td><code>String</code></td><td><code>null</code></td><td><strong>Required</strong> -  A url for a specific layer in an ArcGIS Server service.</td></tr>
-                        <tr><td><code>map</code></td><td><code>Object <a href="http://maps.googleapis.com/">google.maps.Map object</a></code></td><td><code>null</code></td><td>The Google Maps API <code>Map</code> object where the layer will be added. The layer can be added to the map later with the <code>setMap</code> method.</td></tr>
+                        <tr><td><code>map</code></td><td><code>Object <a href="http://leaflet.cloudmade.com/reference.html#map-class">L.Map object</a></code></td><td><code>null</code></td><td>The Leaflet <code>Map</code> object where the layer will be added. The layer can be added to the map later with the <code>setMap</code> method.</td></tr>
                         <tr><td><code>scaleRange</code></td><td><code>Array</code></td><td><code>null</code></td><td>An array with two number values that represent the minimum and maximum scales the layer is visible. For example: <code>[14, 17]</code></td></tr>
                         <tr><td><code>dynamic</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not the layer contains dynamic data. If true, feature geometry and attributes will be checked for changes after extent change and/or when a <a href="http://www.pubnub.com/">PubNub</a> message is sent to the client.</td></tr>
                         <tr><td><code>autoUpdate</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not to auto-update a dynamic layer. If true, feature geometry and attributes will be updated in near real-time by subscribing to <a href="http://www.pubnub.com/">PubNub events</a>.</td></tr>
@@ -177,7 +177,7 @@
                         <tr><th>Method</th><th>Description</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><code>setMap( &lt;google.maps.Map&gt; Map )</code></td><td>Adds the layer to a map. Remove the layer by passing <code>null</code>.</td></tr>
+                        <tr><td><code>setMap( &lt;L.Map&gt; Map )</code></td><td>Adds the layer to a map. Remove the layer by passing <code>null</code>.</td></tr>
                         <tr><td><code>getMap()</code></td><td>Gets the map (if any) that the layer has been added to.</td></tr>
                     </tbody>
                 </table>

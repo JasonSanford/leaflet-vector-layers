@@ -200,7 +200,7 @@
     symbology: {
         type: "single",
         vectorOptions: {
-    	    icon: "../../docs-demo/img/markers/ski-lift.png"
+    	    icon: new customIcon("../../docs-demo/img/markers/ski-lift.png")
         }
     }
 });</pre>
@@ -262,7 +262,7 @@
     symbology: {
         type: "single",
         vectorOptions: {
-            icon: "../../docs-demo/img/markers/manhole.png"
+            icon: new customIcon("../../docs-demo/img/markers/manhole.png")
         }
     },
     popupTemplate: '&lt;h3&gt;Man Hole&lt;/h3&lt;p&gt;Depth: {mh_depth}&lt;/p&gt;',
@@ -332,8 +332,8 @@
     vectorOptions: { // Leaflet Path options for all features
         fillColor: "#46461f",
         fillOpacity: 0.5,
-        strokeWeight: 4,
-        strokeColor: "#ff7800"
+        weight: 4,
+        color: "#ff7800"
     }    
 }</pre>
                 
@@ -352,9 +352,9 @@
             vectorOptions: { // Use these Leaflet Path options for features matching
                 fillColor: "#6600FF",
                 fillOpacity: 0.6,
-                strokeColor: "#666666",
-                strokeOpacity: 0.8,
-                strokeWeight: 1
+                color: "#666666",
+                opacity: 0.8,
+                weight: 1
             }
         },
         {
@@ -362,9 +362,9 @@
             vectorOptions: {
                 fillColor: "#660066",
                 fillOpacity: 0.6,
-                strokeColor: "#666666",
-                strokeOpacity: 0.8,
-                strokeWeight: 1
+                color: "#666666",
+                opacity: 0.8,
+                weight: 1
             }
         },
         {
@@ -372,9 +372,9 @@
             vectorOptions: {
                 fillColor: "#FF9900",
                 fillOpacity: 0.6,
-                strokeColor: "#666666",
-                strokeOpacity: 0.8,
-                strokeWeight: 1
+                color: "#666666",
+                opacity: 0.8,
+                weight: 1
             }
         }
     ]
@@ -391,12 +391,12 @@
         {
             range: [1, 20], // if feature.properties.SPEED &gt;= 1 AND feature.properties.SPEED &lt;= 20
             vectorOptions: { // Use these Leaflet Path options for features with values in this range
-                icon: "../../docs-demo/img/markers/bus-brown.png"
+                icon: new customIcon("../../docs-demo/img/markers/bus-brown.png")
             }
         },{
             range: [21, 100],
             vectorOptions: {
-                icon: "../../docs-demo/img/markers/bus-green.png"
+                icon: new customIcon("../../docs-demo/img/markers/bus-green.png")
             }
         }
     ]

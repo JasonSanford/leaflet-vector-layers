@@ -462,6 +462,22 @@
     autoUpdateInterval: 5000
 });</pre>
                 
+                <h3>Arc2Earth</h3>
+                
+                <p class="docs">Auto-updating works slightly different with Arc2Earth layers. Since update messages are almost immediately sent to the client using <a href="http://pubnub.com/">PubNub</a>, only the <code>dynamic</code> and <code>autoUpdate</code> parameters must be set (both to <code>true</code>). This eliminates the need for constant polling, thus reducing the load on the server.</p>
+                
+                <p>An auto-updating Arc2Earth layer might look something like:</p>
+                
+                <pre class="prettyprint docs">myA2ELayer = new lvector.A2E({
+    url: "http://sync.arc2earth.com/6442491/ArcGIS/rest/services/tfs/2447544/FeatureServer/0",
+    esriOptions: true,
+    uniqueField: "global_fid",
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;{Name}&lt;/h3&gt;&lt;/div&gt;',
+    singlePopup: true,
+    dynamic: true,
+    autoUpdate: true
+});</pre>
+                
                 <footer>
                     <p>&copy; Jason Sanford - geojason.info 2012</p>
                 </footer>

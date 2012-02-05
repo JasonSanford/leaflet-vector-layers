@@ -38,5 +38,12 @@ var deps = {
         desc: 'The CartoDB layer.',
         heading: 'CartoDB',
         deps: ['Layer']
+    },
+    
+    PRWSF: {
+        src: ['layer/PRWSF.js'],
+        desc: 'The PostGIS RESTful Web Service Framework layer.',
+        heading: 'PRWSF',
+        deps: ['Layer']
     }
 };

@@ -55,7 +55,25 @@
                 <p class="docs">Also, note the use of the <code>clickable: false</code> option in the vector symbology definitions. This ensures that the cursor doesn't change to something that would make the user think they could click these polygons since they're just here for display and don't contain any attribute to populate an Popup.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint"></pre>
+                        <pre class="prettyprint">prwsf_preservation = new lvector.PRWSF({
+    url: "http://gis.drcog.org/REST",
+    geotable: "mountain_backdrop_preservation_area",
+    fields: "gid",
+    uniqueField: "gid",
+    srid: 2232,
+    showAll: true,
+    symbology: {
+        type: "single",
+        vectorOptions: {
+            fillColor: "#2f4a00",
+            fillOpacity: 0.4,
+            weight: 1.8,
+            color: "#2f4a00",
+            opacity: 1,
+            clickable: false
+        }
+    }
+});</pre>
                     </div>
                     <div class="span10 height-controlled">
                         <div id="map-container-1" class="map"></div>
@@ -68,11 +86,46 @@
                 <hr>
 
                 <h2>Fire Hydrants</h2>
-                <p class="docs">This demo uses the <code>unique</code> symbology type so we can view the difference between public and private fire hydrants. There's also a simple <code>infoWindowTemplate</code> to help describe the features.</p>
+                <p class="docs">This demo uses the <code>unique</code> symbology type so we can view the difference between public and private fire hydrants. There's also a simple <code>popupTemplate</code> to help describe the features.</p>
                 <p class="docs">We're also using the <code>scaleRange</code> parameter so that when someone zooms out beyond zoom level 15, no more feature requests are made. This helps keep the map from being too cluttered.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint"></pre>
+                        <pre class="prettyprint">var customMarker = L.Icon.extend({
+    iconUrl: "../../docs-demo/img/markers/hydrant-blue.png",
+    shadowUrl: null,
+    iconSize: new L.Point(32, 37),
+    iconAnchor: new L.Point(16, 37),
+    popupAnchor: new L.Point(0, -35)
+});
+
+prwsf_hydrants = new lvector.PRWSF({
+    url: "http://maps.co.mecklenburg.nc.us/rest",
+    geotable: "fire_hydrants",
+    fields: "gid,tagnumber,barrelsize,owner",
+    uniqueField: "gid",
+    srid: 2264,
+    scaleRange: [15, 20],
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;Tag #{tagnumber}&lt;/h3&gt;&lt;table class="condensed-table bordered-table zebra-striped"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th&gt;Owner&lt;/th&gt;&lt;td&gt;{owner}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Barrel Size&lt;/th&gt;&lt;td&gt;{barrelsize}&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;',
+    singlePopup: true,
+    symbology: {
+        type: "unique",
+        property: "owner",
+        values: [
+            {
+                value: "Public",
+                vectorOptions: {
+                    icon: new customMarker()
+                }
+            },
+            {
+                value: "Private",
+                vectorOptions: {
+                    icon: new customMarker("../../docs-demo/img/markers/hydrant-red.png")
+                }
+            }
+        ]
+    }
+});</pre>
                     </div>
                     <div class="span10 height-controlled">
                         <div id="map-container-2" class="map"></div>
@@ -83,6 +136,93 @@
                 </div>
                 
                 <hr>
+
+                <h2>Libraries (and directions to them)</h2>
+                <p class="docs">This demo has a simple, single symbology for all libraries and makes use of a <code>popupTempmlate</code> to inject the libraries address into the Popup, making driving directions to each location just a mouse click away.</p>
+                <div class="row demo">
+                    <div class="span6 height-controlled">
+                        <pre class="prettyprint">var customMarker = L.Icon.extend({
+    iconUrl: "../../docs-demo/img/markers/library.png",
+    shadowUrl: null,
+    iconSize: new L.Point(32, 37),
+    iconAnchor: new L.Point(16, 37),
+    popupAnchor: new L.Point(0, -35)
+});
+
+prwsf_libraries = new lvector.PRWSF({
+    url: "http://maps.co.mecklenburg.nc.us/rest",
+    geotable: "libraries",
+    fields: "gid,name,address,city",
+    uniqueField: "gid",
+    srid: 2264,
+    scaleRange: [7, 20],
+    showAll: true,
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;{name}&lt;/h3&gt;&lt;a href="http://maps.google.com/maps?saddr=&daddr={address}, {city}" target="_blank"&gt;&lt;h4&gt;{address} (click for directions)&lt;/h4&gt;&lt;/a&gt;&lt;/div&gt;',
+    singlePopup: true,
+    symbology: {
+        type: "single",
+        vectorOptions: {
+            icon: new customMarker()
+        }
+    }
+});</pre>
+                    </div>
+                    <div class="span10 height-controlled">
+                        <div id="map-container-3" class="map"></div>
+                        <div class="layer-buttons">
+                            <div class="row layer-button-row"><a href="javascript:prwsf_libraries.setMap(map3);" class="btn success">Layer On</a> <a href="javascript:prwsf_libraries.setMap(null);" class="btn danger">Layer Off</a></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+
+                <h2>Bus Stops</h2>
+                <p class="docs">This demo shows RTD (Denver, CO) Bus Stop locations and updates with each map pan and zoom.</p>
+                <p class="docs">The <code>popupTemplate</code> in this demo is slightly more complex as we're using a function (which gets passed feature properties) that helps us create links to each route's schedule with a bit of JavaScript hackery.</p>
+                <div class="row demo">
+                    <div class="span6 height-controlled">
+                        <pre class="prettyprint">var busMarker = L.Icon.extend({
+    iconUrl: "../../docs-demo/img/markers/bus.png",
+    shadowUrl: null,
+    iconSize: new L.Point(17, 19),
+    iconAnchor: new L.Point(0, 19),
+    popupAnchor: new L.Point(9, -19)
+});
+
+prwsf_bus = new lvector.PRWSF({
+    url: "http://gis.drcog.org/REST",
+    geotable: "rtd_busstops",
+    fields: "gid,bsid,routes,stopname,dir,location",
+    uniqueField: "gid",
+    srid: 2232,
+    scaleRange: [14, 20],
+    popupTemplate: function(properties) {
+        var html = '&lt;div class="iw-content"&gt;&lt;h3&gt;' + properties.stopname + '&lt;/h4&gt;&lt;h4&gt;' + properties.dir + '-bound&lt;/h4&gt;&lt;table class="condensed-table bordered-table zebra-striped"&gt;&lt;tbody&gt;&lt;tr&gt;&lt;th&gt;Bus Stop ID&lt;/th&gt;&lt;td&gt;' + properties.bsid + '&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Routes&lt;/th&gt;&lt;td&gt;';
+        var routes = properties.routes.split(",");
+        var routesHtml = '';
+        for (var i = 0, len = routes.length; i &lt; len; i++) {
+            routesHtml += (routesHtml.length ? ", " : "") + '&lt;a href="http://www3.rtd-denver.com/schedules/getSchedule.action?&routeId=' + routes[i].trim() + '" target="_blank"&gt;' + routes[i].trim() + '&lt;/a&gt;';
+        }
+        html += routesHtml + '&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/div&gt;';
+        return html;
+    },
+    popupWindow: true,
+    symbology: {
+        type: "single",
+        vectorOptions: {
+            icon: new busMarker("../../docs-demo/img/markers/bus.png")
+        }
+    }
+});</pre>
+                    </div>
+                    <div class="span10 height-controlled">
+                        <div id="map-container-4" class="map"></div>
+                        <div class="layer-buttons">
+                            <div class="row layer-button-row"><a href="javascript:prwsf_bus.setMap(map4);" class="btn success">Layer On</a> <a href="javascript:prwsf_bus.setMap(null);" class="btn danger">Layer Off</a></div>
+                        </div>
+                    </div>
+                </div>
                 
                 <footer> 	
                     <p>&copy; Jason Sanford - geojason.info 2012</p>
@@ -123,6 +263,30 @@
                         })
                     ]
                 });
+
+                map3 = new L.Map("map-container-3", {
+                    center: new L.LatLng(35.28363046450107, -80.82827043667335),
+                    zoom: 10,
+                    layers: [
+                        new L.TileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
+                            maxZoom: 18,
+                            subdomains: ["otile1", "otile2", "otile3", "otile4"],
+                            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+                        })
+                    ]
+                });
+
+                map4 = new L.Map("map-container-4", {
+                    center: new L.LatLng(39.7351, -104.9861),
+                    zoom: 15,
+                    layers: [
+                        new L.TileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
+                            maxZoom: 18,
+                            subdomains: ["otile1", "otile2", "otile3", "otile4"],
+                            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+                        })
+                    ]
+                });
                 
                 var customMarker = L.Icon.extend({
                     iconUrl: "../../docs-demo/img/markers/hydrant-blue.png",
@@ -130,6 +294,14 @@
                     iconSize: new L.Point(32, 37),
                     iconAnchor: new L.Point(16, 37),
                     popupAnchor: new L.Point(0, -35)
+                });
+
+                var busMarker = L.Icon.extend({
+                    iconUrl: "../../docs-demo/img/markers/bus.png",
+                    shadowUrl: null,
+                    iconSize: new L.Point(17, 19),
+                    iconAnchor: new L.Point(0, 19),
+                    popupAnchor: new L.Point(9, -19)
                 });
                 
                 prwsf_preservation = new lvector.PRWSF({
@@ -178,6 +350,50 @@
                                 }
                             }
                         ]
+                    }
+                });
+
+                prwsf_libraries = new lvector.PRWSF({
+                    url: "http://maps.co.mecklenburg.nc.us/rest",
+                    geotable: "libraries",
+                    fields: "gid,name,address,city",
+                    uniqueField: "gid",
+                    srid: 2264,
+                    scaleRange: [7, 20],
+                    showAll: true,
+                    popupTemplate: '<div class="iw-content"><h3>{name}</h3><a href="http://maps.google.com/maps?saddr=&daddr={address}, {city}" target="_blank"><h4>{address} (click for directions)</h4></a></div>',
+                    singlePopup: true,
+                    symbology: {
+                        type: "single",
+                        vectorOptions: {
+                            icon: new customMarker("../../docs-demo/img/markers/library.png")
+                        }
+                    }
+                });
+
+                prwsf_bus = new lvector.PRWSF({
+                    url: "http://gis.drcog.org/REST",
+                    geotable: "rtd_busstops",
+                    fields: "gid,bsid,routes,stopname,dir,location",
+                    uniqueField: "gid",
+                    srid: 2232,
+                    scaleRange: [14, 20],
+                    popupTemplate: function(properties) {
+                        var html = '<div class="iw-content"><h3>' + properties.stopname + '</h4><h4>' + properties.dir + '-bound</h4><table class="condensed-table bordered-table zebra-striped"><tbody><tr><th>Bus Stop ID</th><td>' + properties.bsid + '</td></tr><tr><th>Routes</th><td>';
+                        var routes = properties.routes.split(",");
+                        var routesHtml = '';
+                        for (var i = 0, len = routes.length; i < len; i++) {
+                            routesHtml += (routesHtml.length ? ", " : "") + '<a href="http://www3.rtd-denver.com/schedules/getSchedule.action?&routeId=' + routes[i].trim() + '" target="_blank">' + routes[i].trim() + '</a>';
+                        }
+                        html += routesHtml + '</td></tr></tbody></table></div>';
+                        return html;
+                    },
+                    popupWindow: true,
+                    symbology: {
+                        type: "single",
+                        vectorOptions: {
+                            icon: new busMarker("../../docs-demo/img/markers/bus.png")
+                        }
                     }
                 });
                 

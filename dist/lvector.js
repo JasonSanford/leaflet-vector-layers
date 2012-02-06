@@ -1,9 +1,9 @@
 /*
- Copyright (c) 2011, Jason Sanford
+ Copyright (c) 2012, Jason Sanford
  Leaflet Vector Layers is a library for showing geometry objects
  from multiple geoweb services in a Leaflet map
 */
-(function(a){a.lvector={VERSION:"1.0.0",noConflict:function(){a.lvector=this._originallvector;return this},_originallvector:a.lvector};if(!L.LatLngBounds.equals)L.LatLngBounds=L.LatLngBounds.extend({equals:function(a){var e=!1;a!==null&&(e=this._southWest.lat==a.getSouthWest().lat&&this._southWest.lng==a.getSouthWest().lng&&this._northEast.lat==a.getNorthEast().lat&&this._northEast.lng==a.getNorthEast().lng);return e}});L.Popup=L.Popup.extend({_close:function(){this._opened&&(this._map.closePopup(),
+(function(a){a.lvector={VERSION:"1.1.0",noConflict:function(){a.lvector=this._originallvector;return this},_originallvector:a.lvector};if(!L.LatLngBounds.equals)L.LatLngBounds=L.LatLngBounds.extend({equals:function(a){var e=!1;a!==null&&(e=this._southWest.lat==a.getSouthWest().lat&&this._southWest.lng==a.getSouthWest().lng&&this._northEast.lat==a.getNorthEast().lat&&this._northEast.lng==a.getNorthEast().lng);return e}});L.Popup=L.Popup.extend({_close:function(){this._opened&&(this._map.closePopup(),
 this._map.removeLayer(this))}})})(this);/*
  Using portions of Leaflet code (https://github.com/CloudMade/Leaflet)
 */

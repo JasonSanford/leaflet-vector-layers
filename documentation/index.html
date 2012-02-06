@@ -35,6 +35,7 @@
                                 <li><a href="../demos/arc2earth">Arc2Earth</a></li>
                                 <li><a href="../demos/cartodb">CartoDB</a></li>
                                 <li><a href="../demos/geoiq">GeoIQ</a></li>
+                                <li><a href="../demos/postgis-restful-web-service-framework">PostGIS RESTful Web Service Framework</a></li>
                             </ul>
                         </li>
                         <li><a href="../tips-tricks">Tips + Tricks</a></li>
@@ -53,6 +54,7 @@
                         <li><a href="#docs-a2e">lvector.A2E</a></li>
                         <li><a href="#docs-geoiq">lvector.GeoIQ</a></li>
                         <li><a href="#docs-cartodb">lvector.CartoDB</a></li>
+                        <li><a href="#docs-prwsf">lvector.PRWSF</a></li>
                     </ul>
                     <h5>Other Reference</h5>
                     <ul>
@@ -313,6 +315,89 @@
                 </table>
                 
                 <!-- End CartoDB -->
+
+                <!-- PostGIS RESTful Web Service Framework -->
+                                
+                <h2 class="docs" id="docs-prwsf">lvector.PRWSF <small>PostGIS RESTful Web Service Framework</small></h2>
+                
+                <p>This class creates a layer that processes and displays features from a PostGIS RESTful Web Service Framework geotable.</p>
+                
+                <p>The <a href="http://code.google.com/p/postgis-restful-web-service-framework/">PostGIS RESTful Web Service Framework</a> is an open source project written in PHP that creates a set of web services that allow you to query geo data in a PostGIS database. These web services are extemely flexible allowing you to project, aggregate, order and serialize your data in many different ways. Below are some implementations I've found:</p>
+                
+                <ul class="docs">
+                    <li><a href="http://gisapps.co.union.nc.us/ws/rest/">Union County GeoData API</a> (A .Net port)</li>
+                    <li><a href="http://maps.co.mecklenburg.nc.us/rest/">Mecklenburg County GeoPortal</a></li>
+                    <li><a href="http://gis.drcog.org/api_cookbook/">Denver Regional Council of Governments</a></li>
+                </ul>
+                
+                <h3>Usage Example</h3>
+                <pre class="prettyprint docs">var myPrwsfLayer = new lvector.PRWSF({
+    url: "http://gis.drcog.org/REST",
+    geotable: "mountain_backdrop_preservation_area",
+    fields: "gid",
+    uniqueField: "gid",
+    srid: 2232,
+    showAll: true,
+    symbology: {
+        type: "single",
+        vectorOptions: {
+            fillColor: "#2f4a00",
+            fillOpacity: 0.4,
+            strokeWeight: 1.8,
+            strokeColor: "#2f4a00",
+            strokeOpacity: 1,
+            clickable: false
+        }
+    }
+});</pre>
+                <h3>Constructor</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Constructor</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>lvector.PRWSF( &lt;<a href="#docs-prwsf-options">PRWSF options</a>&gt; options )</code></td><td>Instantiates a PRWSF layer with an object literal with PRWSF options described below.</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3 id="docs-prwsf-options">Options</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Option</th><th>Type</th><th>Default Value</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>url</code></td><td><code>String</code></td><td><code>null</code></td><td><strong>Required</strong> -  The root URL for the PostGIS RESTful Web Service Framework instance.</td></tr>
+                        <tr><td><code>geotable</code></td><td><code>String</code></td><td><code>null</code></td><td><strong>Required</strong> -  The geotable for which we want data to be displayed.</td></tr>
+                        <tr><td><code>fields</code></td><td><code>String</code></td><td><code>null</code></td><td>A list of comma separated fields to be returned with the features. By default only the geometry field is returned. You'd likely want to also return a unique id and some other attribute information.</td></tr>
+                        <tr><td><code>geomFieldName</code></td><td><code>String</code></td><td><code>"the_geom"</code></td><td>The geometry field name for this geotable. Most commonly found as <code>the_geom</code></td></tr>
+                        <tr><td><code>srid</code></td><td><code>Integer</code></td><td><code>null</code></td><td>The SRID of the geometry in this geotable. This isn't required but increases performance drastically as the bounding box geometry can be projected to match your features' projection, which makes use of spatial indexes (that you've hopefully built).</td></tr>
+                        <tr><td><code>where</code></td><td><code>String</code></td><td><code>null</code></td><td>Any additional SQL query(ies) to further filter the returned features.</td></tr>
+                        <tr><td><code>limit</code></td><td><code>Integer</code></td><td><code>null</code></td><td>Limit the number of returned features.</td></tr>
+                        <tr><td><code>map</code></td><td><code>Object <a href="http://leaflet.cloudmade.com/reference.html#map-class">L.Map object</a></code></td><td><code>null</code></td><td>The Leaflet <code>Map</code> object where the layer will be added. The layer can be added to the map later with the <code>setMap</code> method.</td></tr>
+                        <tr><td><code>scaleRange</code></td><td><code>Array</code></td><td><code>null</code></td><td>An array with two number values that represent the minimum and maximum scales the layer is visible. For example: <code>[14, 17]</code></td></tr>
+                        <tr><td><code>dynamic</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not the layer contains dynamic data. If true, feature geometry and attributes will be checked for changes after extent change and/or after a defined interval. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>
+                        <tr><td><code>autoUpdate</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not to auto-update a dynamic layer. If true, feature geometry and attributes will be updated at an interval set by the <code>autoUpdateInterval</code> option. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>
+                        <tr><td><code>autoUpdateInterval</code></td><td><code>Integer</code></td><td><code>null</code></td><td>The interval (in milliseconds) between checks for updated feature geometry and attributes when the <code>autoUpdate</code> option is set to <code>true</code>. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>
+                        <tr><td><code>popupTemplate</code></td><td><code>String|Function</code></td><td><code>null</code></td><td>A template for creating the content of a <a href="http://leaflet.cloudmade.com/reference.html#popup">Leaflet Popup</a> when a feature is clicked. For details check the <a href="#docs-popup">Popup Template documentation</a>.</td></tr>
+                        <tr><td><code>singlePopup</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not to show a single Popup for a layer when features are clicked. This keeps the map from getting cluttered when multiple features are clicked.</td></tr>
+                        <tr><td><code>popupOptions</code></td><td><code>Object <a href="http://leaflet.cloudmade.com/reference.html#popup-options">Leaflet Popup options</a></code></td><td><code>null</code></td><td>Controls the width of and the presence of a close button for the Popup and whether the map should be panned when the Popup is opened.</td></tr>
+                        <tr><td><code>symbology</code></td><td><code>Object <a href="#docs-symbology">symbology options</a></code></td><td><code>null</code></td><td>The symbology options for the layer. Features can be rendered with a single symbology or can also be symbolized based on an attribute using unique values or a value range. For details check the <a href="#docs-symbology">symbology options documentation</a>.</td></tr>
+                        <tr><td><code>showAll</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>If true, all features will be fetched and shown once, not after a map extent change. This is helpful for layers with only a handful of features.</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3>Methods</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Method</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>setMap( &lt;L.Map&gt; Map )</code></td><td>Adds the layer to a map. Remove the layer by passing <code>null</code>.</td></tr>
+                        <tr><td><code>getMap()</code></td><td>Gets the map (if any) that the layer has been added to.</td></tr>
+                    </tbody>
+                </table>
+                
+                <!-- End PostGIS RESTful Web Service Framework -->
                 
                 <hr>
                 

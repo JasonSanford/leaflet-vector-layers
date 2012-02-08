@@ -263,12 +263,12 @@ lvector.Layer = lvector.Class.extend({
         //
         // Store previous Popup content so we can check to see if it changed. If it didn't no sense changing the content as this has an ugly flashing effect.
         //
-        var previousContent = feature.popupContent
+        var previousContent = feature.popupContent;
         
         //
         // Esri calls them attributes. GeoJSON calls them properties.
         //
-        var atts = feature.attributes || feature.properties
+        var atts = feature.attributes || feature.properties;
         
         var popupContent;
         

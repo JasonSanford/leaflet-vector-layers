@@ -42,7 +42,7 @@ lvector.Layer = lvector.Class.extend({
                 this.options.visibleAtScale = (z >= sr[0] && z <= sr[1]);
             }
             this._show();
-        } else {
+        } else if (this.options.map) {
             this._hide();
             this.options.map = map;
         }
@@ -155,38 +155,46 @@ lvector.Layer = lvector.Class.extend({
         // "this" means something different inside the on method. Assign it to "me".
         //
         var me = this;
+
+        me._zoomChangeListener = me._zoomChangeListenerTemplate();
         
         this.options.map.on("zoomend", me._zoomChangeListener, me);
     },
-    
-    _zoomChangeListener: function() {
+
+    _zoomChangeListenerTemplate: function() {
         //
         // Whenever the map's zoom changes, check the layer's visibility (this.options.visibleAtScale)
         //
-        this._checkLayerVisibility();
+        var me = this;
+        return function() {
+            me._checkLayerVisibility();
+        }
     },
-    
+
     //
     // This gets fired when the map is panned or zoomed
     //
-    _idleListener: function() {
-        if (this.options.visibleAtScale) {
-            //
-            // Do they use the showAll parameter to load all features once?
-            //
-            if (this.options.showAll) {
+    _idleListenerTemplate: function() {
+        var me = this;
+        return function() {
+            if (me.options.visibleAtScale) {
                 //
-                // Have we already loaded these features
+                // Do they use the showAll parameter to load all features once?
                 //
-                if (!this._gotAll) {
+                if (me.options.showAll) {
                     //
-                    // Grab the features and note that we've already loaded them (no need to _getFeatures again
+                    // Have we already loaded these features
                     //
-                    this._getFeatures();
-                    this._gotAll = true;
+                    if (!me._gotAll) {
+                        //
+                        // Grab the features and note that we've already loaded them (no need to _getFeatures again
+                        //
+                        me._getFeatures();
+                        me._gotAll = true;
+                    }
+                } else {
+                    me._getFeatures();
                 }
-            } else {
-                this._getFeatures();
             }
         }
     },
@@ -199,11 +207,13 @@ lvector.Layer = lvector.Class.extend({
         // "this" means something different inside the on method. Assign it to "me".
         //
         var me = this;
+
+        me._idleListener = me._idleListenerTemplate();
         
         //
         // Whenever the map idles (pan or zoom) get the features in the current map extent
         //
-        this.options.map.on("moveend", this._idleListener, me);
+        this.options.map.on("moveend", me._idleListener, me);
     },
     
     //

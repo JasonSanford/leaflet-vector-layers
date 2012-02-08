@@ -7,3 +7,4 @@ Adding PostGIS RESTful Web Service Framework layer (lvector.PRWSF)
 1.1.1
 Fixing bug where multiple layers on same map failed when turning them on/off. All instances of lvector.PRWSF were referencing the same _idleListener and _zoomChangeListener objects. Oops.
 Fixing bug where layer.setMap(null) to a layer that was already turned off threw errors.
+Fixing sloppy semis;

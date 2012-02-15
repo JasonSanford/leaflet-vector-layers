@@ -37,7 +37,7 @@
     
     L.Popup = L.Popup.extend({
         _close: function () {
-            if (this._opened) {
+            if (this._map) {
     		    this._map.closePopup();
     		    this._map.removeLayer(this);
     	    }

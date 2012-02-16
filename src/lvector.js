@@ -35,12 +35,14 @@
         });
     }
     
-    L.Popup = L.Popup.extend({
-        _close: function () {
-            if (this._map) {
-    		    this._map.closePopup();
-    		    this._map.removeLayer(this);
-    	    }
-        }
-    });
+	L.Popup = L.Popup.extend({
+		_close: function () {
+			if (this._map) {
+				this._map.closePopup();
+				if (this._map) {
+					this._map.removeLayer(this);
+				}
+			}
+		}
+	});
 }(this));

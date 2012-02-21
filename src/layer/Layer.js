@@ -496,14 +496,24 @@ lvector.Layer = lvector.Class.extend({
             //
             // A Point
             //
-            vector = new L.Marker(new L.LatLng(geometry.y, geometry.x), opts);
+            if (opts.color) {
+				vector = new L.CircleMarker(new L.LatLng(geometry.y, geometry.x), opts);
+			}
+			else {
+				vector = new L.Marker(new L.LatLng(geometry.y, geometry.x), opts);
+			}
         } else if (geometry.points) {
             //
             // A MultiPoint
             //
             vectors = [];
             for (var i = 0, len = geometry.points.length; i < len; i++) {
-                vectors.push(new L.Marker(new L.LatLng(geometry.points[i].y, geometry.points[i].x), opts));
+                if (opts.color) {
+					 vectors.push(new L.CircleMarker(new L.LatLng(geometry.points[i].y, geometry.points[i].x), opts));
+				}
+				else {
+					vectors.push(new L.Marker(new L.LatLng(geometry.points[i].y, geometry.points[i].x), opts));
+				}
             }
         } else if (geometry.paths) {
             if (geometry.paths.length > 1) {
@@ -570,13 +580,23 @@ lvector.Layer = lvector.Class.extend({
         
         switch (geometry.type) {
             case "Point":
-                vector = new L.Marker(new L.LatLng(geometry.coordinates[1], geometry.coordinates[0]), opts);
+                if (opts.color) {
+					vector = new L.CircleMarker(new L.LatLng(geometry.coordinates[1], geometry.coordinates[0]), opts);
+				}
+				else {
+					vector = new L.Marker(new L.LatLng(geometry.coordinates[1], geometry.coordinates[0]), opts);
+				}
                 break;
             
             case "MultiPoint":
                 vectors = [];
                 for (var i = 0, len = geometry.coordinates.length; i < len; i++) {
-                    vectors.push(new L.Marker(new L.LatLng(geometry.coordinates[i][1], geometry.coordinates[i][0]), opts));
+                    if (opts.color) {
+						vectors.push(new L.CircleMarker(new L.LatLng(geometry.coordinates[i][1], geometry.coordinates[i][0]), opts));
+					}
+					else {
+						vectors.push(new L.Marker(new L.LatLng(geometry.coordinates[i][1], geometry.coordinates[i][0]), opts));
+					}
                 }
                 break;
                         

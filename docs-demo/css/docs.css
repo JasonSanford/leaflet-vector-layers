@@ -23,3 +23,6 @@ table.docs {
 .docs td {
     min-width: 120px;
 }
+.content-centered {
+    text-align: center;
+}

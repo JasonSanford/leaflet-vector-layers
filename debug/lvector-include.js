@@ -10,11 +10,15 @@
         'core/Class.js',
         
         'layer/Layer.js',
+        'layer/GeoJSONLayer.js',
+        'layer/EsriJSONLayer.js',
+
         'layer/AGS.js',
         'layer/A2E.js',
         'layer/GeoIQ.js',
         'layer/CartoDB.js',
-        'layer/PRWSF.js'
+        'layer/PRWSF.js',
+        'layer/GISCloud.js'
     ];
     
     function getSrcUrl() {

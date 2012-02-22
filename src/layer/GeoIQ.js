@@ -1,4 +1,4 @@
-lvector.GeoIQ = lvector.Layer.extend({
+lvector.GeoIQ = lvector.GeoJSONLayer.extend({
     initialize: function(options) {
         
         // Check for required parameters

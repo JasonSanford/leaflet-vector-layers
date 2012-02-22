@@ -448,6 +448,13 @@ lvector.Layer = lvector.Class.extend({
         }
         return changed;
     },
+
+    //
+    // Check to see if a particular property changed
+    //
+    _getPropertyChanged: function(oldAtts, newAtts, property) {
+        return !(oldAtts[property] == newAtts[property]);
+    },
     
     //
     // Check to see if the geometry has changed
@@ -483,164 +490,203 @@ lvector.Layer = lvector.Class.extend({
         return changed;
     },
     
-    //
-    // Turn EsriJSON into Leaflet vectors
-    //
-    _esriJsonGeometryToLeaflet: function(geometry, opts) {
-        //
-        // Create a variable for a single vector and for multi part vectors.
-        //
-        var vector, vectors;
-        
-        if (geometry.x && geometry.y) {
-            //
-            // A Point
-            //
-            vector = new L.Marker(new L.LatLng(geometry.y, geometry.x), opts);
-        } else if (geometry.points) {
-            //
-            // A MultiPoint
-            //
-            vectors = [];
-            for (var i = 0, len = geometry.points.length; i < len; i++) {
-                vectors.push(new L.Marker(new L.LatLng(geometry.points[i].y, geometry.points[i].x), opts));
-            }
-        } else if (geometry.paths) {
-            if (geometry.paths.length > 1) {
-                //
-                // A MultiLineString
-                //
-                vectors = [];
-                for (var i = 0, len = geometry.paths.length; i < len; i++) {
-                    var latlngs = [];
-                    for (var i2 = 0, len2 = geometry.paths[i].length; i2 < len2; i2++) {
-                        latlngs.push(new L.LatLng(geometry.paths[i][i2][1], geometry.paths[i][i2][0]));
-                    }
-                    vectors.push(new L.Polyline(latlngs, opts));
-                }
-            } else {
-                //
-                // A LineString
-                //
-                var latlngs = [];
-                for (var i = 0, len = geometry.paths[0].length; i < len; i++) {
-                    latlngs.push(new L.LatLng(geometry.paths[0][i][1], geometry.paths[0][i][0]));
-                }
-                vector = new L.Polyline(latlngs, opts);
-            }
-        } else if (geometry.rings) {
-            if (geometry.rings.length > 1) {
-                //
-                // A MultiPolygon
-                //
-                vectors = [];
-                for (var i = 0, len = geometry.rings.length; i < len; i++) {
-                    var latlngss = [];
-                    var latlngs = [];
-                    for (var i2 = 0, len2 = geometry.rings[i].length; i2 < len2; i2++) {
-                        latlngs.push(new L.LatLng(geometry.rings[i][i2][1], geometry.rings[i][i2][0]));
-                    }
-                    latlngss.push(latlngs);
-                    vectors.push(new L.Polygon(latlngss, opts));
-                }
-            } else {
-                //
-                // A Polygon
-                //
-                var latlngss = [];
-                var latlngs = [];
-                for (var i = 0, len = geometry.rings[0].length; i < len; i++) {
-                    latlngs.push(new L.LatLng(geometry.rings[0][i][1], geometry.rings[0][i][0]));
-                }
-                latlngss.push(latlngs);
-                vector = new L.Polygon(latlngss, opts);
-            }
-        }
-        return vector || vectors;
-    },
-    
-    //
-    // Convert GeoJSON to Leaflet vectors
-    //
-    _geoJsonGeometryToLeaflet: function(geometry, opts) {
-        //
-        // Create a variable for a single vector and for multi part vectors.
-        //
-        var vector, vectors;
-        
-        switch (geometry.type) {
-            case "Point":
-                vector = new L.Marker(new L.LatLng(geometry.coordinates[1], geometry.coordinates[0]), opts);
-                break;
-            
-            case "MultiPoint":
-                vectors = [];
-                for (var i = 0, len = geometry.coordinates.length; i < len; i++) {
-                    vectors.push(new L.Marker(new L.LatLng(geometry.coordinates[i][1], geometry.coordinates[i][0]), opts));
-                }
-                break;
-                        
-            case "LineString":
-                var latlngs = [];
-                for (var i = 0, len = geometry.coordinates.length; i < len; i++) {
-                    latlngs.push(new L.LatLng(geometry.coordinates[i][1], geometry.coordinates[i][0]));
-                }
-                vector = new L.Polyline(latlngs, opts);
-                break;
-            
-            case "MultiLineString":
-                vectors = [];
-                for (var i = 0, len = geometry.coordinates.length; i < len; i++){
-                    var latlngs = [];
-                    for (var i2 = 0, len2 = geometry.coordinates[i].length; i2 < len2; i2++){
-                        latlngs.push(new L.LatLng(geometry.coordinates[i][i2][1], geometry.coordinates[i][i2][0]));
-                    }
-                    vectors.push(new L.Polyline(latlngs, opts));
-                }
-                break;
-                
-            case "Polygon":
-                var latlngss = [];
-                for (var i = 0, len = geometry.coordinates.length; i < len; i++) {
-                    var latlngs = [];
-                    for (var i2 = 0, len2 = geometry.coordinates[i].length; i2 < len2; i2++) {
-                        latlngs.push(new L.LatLng(geometry.coordinates[i][i2][1], geometry.coordinates[i][i2][0]));
-                    }
-                    latlngss.push(latlngs);
-                }
-                vector = new L.Polygon(latlngss, opts);
-                break;
-            
-            case "MultiPolygon":
-                vectors = [];
-                for (var i = 0, len = geometry.coordinates.length; i < len; i++) {
-                    latlngss = [];
-                    for (var i2 = 0, len2 = geometry.coordinates[i].length; i2 < len2; i2++) {
-                        var latlngs = [];
-                        for (var i3 = 0, len3 = geometry.coordinates[i][i2].length; i3 < len3; i3++) {
-                            latlngs.push(new L.LatLng(geometry.coordinates[i][i2][i3][1], geometry.coordinates[i][i2][i3][0]));
-                        }
-                        latlngss.push(latlngs);
-                    }
-                    vectors.push(new L.Polygon(latlngss, opts));
-                }
-                break;
-                
-            case "GeometryCollection":
-                vectors = [];
-                for (var i = 0, len = geometry.geometries.length; i < len; i++) {
-                    vectors.push(this._geoJsonGeometryToLeaflet(geometry.geometries[i], opts));
-                }
-                break;
-        }
-        return vector || vectors;
-    },
-    
     _makeJsonpRequest: function(url) {
         var head = document.getElementsByTagName("head")[0];
         var script = document.createElement("script");
         script.type = "text/javascript";
         script.src = url;
         head.appendChild(script);
+    },
+
+    _processFeatures: function(data) {
+        //
+        // Sometimes requests take a while to come back and
+        // the user might have turned the layer off
+        //
+        if (!this.options.map) {
+            return;
+        }
+        var bounds = this.options.map.getBounds();
+        
+        // Check to see if the _lastQueriedBounds is the same as the new bounds
+        // If true, don't bother querying again.
+        if (this._lastQueriedBounds && this._lastQueriedBounds.equals(bounds) && !this.options.autoUpdate) {
+            return;
+        }
+        
+        // Store the bounds in the _lastQueriedBounds member so we don't have
+        // to query the layer again if someone simply turns a layer on/off
+        this._lastQueriedBounds = bounds;
+
+        // GeoIQ layers return JSON string-wrapped, so JSON.parse it
+        if (this instanceof lvector.GeoIQ) {
+             data = JSON.parse(data);
+        }
+
+        // If necessary, convert data to make it look like a GeoJSON FeatureCollection
+        // PRWSF returns GeoJSON, but not in a FeatureCollection. Make it one.
+        if (this instanceof lvector.PRWSF) {
+            data.features = data.rows;
+            delete data.rows;
+            for (var i = 0, len = data.features.length; i < len; i++) {
+                data.features[i].type = "Feature"; // Not really necessary, but let's follow the GeoJSON spec for a Feature
+                data.features[i].properties = {};
+                for (var prop in data.features[i].row) {
+                    if (prop == "geojson") {
+                        data.features[i].geometry = data.features[i].row.geojson;
+                    } else {
+                        data.features[i].properties[prop] = data.features[i].row[prop];
+                    }
+                }
+                delete data.features[i].row;
+            }
+        }
+        // GISCloud returns GeoJSON, but not in a FeatureCollection. Make it one.
+        if (this instanceof lvector.GISCloud) {
+            data.features = data.data;
+            delete data.data;
+            for (var i = 0, len = data.features.length; i < len; i++) {
+                data.features[i].type = "Feature"; // Not really necessary, but let's follow the GeoJSON spec for a Feature
+                data.features[i].properties = data.features[i].data;
+                data.features[i].properties.id = data.features[i].__id;
+                delete data.features[i].data;
+                data.features[i].geometry = data.features[i].__geometry;
+                delete data.features[i].__geometry;
+            }
+        }
+        
+        // If "data.features" exists and there's more than one feature in the array
+        if (data && data.features && data.features.length) {
+            
+            // Loop through the return features
+            for (var i = 0; i < data.features.length; i++) {
+            
+                // if AGS layer type assigned "attributes" to "properties" to keep everything looking like GeoJSON Features
+                if (this instanceof lvector.EsriJSONLayer) {
+                    data.features[i].properties = data.features[i].attributes;
+                    delete data.features[i].attributes;
+                }
+
+                // All objects are assumed to be false until proven true (remember COPS?)
+                var onMap = false;
+            
+                // If we have a "uniqueField" for this layer
+                if (this.options.uniqueField) {
+                    
+                    // Loop through all of the features currently on the map
+                    for (var i2 = 0; i2 < this._vectors.length; i2++) {
+                    
+                        // Does the "uniqueField" property for this feature match the feature on the map
+                        if (data.features[i].properties[this.options.uniqueField] == this._vectors[i2].properties[this.options.uniqueField]) {
+                            // The feature is already on the map
+                            onMap = true;
+                            
+                            // We're only concerned about updating layers that are dynamic (options.dynamic = true).
+                            if (this.options.dynamic) {
+                            
+                                // The feature's geometry might have changed, let's check.
+                                if (this._getGeometryChanged(this._vectors[i2].geometry, data.features[i].geometry)) {
+                                    
+                                    // Check to see if it's a point feature, these are the only ones we're updating for now
+                                    if (!isNaN(data.features[i].geometry.coordinates[0]) && !isNaN(data.features[i].geometry.coordinates[1])) {
+                                        this._vectors[i2].geometry = data.features[i].geometry;
+                                        this._vectors[i2].vector.setLatLng(new L.LatLng(this._vectors[i2].geometry.coordinates[1], this._vectors[i2].geometry.coordinates[0]));
+                                    }
+                                    
+                                }
+                                
+                                var propertiesChanged = this._getPropertiesChanged(this._vectors[i2].properties, data.features[i].properties);
+                                
+                                if (propertiesChanged) {
+                                    var symbologyPropertyChanged = this._getPropertyChanged(this._vectors[i2].properties, data.features[i].properties, this.options.symbology.property);
+                                    this._vectors[i2].properties = data.features[i].properties;
+                                    if (this.options.popupTemplate) {
+                                        this._setPopupContent(this._vectors[i2]);
+                                    }
+                                    if (this.options.symbology && this.options.symbology.type != "single" && symbologyPropertyChanged) {
+                                        if (this._vectors[i2].vectors) {
+                                            for (var i3 = 0, len3 = this._vectors[i2].vectors.length; i3 < len3; i3++) {
+                                                if (this._vectors[i2].vectors[i3].setStyle) {
+                                                    // It's a LineString or Polygon, so use setStyle
+                                                    this._vectors[i2].vectors[i3].setStyle(this._getFeatureVectorOptions(this._vectors[i2]));
+                                                } else if (this._vectors[i2].vectors[i3].setIcon) {
+                                                    // It's a Point, so use setIcon
+                                                    this._vectors[i2].vectors[i3].setIcon(this._getFeatureVectorOptions(this._vectors[i2]).icon);
+                                                }
+                                            }
+                                        } else if (this._vectors[i2].vector) {
+                                            if (this._vectors[i2].vector.setStyle) {
+                                                // It's a LineString or Polygon, so use setStyle
+                                                this._vectors[i2].vector.setStyle(this._getFeatureVectorOptions(this._vectors[i2]));
+                                            } else if (this._vectors[i2].vector.setIcon) {
+                                                // It's a Point, so use setIcon
+                                                this._vectors[i2].vector.setIcon(this._getFeatureVectorOptions(this._vectors[i2]).icon);
+                                            }
+                                        }
+                                    }
+                                }
+                            
+                            }
+                            
+                        }
+                        
+                    }
+                    
+                }
+                
+                // If the feature isn't already or the map OR the "uniqueField" attribute doesn't exist
+                if (!onMap || !this.options.uniqueField) {
+                    
+                    if (this instanceof lvector.GeoJSONLayer) {
+                    // Convert GeoJSON to Leaflet vector (Point, Polyline, Polygon)
+                        var vector_or_vectors = this._geoJsonGeometryToLeaflet(data.features[i].geometry, this._getFeatureVectorOptions(data.features[i]));
+                        data.features[i][vector_or_vectors instanceof Array ? "vectors" : "vector"] = vector_or_vectors;
+                    } else if (this instanceof lvector.EsriJSONLayer) {
+                        // Convert Esri JSON to Google Maps vector (Point, Polyline, Polygon)
+                        var vector_or_vectors = this._esriJsonGeometryToLeaflet(data.features[i].geometry, this._getFeatureVectorOptions(data.features[i]));
+                        data.features[i][vector_or_vectors instanceof Array ? "vectors" : "vector"] = vector_or_vectors;
+                    }
+                    
+                    // Show the vector or vectors on the map
+                    if (data.features[i].vector) {
+                        this.options.map.addLayer(data.features[i].vector);
+                    } else if (data.features[i].vectors && data.features[i].vectors.length) {
+                        for (var i3 = 0; i3 < data.features[i].vectors.length; i3++) {
+                            this.options.map.addLayer(data.features[i].vectors[i3]);
+                        }
+                    }
+                    
+                    // Store the vector in an array so we can remove it later
+                    this._vectors.push(data.features[i]);
+                    
+                    if (this.options.popupTemplate) {
+                        
+                        var me = this;
+                        var feature = data.features[i];
+                        
+                        this._setPopupContent(feature);
+                        
+                        (function(feature){
+                            if (feature.vector) {
+                                feature.vector.on("click", function(event) {
+                                    me._showPopup(feature, event);
+                                });
+                            } else if (feature.vectors) {
+                                for (var i3 = 0, len = feature.vectors.length; i3 < len; i3++) {
+                                    feature.vectors[i3].on("click", function(event) {
+                                        me._showPopup(feature, event);
+                                    });
+                                }
+                            }
+                        }(feature));
+                        
+                    }
+                
+                }
+                
+            }
+            
+        }
+    
     }
 });

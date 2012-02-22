@@ -1,10 +1,16 @@
 1.0.0
-Initial Release
+- Initial Release
 
 1.1.0
-Adding PostGIS RESTful Web Service Framework layer (lvector.PRWSF)
+- Adding PostGIS RESTful Web Service Framework layer (lvector.PRWSF)
 
 1.1.1
-Fixing bug where multiple layers on same map failed when turning them on/off. All instances of lvector.PRWSF were referencing the same _idleListener and _zoomChangeListener objects. Oops.
-Fixing bug where layer.setMap(null) to a layer that was already turned off threw errors.
-Fixing sloppy semis;
+- Fixing bug where multiple layers on same map failed when turning them on/off. All instances of lvector.PRWSF were referencing the same _idleListener and _zoomChangeListener objects. Oops.
+- Fixing bug where layer.setMap(null) to a layer that was already turned off threw errors.
+- Fixing sloppy semis;
+
+1.2.0
+- New GIS Cloud layer (gvector.GISCloud)
+- DRYing up the code. Moved _processFeatures from individual layers into Layer.js
+- Creating two super-layers from which all other layers extend from: GeoJSONLayer and EsriJSONLayer
+- Fixed issue where any property change would trigger a symbology change in dynamic, styled layers. We now check to see if the symbology property has changed.

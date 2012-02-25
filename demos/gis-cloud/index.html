@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Leaflet Vector Layers - GIS Cloud Demo</title>
+        <meta name="description" content="Display vector data from ArcGIS Server, GeoIQ, Geocommons, Arc2Earth, CartoDB and others in a Leaflet map">
+        <meta name="author" content="Jason Sanford">
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <!-- Le styles -->
+        <link href="../../docs-demo/css/bootstrap.css" rel="stylesheet">
+        <link href="../../docs-demo/css/prettify.css" rel="stylesheet">
+        <link href="../../docs-demo/css/docs.css" rel="stylesheet">
+        <link href="../../docs-demo/css/demo.css" rel="stylesheet">
+        <link href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.css" rel="stylesheet">
+
+    </head>
+
+    <body>
+        <a href="https://github.com/JasonSanford/leaflet-vector-layers"><img style="position: fixed; top: 0; right: 0; border: 0; z-index: 10001;" src="../../docs-demo/img/github-fork.png" alt="Fork me on GitHub"></a>
+        <div class="topbar" data-dropdown="dropdown">
+            <div class="topbar-inner">
+                <div class="container-fluid">
+                    <a class="brand" href="../../">Leaflet Vector Layers</a>
+                    <ul class="nav">
+                        <li><a href="../../">Home</a></li>
+                        <li><a href="../../documentation">Documentation</a></li>
+                        <li class="dropdown active">
+                            <a href="demos" class="dropdown-toggle">Demos</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="../arcgis-server">ArcGIS Server</a></li>
+                                <li><a href="../arc2earth">Arc2Earth</a></li>
+                                <li><a href="../cartodb">CartoDB</a></li>
+                                <li><a href="../geoiq">GeoIQ</a></li>
+                                <li><a href="../postgis-restful-web-service-framework">PostGIS RESTful Web Service Framework</a></li>
+                                <li class="active"><a href="../gis-cloud">GIS Cloud</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="../../tips-tricks">Tips + Tricks</a></li>
+                        <li><a href="../../download">Download</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="content">
+                <h1>GIS Cloud</h1>
+                
+                <h2>Sewer Network</h2>
+                <p class="docs"></p>
+                <div class="row demo">
+                    <div class="span6 height-controlled">
+                        <pre class="prettyprint"></pre>
+                    </div>
+                    <div class="span10 height-controlled">
+                        <div id="map-container-1" class="map"></div>
+                        <div class="layer-buttons">
+                            <div class="row layer-button-row"><a href="javascript:giscloud_sewer_line.setMap(map1);" class="btn success">Sewer Line On</a> <a href="javascript:giscloud_sewer_line.setMap(null);" class="btn danger">Sewer Line Off</a></div>
+                            <div class="row layer-button-row" style="float: right;"><a href="javascript:giscloud_man_hole.setMap(map1);" class="btn success">Man Hole On</a> <a href="javascript:giscloud_man_hole.setMap(null);" class="btn danger">Man Hole Off</a></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+
+                <h2>Flood Zones</h2>
+                <p class="docs"></p>
+                <div class="row demo">
+                    <div class="span6 height-controlled">
+                        <pre class="prettyprint"></pre>
+                    </div>
+                    <div class="span10 height-controlled">
+                        <div id="map-container-2" class="map"></div>
+                        <div class="layer-buttons">
+                            <div class="row layer-button-row"><a href="javascript:giscloud_flood_zones.setMap(map2);" class="btn success">Layer On</a> <a href="javascript:giscloud_flood_zones.setMap(null);" class="btn danger">Layer Off</a></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+
+                <h2>Elementary Schools</h2>
+                <p class="docs"></p>
+                <div class="row demo">
+                    <div class="span6 height-controlled">
+                        <pre class="prettyprint"></pre>
+                    </div>
+                    <div class="span10 height-controlled">
+                        <div id="map-container-3" class="map"></div>
+                        <div class="layer-buttons">
+                            <div class="row layer-button-row"><a href="javascript:giscloud_elementary_schools.setMap(map3);" class="btn success">Layer On</a> <a href="javascript:giscloud_elementary_schools.setMap(null);" class="btn danger">Layer Off</a></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr>
+
+                <h2>Bus Stops</h2>
+                <p class="docs"></p>
+                <div class="row demo">
+                    <div class="span6 height-controlled">
+                        <pre class="prettyprint"></pre>
+                    </div>
+                    <div class="span10 height-controlled">
+                        <div id="map-container-4" class="map"></div>
+                        <div class="layer-buttons">
+                            <div class="row layer-button-row"><a href="javascript:giscloud_bus_stops.setMap(map4);" class="btn success">Layer On</a> <a href="javascript:giscloud_bus_stops.setMap(null);" class="btn danger">Layer Off</a></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <footer> 	
+                    <p>&copy; Jason Sanford - geojason.info 2012</p>
+                </footer>
+            </div>
+        </div>
+        <script src="http://code.leafletjs.com/leaflet-0.3.1/leaflet.js"type="text/javascript"></script>
+        <script src="../../docs-demo/js/prettify.js" type="text/javascript"></script>
+        <script src="../../docs-demo/js/jquery-1.5.2.min.js" type="text/javascript"></script>
+        <script src="../../docs-demo/js/docs-demos.js" type="text/javascript"></script>
+        <script src="../../docs-demo/js/bootstrap-dropdown.js" type="text/javascript"></script>
+        <script src="../../dist/lvector.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            var map1, map2, map3, map4;
+            var giscloud_sewer_line, giscloud_man_hole, giscloud_flood_zones, giscloud_elementary_schools, giscloud_bus_stops;
+            $(document).ready(function() {
+            
+                map1 = new L.Map("map-container-1", {
+                    center: new L.LatLng(34.95162940282452, -80.76188617004397),
+                    zoom: 16,
+                    minZoom: 4,
+                    layers: [
+                        new L.TileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
+                            maxZoom: 18,
+                            subdomains: ["otile1", "otile2", "otile3", "otile4"],
+                            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+                        })
+                    ]
+                });
+
+                map2 = new L.Map("map-container-2", {
+                    center: new L.LatLng(35.02218076922061, -80.67909174217226),
+                    zoom: 16,
+                    layers: [
+                        new L.TileLayer("http://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg", {
+                            maxZoom: 18,
+                            subdomains: ["oatile1", "oatile2", "oatile3", "oatile4"],
+                            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>.'
+                        })
+                    ]
+                });
+
+                map3 = new L.Map("map-container-3", {
+                    center: new L.LatLng(35.22363916042938, -80.8219259462891),
+                    zoom: 11,
+                    layers: [
+                        new L.TileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
+                            maxZoom: 18,
+                            subdomains: ["otile1", "otile2", "otile3", "otile4"],
+                            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+                        })
+                    ]
+                });
+
+                map4 = new L.Map("map-container-4", {
+                    center: new L.LatLng(35.22363916042938, -80.8219259462891),
+                    zoom: 14,
+                    layers: [
+                        new L.TileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
+                            maxZoom: 18,
+                            subdomains: ["otile1", "otile2", "otile3", "otile4"],
+                            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+                        })
+                    ]
+                });
+                
+                giscloud_sewer_line = new lvector.GISCloud({
+                    mapID: 27322,
+                    layerID: 117755,
+                    scaleRange: [15, 20],
+                    symbology: {
+                        type: "range",
+                        property: "pipe_dia",
+                        ranges: [
+                            {
+                                range: [0, 8],
+                                vectorOptions: {
+                                    weight: 4,
+                                    color: "#46461f",
+                                    opacity: 0.8
+                                }
+                            },
+                            {
+                                range: [8.00001, 47.9999],
+                                vectorOptions: {
+                                    weight: 7,
+                                    color: "#ff7800",
+                                    opacity: 0.8
+                                }
+                            },
+                            {
+                                range: [48, 100],
+                                vectorOptions: {
+                                    weight: 10,
+                                    color: "#000000",
+                                    opacity: 1
+                                }
+                            }
+                        ]
+                    },
+                    popupTemplate: '<div class="iw-content"><h3>Sewer Line</h3><table class="condensed-table zebra-striped bordered-table"><tr><th>Diameter</th><td>{pipe_dia} in.</td></tr><tr><th>Material</th><td>{pipe_mat}</td></tr><tr><th>Flows To</th><td>{wwtp} WWTP</td></tr></table></div>',
+                    singlePopup: true
+                });
+                
+                var manHoleMarker = L.Icon.extend({
+                    iconUrl: "../../docs-demo/img/markers/manhole.png",
+                    shadowUrl: null,
+                    iconSize: new L.Point(16, 16),
+                    iconAnchor: new L.Point(8, 8),
+                    popupAnchor: new L.Point(1, -8)
+                });
+
+                giscloud_man_hole = new lvector.GISCloud({
+                    mapID: 27322,
+                    layerID: 117756,
+                    scaleRange: [16, 20],
+                    symbology: {
+                        type: "single",
+                        vectorOptions: {
+                            icon: new manHoleMarker()
+                        }
+                    },
+                    popupTemplate: '<div class="iw-content"><h3>Man Hole</h3><table class="condensed-table zebra-striped bordered-table"><tr><th>Diameter</th><td>{mh_dia} ft.</td></tr><tr><th>Depth</th><td>{mh_depth} ft.</td></tr><tr><th>Address</th><td>{street_add}</td></tr><tr><th>Flows To</th><td>{wwtp} WWTP</td></tr></table></div>',
+                    singlePopup: true
+                });
+                
+                giscloud_flood_zones = new lvector.GISCloud({
+                    mapID: 28792,
+                    layerID: 121087,
+                    scaleRange: [14, 20],
+                    symbology: {
+                        type: "unique",
+                        property: "label",
+                        values: [
+                            {
+                                value: "AE",
+                                vectorOptions: {
+                                    fillColor: "#2f952f",
+                                    fillOpacity: 0.6,
+                                    weight: 1,
+                                    color: "#fff",
+                                    opacity: 0
+                                }
+                            },
+                            {
+                                value: "AE-FW",
+                                vectorOptions: {
+                                    fillColor: "#004a00",
+                                    fillOpacity: 0.6,
+                                    weight: 1,
+                                    color: "#fff",
+                                    opacity: 0
+                                }
+                            },
+                            {
+                                value: "0.2% Annual Chance",
+                                vectorOptions: {
+                                    fillColor: "#aaff7a",
+                                    fillOpacity: 0.6,
+                                    weight: 1,
+                                    color: "#fff",
+                                    opacity: 0
+                                }
+                            }
+                        ],
+                    },
+                    popupTemplate: '<div class="iw-content"><h3>Flood Zone</h3><table class="condensed-table zebra-striped bordered-table"><tr><th>Type</th><td>{label}</td></tr></table></div>',
+                    singlePopup: true
+                });
+                
+                var schoolMarker = L.Icon.extend({
+                    iconUrl: "../../docs-demo/img/markers/school.png",
+                    shadowUrl: null,
+                    iconSize: new L.Point(32, 37),
+                    iconAnchor: new L.Point(16, 37),
+                    popupAnchor: new L.Point(0, -35)
+                });
+
+                giscloud_elementary_schools = new lvector.GISCloud({
+                    mapID: 29104,
+                    layerID: 121819,
+                    where: "type = 'Elementary'",
+                    showAll: true,
+                    popupTemplate: function(properties) {
+                        return '<div class="iw-content"><h3>' + properties.name.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) + ' ' + properties.type + '</h3><h4>' + properties.address + '</h4></div>';
+                    },
+                    singlePopup: true,
+                    scaleRange: [11, 20],
+                    symbology: {
+                        type: "single",
+                        vectorOptions: {
+                            icon: new schoolMarker()
+                        }
+                    }
+                });
+                
+                var busMarker = L.Icon.extend({
+                    iconUrl: "../../docs-demo/img/markers/bus.png",
+                    shadowUrl: null,
+                    iconSize: new L.Point(17, 19),
+                    iconAnchor: new L.Point(0, 19),
+                    popupAnchor: new L.Point(9, -19)
+                });
+
+                giscloud_bus_stops = new lvector.GISCloud({
+                    mapID: 29158,
+                    layerID: 121929,
+                    popupTemplate: '<div class="iw-content"><h3>Stop ID - {stopid}</h3><h4>{stopdesc}</h4><h4>Routes - {routes}</h4></div>',
+                    singlePopup: true,
+                    scaleRange: [14, 20],
+                    symbology: {
+                        type: "single",
+                        vectorOptions: {
+                            icon: new busMarker()
+                        }
+                    }
+                });
+                
+            });
+        </script>
+    </body>
+</html>

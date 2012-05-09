@@ -431,6 +431,17 @@ lvector.Layer = lvector.Class.extend({
                         }
                     }
                     break;
+                case "dynamic":
+                	for (var key in this.options.symbology.vectorOptions){
+               			if (typeof (this.options.symbology.vectorOptions[key]=="function")){
+                       		// does call make an unnecessary closure??
+                       		vectorOptions[key] = this.options.symbology.vectorOptions[key].call(this,feature);
+               			}
+               			else {
+                       		vectorOptions[key] = this.options.symbology.vectorOptions[key];
+               			}
+       				}
+       				break;
             }
         }
         return vectorOptions;
@@ -519,13 +530,13 @@ lvector.Layer = lvector.Class.extend({
         this._lastQueriedBounds = bounds;
 
         // GeoIQ layers return JSON string-wrapped, so JSON.parse it
-        if (this instanceof lvector.GeoIQ) {
+        if (lvector.GeoIQ && this instanceof lvector.GeoIQ) {
              data = JSON.parse(data);
         }
 
         // If necessary, convert data to make it look like a GeoJSON FeatureCollection
         // PRWSF returns GeoJSON, but not in a FeatureCollection. Make it one.
-        if (this instanceof lvector.PRWSF) {
+        if (lvector.PRWSF && this instanceof lvector.PRWSF) {
             data.features = data.rows;
             delete data.rows;
             for (var i = 0, len = data.features.length; i < len; i++) {
@@ -542,7 +553,7 @@ lvector.Layer = lvector.Class.extend({
             }
         }
         // GISCloud returns GeoJSON, but not in a FeatureCollection. Make it one.
-        if (this instanceof lvector.GISCloud) {
+        if (lvector.GISCloud && this instanceof lvector.GISCloud) {
             data.features = data.data;
             delete data.data;
             for (var i = 0, len = data.features.length; i < len; i++) {

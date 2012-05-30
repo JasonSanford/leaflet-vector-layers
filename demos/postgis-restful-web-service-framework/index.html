@@ -235,7 +235,7 @@ prwsf_bus = new lvector.PRWSF({
         <script src="../../docs-demo/js/jquery-1.5.2.min.js" type="text/javascript"></script>
         <script src="../../docs-demo/js/docs-demos.js" type="text/javascript"></script>
         <script src="../../docs-demo/js/bootstrap-dropdown.js" type="text/javascript"></script>
-        <script src="../../dist/lvector.js" type="text/javascript"></script>
+        <script src="../../debug/lvector-include.js" type="text/javascript"></script>
         <script type="text/javascript">
             var map1, map2, map3, map4;
             var prwsf_preservation, prwsf_hydrants, prwsf_libraries, prwsf_bus;
@@ -394,6 +394,19 @@ prwsf_bus = new lvector.PRWSF({
                         type: "single",
                         vectorOptions: {
                             icon: new busMarker("../../docs-demo/img/markers/bus.png")
+                        }
+                    },
+                    events: {
+                        mouseover: function(event, vector, properties) {
+                            //vector.setIcon(new busMarker("../../docs-demo/img/markers/bus-hover.png"));
+                            console.log('you mouseovered');
+                        },
+                        mouseout: function(event, vector, properties) {
+                            //vector.setIcon(new busMarker("../../docs-demo/img/markers/bus.png"));
+                            console.log('you mouseouted');
+                        },
+                        click: function(event, vector, properties) {
+                            console.log('you clicked that shit')
                         }
                     }
                 });

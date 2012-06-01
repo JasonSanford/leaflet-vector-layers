@@ -57,7 +57,11 @@ lvector.PRWSF = lvector.GeoJSONLayer.extend({
             var ne = bounds.getNorthEast();
             where += where.length ? " AND " : "";
             if (this.options.srid) {
-                where += this.options.geomFieldName + " && transform(st_setsrid(st_makebox2d(st_point(" + sw.lng + "," + sw.lat + "),st_point(" + ne.lng + "," + ne.lat + ")),4326)," + this.options.srid + ")";
+                if (this.options.srid == "4326") {
+                    where += this.options.geomFieldName + " && st_setsrid(st_makebox2d(st_point(" + sw.lng + "," + sw.lat + "),st_point(" + ne.lng + "," + ne.lat + ")),4326)";
+                } else {
+                    where += this.options.geomFieldName + " && transform(st_setsrid(st_makebox2d(st_point(" + sw.lng + "," + sw.lat + "),st_point(" + ne.lng + "," + ne.lat + ")),4326)," + this.options.srid + ")";
+                }
             } else {
                 where += "transform(" + this.options.geomFieldName + ",4326) && st_setsrid(st_makebox2d(st_point(" + sw.lng + "," + sw.lat + "),st_point(" + ne.lng + "," + ne.lat + ")),4326)";
             }
@@ -69,7 +73,11 @@ lvector.PRWSF = lvector.GeoJSONLayer.extend({
         }
         
         // Build fields
-        var fields = (this.options.fields.length ? this.options.fields + "," : "") + "st_asgeojson(transform(" + this.options.geomFieldName + ",4326)) as geojson";
+        if (this.options.srid && this.options.srid != "4326") {
+            var fields = (this.options.fields.length ? this.options.fields + "," : "") + "st_asgeojson(transform(" + this.options.geomFieldName + ",4326)) as geojson";
+        } else {
+            var fields = (this.options.fields.length ? this.options.fields + "," : "") + "st_asgeojson(" + this.options.geomFieldName + ") as geojson";
+        }
         
         // Build URL
         var url = this.options.url + "v1/ws_geo_attributequery.php" + // The attribute query service
@@ -77,7 +85,7 @@ lvector.PRWSF = lvector.GeoJSONLayer.extend({
             "&geotable=" + this.options.geotable + // The table name
             "&fields=" + encodeURIComponent(fields) + //
             "&format=json" + // JSON please
-            "&callback=" + this._globalPointer + "._processFeatures"; // Need this for JSONP
+            "&callback=" + this._globalPointer + "._processFeatures" + "&jsoncallback=" + this._globalPointer + "._processFeatures"; // Need this for JSONP
         
         // JSONP request
         this._makeJsonpRequest(url);

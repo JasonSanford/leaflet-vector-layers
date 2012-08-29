@@ -1,6 +1,6 @@
 @echo off
 java -jar ../lib/closure-compiler/compiler.jar ^
---js ../src/gvector.js ^
+--js ../src/lvector.js ^
 --js ../src/core/Util.js ^
 --js ../src/core/Class.js ^
 --js ../src/layer/Layer.js ^
@@ -12,4 +12,4 @@ java -jar ../lib/closure-compiler/compiler.jar ^
 --js ../src/layer/CartoDB.js ^
 --js ../src/layer/PRWSF.js ^
 --js ../src/layer/GISCloud.js ^
---js_output_file ../dist/gvector.js
+--js_output_file ../dist/lvector.js

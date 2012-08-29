@@ -33,6 +33,10 @@ lvector.AGS = lvector.EsriJSONLayer.extend({
         
         // Extend Layer to create AGS
         lvector.Layer.prototype.initialize.call(this, options);
+		
+		if (this.options.onload && typeof this.options.onload == 'function') {
+			this._layerLoaded = this.options.onload;
+		}
         
         if (this.options.where) {
             this.options.where = encodeURIComponent(this.options.where);
@@ -387,7 +391,14 @@ lvector.AGS = lvector.EsriJSONLayer.extend({
             }
             
         }
+		
+		if (typeof this._layerLoaded == 'function') {
+			this._layerLoaded(data);
+		}
     
-    }
-    
+    },
+	
+	_layerLoaded: function(data) {
+		// do nothing by default
+	}
 });

@@ -14,3 +14,8 @@
 - DRYing up the code. Moved _processFeatures from individual layers into Layer.js
 - Creating two super-layers from which all other layers extend from: GeoJSONLayer and EsriJSONLayer
 - Fixed issue where any property change would trigger a symbology change in dynamic, styled layers. We now check to see if the symbology property has changed.
+
+1.3.0
+- Support Leaflet 0.4.x
+- Fix bug where GeoIQ was returning JSON wrapped in single quotes, then they didn't, then this layer type broke.
+- Reduce filesize by 6k because I was dumb and duplicating some code. Still some room for improvement here.

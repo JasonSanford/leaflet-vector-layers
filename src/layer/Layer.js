@@ -333,7 +333,7 @@ lvector.Layer = lvector.Class.extend({
         // Set the popupAnchor if a marker was clicked
         if (!isLineOrPolygon) {
             L.Util.extend(this.options.popupOptions, {
-                offset: event.target.options.icon.popupAnchor
+                offset: event.target.options.icon.options.popupAnchor
             });
         }
         
@@ -517,11 +517,6 @@ lvector.Layer = lvector.Class.extend({
         // Store the bounds in the _lastQueriedBounds member so we don't have
         // to query the layer again if someone simply turns a layer on/off
         this._lastQueriedBounds = bounds;
-
-        // GeoIQ layers return JSON string-wrapped, so JSON.parse it
-        if (this instanceof lvector.GeoIQ) {
-             data = JSON.parse(data);
-        }
 
         // If necessary, convert data to make it look like a GeoJSON FeatureCollection
         // PRWSF returns GeoJSON, but not in a FeatureCollection. Make it one.

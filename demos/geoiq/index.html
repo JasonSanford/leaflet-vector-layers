@@ -236,7 +236,7 @@ geoiq_ski_areas = new lvector.GeoIQ({
         <script src="../../docs-demo/js/jquery-1.8.1.min.js" type="text/javascript"></script>
         <script src="../../docs-demo/js/docs-demos.js" type="text/javascript"></script>
         <script src="../../docs-demo/js/bootstrap-dropdown.js" type="text/javascript"></script>
-        <script src="../../debug/lvector-include.js" type="text/javascript"></script>
+        <script src="../../debug/lvector.js" type="text/javascript"></script>
         <script type="text/javascript">
             var map1, map2, map3;
             var geoiq_ski_areas, geoiq_foss4g_reg, geoiq_parks;
@@ -279,11 +279,13 @@ geoiq_ski_areas = new lvector.GeoIQ({
                 });
                 
                 var customMarker = L.Icon.extend({
-                    iconUrl: "../../docs-demo/img/markers/ski-lift.png",
-                    shadowUrl: null,
-                    iconSize: new L.Point(32, 37),
-                    iconAnchor: new L.Point(16, 37),
-                    popupAnchor: new L.Point(0, -35)
+                    options: {
+                        iconUrl: "../../docs-demo/img/markers/ski-lift.png",
+                        shadowUrl: null,
+                        iconSize: new L.Point(32, 37),
+                        iconAnchor: new L.Point(16, 37),
+                        popupAnchor: new L.Point(0, -35)
+                    }
                 });
                 
                 geoiq_ski_areas = new lvector.GeoIQ({
@@ -373,37 +375,49 @@ geoiq_ski_areas = new lvector.GeoIQ({
                             {
                                 value: "REGIONAL PARK",
                                 vectorOptions: {
-                                    icon: new customMarker("../../docs-demo/img/markers/park.png")
+                                    icon: new customMarker({
+                                        iconUrl: "../../docs-demo/img/markers/park.png"
+                                    })
                                 }
                             },
                             {
                                 value: "NEIGHBORHOOD PARK",
                                 vectorOptions: {
-                                    icon: new customMarker("../../docs-demo/img/markers/park.png")
+                                    icon: new customMarker({
+                                        iconUrl: "../../docs-demo/img/markers/park.png"
+                                    })
                                 }
                             },
                             {
                                 value: "COMMUNITY PARK",
                                 vectorOptions: {
-                                    icon: new customMarker("../../docs-demo/img/markers/park.png")
+                                    icon: new customMarker({
+                                        iconUrl: "../../docs-demo/img/markers/park.png"
+                                    })
                                 }
                             },
                             {
                                 value: "NATURE PRESERVE",
                                 vectorOptions: {
-                                    icon: new customMarker("../../docs-demo/img/markers/nature-preserve.png")
+                                    icon: new customMarker({
+                                        iconUrl: "../../docs-demo/img/markers/nature-preserve.png"
+                                    })
                                 }
                             },
                             {
                                 value: "RECREATION CENTER",
                                 vectorOptions: {
-                                    icon: new customMarker("../../docs-demo/img/markers/recreation-center.png")
+                                    icon: new customMarker({
+                                        iconUrl: "../../docs-demo/img/markers/recreation-center.png"
+                                    })
                                 }
                             },
                             {
                                 value: "GOLF COURSE",
                                 vectorOptions: {
-                                    icon: new customMarker("../../docs-demo/img/markers/golf.png")
+                                    icon: new customMarker({
+                                        iconUrl: "../../docs-demo/img/markers/golf.png"
+                                    })
                                 }
                             }
                         ]

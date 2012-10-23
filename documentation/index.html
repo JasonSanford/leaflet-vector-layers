@@ -205,7 +205,9 @@
     symbology: {
         type: "single",
         vectorOptions: {
-    	    icon: new customIcon("../../docs-demo/img/markers/ski-lift.png")
+    	    icon: new customIcon({
+                iconUrl: "../../docs-demo/img/markers/ski-lift.png"
+            })
         }
     }
 });</pre>
@@ -267,7 +269,9 @@
     symbology: {
         type: "single",
         vectorOptions: {
-            icon: new customIcon("../../docs-demo/img/markers/manhole.png")
+            icon: new customIcon({
+                iconUrl: "../../docs-demo/img/markers/manhole.png"
+            })
         }
     },
     popupTemplate: '&lt;h3&gt;Man Hole&lt;/h3&lt;p&gt;Depth: {mh_depth}&lt;/p&gt;',
@@ -544,12 +548,16 @@
         {
             range: [1, 20], // if feature.properties.SPEED &gt;= 1 AND feature.properties.SPEED &lt;= 20
             vectorOptions: { // Use these Leaflet Path options for features with values in this range
-                icon: new customIcon("../../docs-demo/img/markers/bus-brown.png")
+                icon: new customIcon({
+                    iconUrl: "../../docs-demo/img/markers/bus-brown.png"
+                })
             }
         },{
             range: [21, 100],
             vectorOptions: {
-                icon: new customIcon("../../docs-demo/img/markers/bus-green.png")
+                icon: new customIcon({
+                    iconUrl: "../../docs-demo/img/markers/bus-green.png"
+                })
             }
         }
     ]

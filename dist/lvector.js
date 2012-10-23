@@ -3,7 +3,7 @@
  Leaflet Vector Layers is a library for showing geometry objects
  from multiple geoweb services in a Leaflet map
 */
-(function(a){a.lvector={VERSION:"1.2.0",noConflict:function(){a.lvector=this._originallvector;return this},_originallvector:a.lvector}})(this);/*
+(function(a){a.lvector={VERSION:"1.3.0",noConflict:function(){a.lvector=this._originallvector;return this},_originallvector:a.lvector}})(this);/*
  Using portions of Leaflet code (https://github.com/CloudMade/Leaflet)
 */
 lvector.Util={extend:function(a){for(var b=Array.prototype.slice.call(arguments,1),c=0,e=b.length,d;c<e;c++){d=b[c]||{};for(var f in d)d.hasOwnProperty(f)&&(a[f]=d[f])}return a},setOptions:function(a,b){a.options=lvector.Util.extend({},a.options,b)}};/*

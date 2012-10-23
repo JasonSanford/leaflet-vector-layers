@@ -92,11 +92,13 @@
                 <div class="row demo">
                     <div class="span6 height-controlled">
                         <pre class="prettyprint">var customMarker = L.Icon.extend({
-    iconUrl: "../../docs-demo/img/markers/hydrant-blue.png",
-    shadowUrl: null,
-    iconSize: new L.Point(32, 37),
-    iconAnchor: new L.Point(16, 37),
-    popupAnchor: new L.Point(0, -35)
+    options: {
+        iconUrl: "../../docs-demo/img/markers/hydrant-blue.png",
+        shadowUrl: null,
+        iconSize: new L.Point(32, 37),
+        iconAnchor: new L.Point(16, 37),
+        popupAnchor: new L.Point(0, -35)
+    }
 });
 
 prwsf_hydrants = new lvector.PRWSF({
@@ -121,7 +123,9 @@ prwsf_hydrants = new lvector.PRWSF({
             {
                 value: "Private",
                 vectorOptions: {
-                    icon: new customMarker("../../docs-demo/img/markers/hydrant-red.png")
+                    icon: new customMarker({
+                        iconUrl: "../../docs-demo/img/markers/hydrant-red.png"
+                    })
                 }
             }
         ]
@@ -143,11 +147,13 @@ prwsf_hydrants = new lvector.PRWSF({
                 <div class="row demo">
                     <div class="span6 height-controlled">
                         <pre class="prettyprint">var customMarker = L.Icon.extend({
-    iconUrl: "../../docs-demo/img/markers/library.png",
-    shadowUrl: null,
-    iconSize: new L.Point(32, 37),
-    iconAnchor: new L.Point(16, 37),
-    popupAnchor: new L.Point(0, -35)
+    options: {
+        iconUrl: "../../docs-demo/img/markers/library.png",
+        shadowUrl: null,
+        iconSize: new L.Point(32, 37),
+        iconAnchor: new L.Point(16, 37),
+        popupAnchor: new L.Point(0, -35)
+    }
 });
 
 prwsf_libraries = new lvector.PRWSF({
@@ -184,11 +190,13 @@ prwsf_libraries = new lvector.PRWSF({
                 <div class="row demo">
                     <div class="span6 height-controlled">
                         <pre class="prettyprint">var busMarker = L.Icon.extend({
-    iconUrl: "../../docs-demo/img/markers/bus.png",
-    shadowUrl: null,
-    iconSize: new L.Point(17, 19),
-    iconAnchor: new L.Point(0, 19),
-    popupAnchor: new L.Point(9, -19)
+    options: {
+        iconUrl: "../../docs-demo/img/markers/bus.png",
+        shadowUrl: null,
+        iconSize: new L.Point(17, 19),
+        iconAnchor: new L.Point(0, 19),
+        popupAnchor: new L.Point(9, -19)
+    }
 });
 
 prwsf_bus = new lvector.PRWSF({
@@ -212,7 +220,9 @@ prwsf_bus = new lvector.PRWSF({
     symbology: {
         type: "single",
         vectorOptions: {
-            icon: new busMarker("../../docs-demo/img/markers/bus.png")
+            icon: new busMarker({
+                iconUrl: "../../docs-demo/img/markers/bus.png"
+            })
         }
     }
 });</pre>
@@ -235,7 +245,7 @@ prwsf_bus = new lvector.PRWSF({
         <script src="../../docs-demo/js/jquery-1.8.1.min.js" type="text/javascript"></script>
         <script src="../../docs-demo/js/docs-demos.js" type="text/javascript"></script>
         <script src="../../docs-demo/js/bootstrap-dropdown.js" type="text/javascript"></script>
-        <script src="../../debug/lvector.js" type="text/javascript"></script>
+        <script src="../../dist/lvector.js" type="text/javascript"></script>
         <script type="text/javascript">
             var map1, map2, map3, map4;
             var prwsf_preservation, prwsf_hydrants, prwsf_libraries, prwsf_bus;

@@ -19,3 +19,4 @@
 - Support Leaflet 0.4.x
 - Fix bug where GeoIQ was returning JSON wrapped in single quotes, then they didn't, then this layer type broke.
 - Reduce filesize by 6k because I was dumb and duplicating some code. Still some room for improvement here.
+- Added code examples for GISCloud

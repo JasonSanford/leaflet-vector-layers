@@ -85,11 +85,13 @@
 });
 
 var customMarker = L.Icon.extend({
-    iconUrl: "../../docs-demo/img/markers/manhole.png",
-    shadowUrl: null,
-    iconSize: new L.Point(16, 16),
-    iconAnchor: new L.Point(8, 8),
-    popupAnchor: new L.Point(1, -8)
+    options: {
+        iconUrl: "../../docs-demo/img/markers/manhole.png",
+        shadowUrl: null,
+        iconSize: new L.Point(16, 16),
+        iconAnchor: new L.Point(8, 8),
+        popupAnchor: new L.Point(1, -8)
+    }
 });
 
 cartodb_man_hole = new lvector.CartoDB({
@@ -99,7 +101,9 @@ cartodb_man_hole = new lvector.CartoDB({
     symbology: {
         type: "single",
         vectorOptions: {
-            icon: new customMarker("../../docs-demo/img/markers/manhole.png")
+            icon: new customMarker({
+                iconUrl: "../../docs-demo/img/markers/manhole.png"
+            })
         }
     },
     popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;Man Hole&lt;/h3&gt;&lt;table class="condensed-table"&gt;&lt;tr&gt;&lt;th&gt;Diameter&lt;/th&gt;&lt;td&gt;{mh_dia} ft.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Depth&lt;/th&gt;&lt;td&gt;{mh_depth} ft.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Address&lt;/th&gt;&lt;td&gt;{street_add}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Flows To&lt;/th&gt;&lt;td&gt;{wwtp} WWTP&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;',
@@ -184,7 +188,7 @@ cartodb_man_hole = new lvector.CartoDB({
         <script src="../../docs-demo/js/jquery-1.8.1.min.js" type="text/javascript"></script>
         <script src="../../docs-demo/js/docs-demos.js" type="text/javascript"></script>
         <script src="../../docs-demo/js/bootstrap-dropdown.js" type="text/javascript"></script>
-        <script src="../../debug/lvector.js" type="text/javascript"></script>
+        <script src="../../dist/lvector.js" type="text/javascript"></script>
         <script type="text/javascript">
             var map1, map2;
             var cartodb_sewer_line, cartodb_man_hole, cartodb_flood_zones;

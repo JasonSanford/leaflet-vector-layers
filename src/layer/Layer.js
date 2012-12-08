@@ -3,7 +3,7 @@
  */
 
 lvector.Layer = lvector.Class.extend({
-    
+
     //
     // Default options for all layers
     //
@@ -26,7 +26,7 @@ lvector.Layer = lvector.Class.extend({
     initialize: function(options) {
         lvector.Util.setOptions(this, options);
     },
-    
+
     //
     // Show this layer on the map provided
     //
@@ -47,18 +47,18 @@ lvector.Layer = lvector.Class.extend({
             this.options.map = map;
         }
     },
-    
+
     //
     // Get the map (if any) that the layer has been added to
     //
     getMap: function() {
         return this.options.map;
     },
-    
+
     setOptions: function(o) {
         // TODO - Merge new options (o) with current options (this.options)
     },
-    
+
     _show: function() {
         this._addIdleListener();
         if (this.options.scaleRange && this.options.scaleRange instanceof Array && this.options.scaleRange.length === 2) {
@@ -74,7 +74,7 @@ lvector.Layer = lvector.Class.extend({
             this.options.map.fire("moveend").fire("zoomend");
         }
     },
-    
+
     _hide: function() {
         if (this._idleListener) {
             this.options.map.off("moveend", this._idleListener);
@@ -91,7 +91,7 @@ lvector.Layer = lvector.Class.extend({
             this._gotAll = false;
         }
     },
-    
+
     //
     // Hide the vectors in the layer. This might get called if the layer is still on but out of scaleRange.
     //
@@ -121,7 +121,7 @@ lvector.Layer = lvector.Class.extend({
             }
         }
     },
-    
+
     //
     // Show the vectors in the layer. This might get called if the layer is on and came back into scaleRange.
     //
@@ -137,7 +137,7 @@ lvector.Layer = lvector.Class.extend({
             }
         }
     },
-    
+
     //
     // Hide the vectors, then empty the vectory holding array
     //
@@ -146,7 +146,7 @@ lvector.Layer = lvector.Class.extend({
         this._hideVectors();
         this._vectors = [];
     },
-    
+
     //
     // Add an event hanlder to detect a zoom change on the map
     //
@@ -157,7 +157,7 @@ lvector.Layer = lvector.Class.extend({
         var me = this;
 
         me._zoomChangeListener = me._zoomChangeListenerTemplate();
-        
+
         this.options.map.on("zoomend", me._zoomChangeListener, me);
     },
 
@@ -198,7 +198,7 @@ lvector.Layer = lvector.Class.extend({
             }
         }
     },
-    
+
     //
     // Add an event hanlder to detect an idle (pan or zoom) on the map
     //
@@ -209,13 +209,13 @@ lvector.Layer = lvector.Class.extend({
         var me = this;
 
         me._idleListener = me._idleListenerTemplate();
-        
+
         //
         // Whenever the map idles (pan or zoom) get the features in the current map extent
         //
         this.options.map.on("moveend", me._idleListener, me);
     },
-    
+
     //
     // Get the current map zoom and check to see if the layer should still be visible
     //
@@ -224,14 +224,14 @@ lvector.Layer = lvector.Class.extend({
         // Store current visibility so we can see if it changed
         //
         var visibilityBefore = this.options.visibleAtScale;
-        
+
         //
         // Check current map scale and see if it's in this layer's range
         //
         var z = this.options.map.getZoom();
         var sr = this.options.scaleRange;
         this.options.visibleAtScale = (z >= sr[0] && z <= sr[1]);
-        
+
         //
         // Check to see if the visibility has changed
         //
@@ -241,7 +241,7 @@ lvector.Layer = lvector.Class.extend({
             //
             this[this.options.visibleAtScale ? "_showVectors" : "_hideVectors"]();
         }
-        
+
         //
         // Check to see if we need to set or clear any intervals for auto-updating layers
         //
@@ -253,9 +253,9 @@ lvector.Layer = lvector.Class.extend({
                 me._getFeatures();
             }, this.options.autoUpdateInterval);
         }
-        
+
     },
-    
+
     //
     // Set the Popup content for the feature
     //
@@ -264,14 +264,14 @@ lvector.Layer = lvector.Class.extend({
         // Store previous Popup content so we can check to see if it changed. If it didn't no sense changing the content as this has an ugly flashing effect.
         //
         var previousContent = feature.popupContent;
-        
+
         //
         // Esri calls them attributes. GeoJSON calls them properties.
         //
         var atts = feature.attributes || feature.properties;
-        
+
         var popupContent;
-        
+
         //
         // Check to see if it's a string-based popupTemplate or function
         //
@@ -280,7 +280,7 @@ lvector.Layer = lvector.Class.extend({
             // Store the string-based popupTemplate
             //
             popupContent = this.options.popupTemplate;
-            
+
             //
             // Loop through the properties and replace mustache-wrapped property names with actual values
             //
@@ -299,12 +299,12 @@ lvector.Layer = lvector.Class.extend({
             //
             return;
         }
-        
+
         //
         // Store the Popup content
         //
         feature.popupContent = popupContent;
-        
+
         //
         // Check to see if popupContent has changed and if so setContent
         //
@@ -320,7 +320,7 @@ lvector.Layer = lvector.Class.extend({
             }
         }
     },
-    
+
     //
     // Show the feature's (or layer's) Popup
     //
@@ -329,19 +329,19 @@ lvector.Layer = lvector.Class.extend({
         // Popups on Lines and Polygons are opened slightly different, make note of it
         //
         var isLineOrPolygon = event.latlng;
-        
+
         // Set the popupAnchor if a marker was clicked
         if (!isLineOrPolygon) {
             L.Util.extend(this.options.popupOptions, {
                 offset: event.target.options.icon.options.popupAnchor
             });
         }
-        
+
         //
         // Create a variable to hold a reference to the object that owns the Popup so we can show it later
         //
         var ownsPopup;
-        
+
         //
         // If the layer isn't set to show a single Popup
         //
@@ -359,25 +359,25 @@ lvector.Layer = lvector.Class.extend({
                 this.options.map.removeLayer(this.popup);
                 this.popup = null;
             }
-            
+
             //
             // Create a new Popup
             //
             this.popup = new L.Popup(this.options.popupOptions, feature.vector);
-            
+
             //
             // Store the associated feature reference in the Popup so we can close and clear it later
             //
             this.popup.associatedFeature = feature;
-            
+
             ownsPopup = this;
         }
-        
+
         ownsPopup.popup.setLatLng(isLineOrPolygon ? event.latlng : event.target.getLatLng());
         ownsPopup.popup.setContent(feature.popupContent);
         this.options.map.addLayer(ownsPopup.popup);
     },
-    
+
     //
     // Get the appropriate Google Maps vector options for this feature
     //
@@ -386,12 +386,12 @@ lvector.Layer = lvector.Class.extend({
         // Create an empty vectorOptions object to add to, or leave as is if no symbology can be found
         //
         var vectorOptions = {};
-        
+
         //
         // Esri calls them attributes. GeoJSON calls them properties.
         //
         var atts = feature.attributes || feature.properties;
-        
+
         //
         // Is there a symbology set for this layer?
         //
@@ -403,6 +403,17 @@ lvector.Layer = lvector.Class.extend({
                     //
                     for (var key in this.options.symbology.vectorOptions) {
                         vectorOptions[key] = this.options.symbology.vectorOptions[key];
+                        if (vectorOptions.title && vectorOptions.title.indexOf('{') !== -1 && vectorOptions.title.indexOf('}') !== -1) {
+                            var title = vectorOptions.title.replace("{","").replace("}","");
+                            if (vectorOptions.titlePrefix) {
+                                vectorOptions.title = vectorOptions.titlePrefix + atts[title];
+                            } else {
+                                vectorOptions.title = atts[title];
+                            }
+                            if (vectorOptions.titleSuffix) {
+                                vectorOptions.title = vectorOptions.title + vectorOptions.titleSuffix;
+                            }
+                        }
                     }
                     break;
                 case "unique":
@@ -414,6 +425,17 @@ lvector.Layer = lvector.Class.extend({
                         if (atts[att] == this.options.symbology.values[i].value) {
                             for (var key in this.options.symbology.values[i].vectorOptions) {
                                 vectorOptions[key] = this.options.symbology.values[i].vectorOptions[key];
+                                if (vectorOptions.title && vectorOptions.title.indexOf('{') !== -1 && vectorOptions.title.indexOf('}') !== -1) {
+                                    var title = vectorOptions.title.replace("{","").replace("}","");
+                                    if (vectorOptions.titlePrefix) {
+                                        vectorOptions.title = vectorOptions.titlePrefix + atts[title];
+                                    } else {
+                                        vectorOptions.title = atts[title];
+                                    }
+                                    if (vectorOptions.titleSuffix) {
+                                        vectorOptions.title = vectorOptions.title + vectorOptions.titleSuffix;
+                                    }
+                                }
                             }
                         }
                     }
@@ -427,6 +449,17 @@ lvector.Layer = lvector.Class.extend({
                         if (atts[att] >= this.options.symbology.ranges[i].range[0] && atts[att] <= this.options.symbology.ranges[i].range[1]) {
                             for (var key in this.options.symbology.ranges[i].vectorOptions) {
                                 vectorOptions[key] = this.options.symbology.ranges[i].vectorOptions[key];
+                                if (vectorOptions.title && vectorOptions.title.indexOf('{') !== -1 && vectorOptions.title.indexOf('}') !== -1) {
+                                    var title = vectorOptions.title.replace("{","").replace("}","");
+                                    if (vectorOptions.titlePrefix) {
+                                        vectorOptions.title = vectorOptions.titlePrefix + atts[title];
+                                    } else {
+                                        vectorOptions.title = atts[title];
+                                    }
+                                    if (vectorOptions.titleSuffix) {
+                                        vectorOptions.title = vectorOptions.title + vectorOptions.titleSuffix;
+                                    }
+                                }
                             }
                         }
                     }
@@ -435,7 +468,7 @@ lvector.Layer = lvector.Class.extend({
         }
         return vectorOptions;
     },
-    
+
     //
     // Check to see if any attributes have changed
     //
@@ -455,7 +488,7 @@ lvector.Layer = lvector.Class.extend({
     _getPropertyChanged: function(oldAtts, newAtts, property) {
         return !(oldAtts[property] == newAtts[property]);
     },
-    
+
     //
     // Check to see if the geometry has changed
     //
@@ -468,7 +501,7 @@ lvector.Layer = lvector.Class.extend({
             //
             // It's GeoJSON
             //
-            
+
             //
             // For now only checking for point changes
             //
@@ -479,7 +512,7 @@ lvector.Layer = lvector.Class.extend({
             //
             // It's EsriJSON
             //
-            
+
             //
             // For now only checking for point changes
             //
@@ -489,7 +522,7 @@ lvector.Layer = lvector.Class.extend({
         }
         return changed;
     },
-    
+
     _makeJsonpRequest: function(url) {
         var head = document.getElementsByTagName("head")[0];
         var script = document.createElement("script");
@@ -507,13 +540,13 @@ lvector.Layer = lvector.Class.extend({
             return;
         }
         var bounds = this.options.map.getBounds();
-        
+
         // Check to see if the _lastQueriedBounds is the same as the new bounds
         // If true, don't bother querying again.
         if (this._lastQueriedBounds && this._lastQueriedBounds.equals(bounds) && !this.options.autoUpdate) {
             return;
         }
-        
+
         // Store the bounds in the _lastQueriedBounds member so we don't have
         // to query the layer again if someone simply turns a layer on/off
         this._lastQueriedBounds = bounds;
@@ -549,13 +582,13 @@ lvector.Layer = lvector.Class.extend({
                 delete data.features[i].__geometry;
             }
         }
-        
+
         // If "data.features" exists and there's more than one feature in the array
         if (data && data.features && data.features.length) {
-            
+
             // Loop through the return features
             for (var i = 0; i < data.features.length; i++) {
-            
+
                 // if AGS layer type assigned "attributes" to "properties" to keep everything looking like GeoJSON Features
                 if (this instanceof lvector.EsriJSONLayer) {
                     data.features[i].properties = data.features[i].attributes;
@@ -564,34 +597,34 @@ lvector.Layer = lvector.Class.extend({
 
                 // All objects are assumed to be false until proven true (remember COPS?)
                 var onMap = false;
-            
+
                 // If we have a "uniqueField" for this layer
                 if (this.options.uniqueField) {
-                    
+
                     // Loop through all of the features currently on the map
                     for (var i2 = 0; i2 < this._vectors.length; i2++) {
-                    
+
                         // Does the "uniqueField" property for this feature match the feature on the map
                         if (data.features[i].properties[this.options.uniqueField] == this._vectors[i2].properties[this.options.uniqueField]) {
                             // The feature is already on the map
                             onMap = true;
-                            
+
                             // We're only concerned about updating layers that are dynamic (options.dynamic = true).
                             if (this.options.dynamic) {
-                            
+
                                 // The feature's geometry might have changed, let's check.
                                 if (this._getGeometryChanged(this._vectors[i2].geometry, data.features[i].geometry)) {
-                                    
+
                                     // Check to see if it's a point feature, these are the only ones we're updating for now
                                     if (!isNaN(data.features[i].geometry.coordinates[0]) && !isNaN(data.features[i].geometry.coordinates[1])) {
                                         this._vectors[i2].geometry = data.features[i].geometry;
                                         this._vectors[i2].vector.setLatLng(new L.LatLng(this._vectors[i2].geometry.coordinates[1], this._vectors[i2].geometry.coordinates[0]));
                                     }
-                                    
+
                                 }
-                                
+
                                 var propertiesChanged = this._getPropertiesChanged(this._vectors[i2].properties, data.features[i].properties);
-                                
+
                                 if (propertiesChanged) {
                                     var symbologyPropertyChanged = this._getPropertyChanged(this._vectors[i2].properties, data.features[i].properties, this.options.symbology.property);
                                     this._vectors[i2].properties = data.features[i].properties;
@@ -620,18 +653,18 @@ lvector.Layer = lvector.Class.extend({
                                         }
                                     }
                                 }
-                            
+
                             }
-                            
+
                         }
-                        
+
                     }
-                    
+
                 }
-                
+
                 // If the feature isn't already or the map OR the "uniqueField" attribute doesn't exist
                 if (!onMap || !this.options.uniqueField) {
-                    
+
                     if (this instanceof lvector.GeoJSONLayer) {
                     // Convert GeoJSON to Leaflet vector (Point, Polyline, Polygon)
                         var vector_or_vectors = this._geoJsonGeometryToLeaflet(data.features[i].geometry, this._getFeatureVectorOptions(data.features[i]));
@@ -641,7 +674,7 @@ lvector.Layer = lvector.Class.extend({
                         var vector_or_vectors = this._esriJsonGeometryToLeaflet(data.features[i].geometry, this._getFeatureVectorOptions(data.features[i]));
                         data.features[i][vector_or_vectors instanceof Array ? "vectors" : "vector"] = vector_or_vectors;
                     }
-                    
+
                     // Show the vector or vectors on the map
                     if (data.features[i].vector) {
                         this.options.map.addLayer(data.features[i].vector);
@@ -650,17 +683,17 @@ lvector.Layer = lvector.Class.extend({
                             this.options.map.addLayer(data.features[i].vectors[i3]);
                         }
                     }
-                    
+
                     // Store the vector in an array so we can remove it later
                     this._vectors.push(data.features[i]);
-                    
+
                     if (this.options.popupTemplate) {
-                        
+
                         var me = this;
                         var feature = data.features[i];
-                        
+
                         this._setPopupContent(feature);
-                        
+
                         (function(feature){
                             if (feature.vector) {
                                 feature.vector.on("click", function(event) {
@@ -674,14 +707,14 @@ lvector.Layer = lvector.Class.extend({
                                 }
                             }
                         }(feature));
-                        
+
                     }
-                
+
                 }
-                
+
             }
-            
+
         }
-    
+
     }
 });

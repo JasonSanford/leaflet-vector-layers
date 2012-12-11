@@ -404,13 +404,9 @@ lvector.Layer = lvector.Class.extend({
                     for (var key in this.options.symbology.vectorOptions) {
                         vectorOptions[key] = this.options.symbology.vectorOptions[key];
                         if (vectorOptions.title) {
-                            var value = [];
-                            var re = new RegExp("{([^}]+)}", "g"), matchArray;
-                            while ((matchArray = re.exec(vectorOptions.title)) !== null ) {
-                                value.push(matchArray[1]);
-                            }
-                            for (var i = 0; i < value.length; i++) {
-                                vectorOptions.title = vectorOptions.title.replace("{" + value[i] + "}", atts[value[i]]);
+                            for (var prop in atts) {
+                                var re = new RegExp("{" + prop + "}", "g");
+                                vectorOptions.title = vectorOptions.title.replace(re, atts[prop]);
                             }
                         }
                     }
@@ -425,13 +421,9 @@ lvector.Layer = lvector.Class.extend({
                             for (var key in this.options.symbology.values[i].vectorOptions) {
                                 vectorOptions[key] = this.options.symbology.values[i].vectorOptions[key];
                                 if (vectorOptions.title) {
-                                    var value = [];
-                                    var re = new RegExp("{([^}]+)}", "g"), matchArray;
-                                    while ((matchArray = re.exec(vectorOptions.title)) !== null ) {
-                                        value.push(matchArray[1]);
-                                    }
-                                    for (var i = 0; i < value.length; i++) {
-                                        vectorOptions.title = vectorOptions.title.replace("{" + value[i] + "}", atts[value[i]]);
+                                    for (var prop in atts) {
+                                        var re = new RegExp("{" + prop + "}", "g");
+                                        vectorOptions.title = vectorOptions.title.replace(re, atts[prop]);
                                     }
                                 }
                             }
@@ -448,13 +440,9 @@ lvector.Layer = lvector.Class.extend({
                             for (var key in this.options.symbology.ranges[i].vectorOptions) {
                                 vectorOptions[key] = this.options.symbology.ranges[i].vectorOptions[key];
                                 if (vectorOptions.title) {
-                                    var value = [];
-                                    var re = new RegExp("{([^}]+)}", "g"), matchArray;
-                                    while ((matchArray = re.exec(vectorOptions.title)) !== null ) {
-                                        value.push(matchArray[1]);
-                                    }
-                                    for (var i = 0; i < value.length; i++) {
-                                        vectorOptions.title = vectorOptions.title.replace("{" + value[i] + "}", atts[value[i]]);
+                                    for (var prop in atts) {
+                                        var re = new RegExp("{" + prop + "}", "g");
+                                        vectorOptions.title = vectorOptions.title.replace(re, atts[prop]);
                                     }
                                 }
                             }

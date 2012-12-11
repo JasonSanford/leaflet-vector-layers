@@ -403,6 +403,16 @@ lvector.Layer = lvector.Class.extend({
                     //
                     for (var key in this.options.symbology.vectorOptions) {
                         vectorOptions[key] = this.options.symbology.vectorOptions[key];
+                        if (vectorOptions.title) {
+                            var value = [];
+                            var re = new RegExp("{([^}]+)}", "g"), matchArray;
+                            while ((matchArray = re.exec(vectorOptions.title)) !== null ) {
+                                value.push(matchArray[1]);
+                            }
+                            for (var i = 0; i < value.length; i++) {
+                                vectorOptions.title = vectorOptions.title.replace("{" + value[i] + "}", atts[value[i]]);
+                            }
+                        }
                     }
                     break;
                 case "unique":
@@ -414,6 +424,16 @@ lvector.Layer = lvector.Class.extend({
                         if (atts[att] == this.options.symbology.values[i].value) {
                             for (var key in this.options.symbology.values[i].vectorOptions) {
                                 vectorOptions[key] = this.options.symbology.values[i].vectorOptions[key];
+                                if (vectorOptions.title) {
+                                    var value = [];
+                                    var re = new RegExp("{([^}]+)}", "g"), matchArray;
+                                    while ((matchArray = re.exec(vectorOptions.title)) !== null ) {
+                                        value.push(matchArray[1]);
+                                    }
+                                    for (var i = 0; i < value.length; i++) {
+                                        vectorOptions.title = vectorOptions.title.replace("{" + value[i] + "}", atts[value[i]]);
+                                    }
+                                }
                             }
                         }
                     }
@@ -427,6 +447,16 @@ lvector.Layer = lvector.Class.extend({
                         if (atts[att] >= this.options.symbology.ranges[i].range[0] && atts[att] <= this.options.symbology.ranges[i].range[1]) {
                             for (var key in this.options.symbology.ranges[i].vectorOptions) {
                                 vectorOptions[key] = this.options.symbology.ranges[i].vectorOptions[key];
+                                if (vectorOptions.title) {
+                                    var value = [];
+                                    var re = new RegExp("{([^}]+)}", "g"), matchArray;
+                                    while ((matchArray = re.exec(vectorOptions.title)) !== null ) {
+                                        value.push(matchArray[1]);
+                                    }
+                                    for (var i = 0; i < value.length; i++) {
+                                        vectorOptions.title = vectorOptions.title.replace("{" + value[i] + "}", atts[value[i]]);
+                                    }
+                                }
                             }
                         }
                     }

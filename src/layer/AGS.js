@@ -157,6 +157,31 @@ lvector.AGS = lvector.EsriJSONLayer.extend({
         var vectorOptions = {};
         switch (symbol.type) {
             case "esriSMS":
+                /*vectorOptions.color = this._parseColor(symbol.outline.color);
+                vectorOptions.weight = symbol.width;
+                vectorOptions.opacity = this._parseAlpha(symbol.outline.color[3]);
+                vectorOptions.fill = true;
+                vectorOptions.fillColor = this._parseColor(symbol.color);
+                vectorOptions.fillOpacity = */
+                //solid or hollow only
+                vectorOptions.circleMarker = true;
+                if (symbol.outline) {                    
+                    vectorOptions.weight = symbol.outline.width;
+                    vectorOptions.color = this._parseColor(symbol.outline.color);
+                    vectorOptions.opacity = this._parseAlpha(symbol.outline.color[3]);
+                } else {
+                    vectorOptions.weight = 0;
+                    vectorOptions.color = "#000000";
+                    vectorOptions.opacity = 0.0;
+                }
+                if (symbol.style != "esriSFSNull") {
+                    vectorOptions.fillColor = this._parseColor(symbol.color);
+                    vectorOptions.fillOpacity = this._parseAlpha(symbol.color[3]);                
+                } else {
+                    vectorOptions.fillColor = "#000000";
+                    vectorOptions.fillOpacity = 0.0;                
+                }
+                break;
             case "esriPMS":
                 var customMarker = L.icon({
                     iconUrl: "data:" + symbol.contentType + ";base64," + symbol.imageData,

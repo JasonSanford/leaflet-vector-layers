@@ -15,7 +15,11 @@ lvector.EsriJSONLayer = lvector.Layer.extend({
             //
             // A Point
             //
-            vector = new L.Marker(new L.LatLng(geometry.y, geometry.x), opts);
+            if (opts.circleMarker) {
+                vector = new L.CircleMarker(new L.LatLng(geometry.y, geometry.x), opts)
+            } else {
+                vector = new L.Marker(new L.LatLng(geometry.y, geometry.x), opts);
+            }
         } else if (geometry.points) {
             //
             // A MultiPoint

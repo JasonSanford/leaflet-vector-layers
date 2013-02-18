@@ -223,24 +223,28 @@ lvector.AGS = lvector.EsriJSONLayer.extend({
         if (!this.options.uniqueField) {
             this._clearFeatures();
         }
-        
-        // Build URL
-        var url = this.options.url + "query" + // Query this layer
-            "?returnGeometry=true" + // Of course we want geometry
-            "&outSR=4326" + // receive geometry in WGS 84 Lat/Lng.
-            "&f=json" + // Wish it were GeoJSON, but we'll take it
-            "&outFields=" + this.options.fields + // Please return the following fields
-            "&where=" + this.options.where + // By default return all feature (1=1) but could pass SQL statement (value<90)
-            "&callback=" + this._globalPointer + "._processFeatures"; // Need this for JSONP
-        if (!this.options.showAll) {
-            url += "&inSR=4326" + // request geometry in WGS 84 Lat/Lng.
-            "&spatialRel=esriSpatialRelIntersects" + // Find stuff that intersects this envelope
-            "&geometryType=esriGeometryEnvelope" + // Our "geometry" url param will be an envelope
-            "&geometry=" + this.options.map.getBounds().toBBoxString(); // Build envelope geometry
+
+        // url could be null when we use {esriOptions: true}, because of a query to get esriOptions from ArcGis
+        // so skip this if url is null, after we got options from the server, this method will be called once again.
+        if (this.options.url != null)
+        {
+            // Build URL
+            var url = this.options.url + "query" + // Query this layer
+                "?returnGeometry=true" + // Of course we want geometry
+                "&outSR=4326" + // receive geometry in WGS 84 Lat/Lng.
+                "&f=json" + // Wish it were GeoJSON, but we'll take it
+                "&outFields=" + this.options.fields + // Please return the following fields
+                "&where=" + this.options.where + // By default return all feature (1=1) but could pass SQL statement (value<90)
+                "&callback=" + this._globalPointer + "._processFeatures"; // Need this for JSONP
+            if (!this.options.showAll) {
+                url += "&inSR=4326" + // request geometry in WGS 84 Lat/Lng.
+                "&spatialRel=esriSpatialRelIntersects" + // Find stuff that intersects this envelope
+                "&geometryType=esriGeometryEnvelope" + // Our "geometry" url param will be an envelope
+                "&geometry=" + this.options.map.getBounds().toBBoxString(); // Build envelope geometry
+            }        
+            // JSONP request
+            this._makeJsonpRequest(url);
         }
-        
-        // JSONP request
-        this._makeJsonpRequest(url);
     }
     
 });

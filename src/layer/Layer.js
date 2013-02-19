@@ -25,6 +25,10 @@ lvector.Layer = lvector.Class.extend({
 
     initialize: function(options) {
         lvector.Util.setOptions(this, options);
+        
+        if (this.options.onload && typeof this.options.onload === 'function') {
+            this._layerLoaded = this.options.onload;
+        }
     },
     
     //
@@ -683,5 +687,13 @@ lvector.Layer = lvector.Class.extend({
             
         }
     
+        if (typeof this._layerLoaded === 'function') {
+            this._layerLoaded(data);
+        }
+    },
+    
+    _layerLoaded: function (data) {
+        // do nothing by default
     }
+    
 });

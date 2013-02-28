@@ -342,6 +342,7 @@
     geotable: "mountain_backdrop_preservation_area",
     fields: "gid",
     uniqueField: "gid",
+    geomPrecision: 6,
     srid: 2232,
     showAll: true,
     symbology: {
@@ -376,6 +377,7 @@
                         <tr><td><code>geotable</code></td><td><code>String</code></td><td><code>null</code></td><td><strong>Required</strong> -  The geotable for which we want data to be displayed.</td></tr>
                         <tr><td><code>fields</code></td><td><code>String</code></td><td><code>null</code></td><td>A list of comma separated fields to be returned with the features. By default only the geometry field is returned. You'd likely want to also return a unique id and some other attribute information.</td></tr>
                         <tr><td><code>geomFieldName</code></td><td><code>String</code></td><td><code>"the_geom"</code></td><td>The geometry field name for this geotable. Most commonly found as <code>the_geom</code></td></tr>
+                        <tr><td><code>geomPrecision</code></td><td><code>Integer</code></td><td><code>null</code></td><td>Used to reduce the maximum number of decimal places in the PostGIS ST_AsGeoJSON output (PostGIS defaults to 15).</td></tr>
                         <tr><td><code>srid</code></td><td><code>Integer</code></td><td><code>null</code></td><td>The SRID of the geometry in this geotable. This isn't required but increases performance drastically as the bounding box geometry can be projected to match your features' projection, which makes use of spatial indexes (that you've hopefully built).</td></tr>
                         <tr><td><code>where</code></td><td><code>String</code></td><td><code>null</code></td><td>Any additional SQL query(ies) to further filter the returned features.</td></tr>
                         <tr><td><code>limit</code></td><td><code>Integer</code></td><td><code>null</code></td><td>Limit the number of returned features.</td></tr>

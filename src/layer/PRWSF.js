@@ -39,6 +39,7 @@ lvector.PRWSF = lvector.GeoJSONLayer.extend({
         geotable: null,
         srid: null,
         geomFieldName: "the_geom",
+        geomPrecision: "",
         fields: "",
         where: null,
         limit: null,
@@ -69,7 +70,7 @@ lvector.PRWSF = lvector.GeoJSONLayer.extend({
         }
         
         // Build fields
-        var fields = (this.options.fields.length ? this.options.fields + "," : "") + "st_asgeojson(transform(" + this.options.geomFieldName + ",4326)) as geojson";
+        var fields = (this.options.fields.length ? this.options.fields + "," : "") + "st_asgeojson(transform(" + this.options.geomFieldName + ",4326)" + (this.options.geomPrecision ? "," + this.options.geomPrecision : "") + ") as geojson";
         
         // Build URL
         var url = this.options.url + "v1/ws_geo_attributequery.php" + // The attribute query service

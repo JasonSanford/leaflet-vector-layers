@@ -377,6 +377,13 @@ lvector.Layer = lvector.Class.extend({
         ownsPopup.popup.setContent(feature.popupContent);
         this.options.map.addLayer(ownsPopup.popup);
     },
+
+    //
+    // Optional click event
+    //
+    _fireClickEvent: function (feature, event) {
+        this.options.clickEvent(feature, event)
+    },
     
     //
     // Get the appropriate Google Maps vector options for this feature
@@ -403,6 +410,12 @@ lvector.Layer = lvector.Class.extend({
                     //
                     for (var key in this.options.symbology.vectorOptions) {
                         vectorOptions[key] = this.options.symbology.vectorOptions[key];
+                        if (vectorOptions.title) {
+                            for (var prop in atts) {
+                                var re = new RegExp("{" + prop + "}", "g");
+                                vectorOptions.title = vectorOptions.title.replace(re, atts[prop]);
+                            }
+                        }
                     }
                     break;
                 case "unique":
@@ -414,6 +427,12 @@ lvector.Layer = lvector.Class.extend({
                         if (atts[att] == this.options.symbology.values[i].value) {
                             for (var key in this.options.symbology.values[i].vectorOptions) {
                                 vectorOptions[key] = this.options.symbology.values[i].vectorOptions[key];
+                                if (vectorOptions.title) {
+                                    for (var prop in atts) {
+                                        var re = new RegExp("{" + prop + "}", "g");
+                                        vectorOptions.title = vectorOptions.title.replace(re, atts[prop]);
+                                    }
+                                }
                             }
                         }
                     }
@@ -427,6 +446,12 @@ lvector.Layer = lvector.Class.extend({
                         if (atts[att] >= this.options.symbology.ranges[i].range[0] && atts[att] <= this.options.symbology.ranges[i].range[1]) {
                             for (var key in this.options.symbology.ranges[i].vectorOptions) {
                                 vectorOptions[key] = this.options.symbology.ranges[i].vectorOptions[key];
+                                if (vectorOptions.title) {
+                                    for (var prop in atts) {
+                                        var re = new RegExp("{" + prop + "}", "g");
+                                        vectorOptions.title = vectorOptions.title.replace(re, atts[prop]);
+                                    }
+                                }
                             }
                         }
                     }
@@ -675,6 +700,27 @@ lvector.Layer = lvector.Class.extend({
                             }
                         }(feature));
                         
+                    }
+
+                    if (this.options.clickEvent) {
+
+                        var me = this;
+                        var feature = data.features[i];
+
+                        (function(feature){
+                            if (feature.vector) {
+                                feature.vector.on("click", function(event) {
+                                    me._fireClickEvent(feature, event);
+                                });
+                            } else if (feature.vectors) {
+                                for (var i3 = 0, len = feature.vectors.length; i3 < len; i3++) {
+                                    feature.vectors[i3].on("click", function(event) {
+                                        me._fireClickEvent(feature, event);
+                                    });
+                                }
+                            }
+                        }(feature));
+
                     }
                 
                 }

@@ -4,7 +4,17 @@ Arizona Geological Survey
 
 Added support for Geoserver (-v 2.2.4 WAR Apache Tomcat 7.0.26).
 
-Edited files in build directory as well for compatibility.
+Inheritance:
+	src/layer/GeoJSONLayer.js
+		src/layer/Geoserver.js
+
+Edited files:
+	src/layer/Geoserver.js
+	dist/lvector.js 
+	build/Makefile 
+	build/build.bat 
+	build/build.html 
+	build/deps.js 
 
 Documentation:
 	var example = new lvector.Geoserver({

@@ -12,4 +12,5 @@
     --js ../src/layer/CartoDB.js \
     --js ../src/layer/PRWSF.js \
     --js ../src/layer/GISCloud.js \
+    --js ../src/layer/Geoserver.js \
     --js_output_file ../dist/gvector.js

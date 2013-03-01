@@ -66,5 +66,12 @@ var deps = {
         desc: 'The GIS Cloud Layer',
         heading: 'GIS Cloud',
         deps: ['GeoJSONLayer']
-    }
+    },
+
+	Geoserver:{
+		src:['layer/Geoserver.js'],
+		desc: 'Geoserver loads of awesomeness',
+		heading: 'Geoserver',
+		deps:['GeoJSONLayer']
+	}
 };

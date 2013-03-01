@@ -1,0 +1,17 @@
+Adrian Sonnenschein
+Arizona Geological Survey
+3/1/2013
+
+Added support for Geoserver (-v 2.2.4 WAR Apache Tomcat 7.0.26).
+
+Edited files in build directory as well for compatibility.
+
+Documentation:
+	var example = new lvector.Geoserver({
+		workspace:"workspace",			
+		typeName: "store:layer",
+		symbology:{
+		}
+	});
+
+	example.setMap(map);

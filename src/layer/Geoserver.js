@@ -25,11 +25,17 @@ lvector.Geoserver=lvector.GeoJSONLayer.extend({
 
 	options: {
 		workspace:null,
-		typeName: null
+		typeName: null,
+		uniqueField:null
 	},
 
-	_requiredParams: ["workspace","typeName"],
+	_requiredParams: ["workspace","typeName","uniqueField"],
+
 	_getFeatures:function(){
+//		if (!this.options.uniqueField) {
+//			this._clearFeatures();
+//		}
+
 		var url="http://localhost:8080/geoserver/" + this.options.workspace + "/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=" +
 			this.options.typeName + "&outputFormat=json&format_options=callback:" + this._globalPointer + "._processFeatures";
 		if (!this.options.showAll){

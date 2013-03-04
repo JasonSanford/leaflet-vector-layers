@@ -20,6 +20,7 @@ Documentation:
 	var example = new lvector.Geoserver({
 		workspace:"workspace",			
 		typeName: "store:layer",
+		uniqueField:"uid", //user selected unique field ID
 		symbology:{
 		}
 	});

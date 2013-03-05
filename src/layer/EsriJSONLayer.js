@@ -9,7 +9,7 @@ lvector.EsriJSONLayer = lvector.Layer.extend({
         //
         // Create a variable for a single vector and for multi part vectors.
         //
-        var vector, vectors;
+        var vector;
         
         if (geometry.x && geometry.y) {
             //
@@ -20,23 +20,25 @@ lvector.EsriJSONLayer = lvector.Layer.extend({
             //
             // A MultiPoint
             //
-            vectors = [];
+            var points = [];
             for (var i = 0, len = geometry.points.length; i < len; i++) {
-                vectors.push(new L.Marker(new L.LatLng(geometry.points[i].y, geometry.points[i].x), opts));
+                points.push(new L.Marker(new L.LatLng(geometry.points[i].y, geometry.points[i].x), opts));
             }
+            vector = new L.FeatureGroup(points);
         } else if (geometry.paths) {
             if (geometry.paths.length > 1) {
                 //
                 // A MultiLineString
                 //
-                vectors = [];
+                var latlngss = [];
                 for (var i = 0, len = geometry.paths.length; i < len; i++) {
                     var latlngs = [];
                     for (var i2 = 0, len2 = geometry.paths[i].length; i2 < len2; i2++) {
                         latlngs.push(new L.LatLng(geometry.paths[i][i2][1], geometry.paths[i][i2][0]));
                     }
-                    vectors.push(new L.Polyline(latlngs, opts));
+                    latlngss.push(latlngs);
                 }
+                vector = new L.MultiPolyline(latlngss, opts);
             } else {
                 //
                 // A LineString
@@ -52,16 +54,15 @@ lvector.EsriJSONLayer = lvector.Layer.extend({
                 //
                 // A MultiPolygon
                 //
-                vectors = [];
+                var latlngss = [];
                 for (var i = 0, len = geometry.rings.length; i < len; i++) {
-                    var latlngss = [];
                     var latlngs = [];
                     for (var i2 = 0, len2 = geometry.rings[i].length; i2 < len2; i2++) {
                         latlngs.push(new L.LatLng(geometry.rings[i][i2][1], geometry.rings[i][i2][0]));
                     }
                     latlngss.push(latlngs);
-                    vectors.push(new L.Polygon(latlngss, opts));
                 }
+                vector = new L.Polygon(latlngss, opts);
             } else {
                 //
                 // A Polygon
@@ -75,6 +76,6 @@ lvector.EsriJSONLayer = lvector.Layer.extend({
                 vector = new L.Polygon(latlngss, opts);
             }
         }
-        return vector || vectors;
+        return vector;
     }
 });

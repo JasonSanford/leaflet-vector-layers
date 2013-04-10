@@ -1,9 +1,7 @@
 var deps = {
     Core: {
-        src: ['lvector.js',
-              'core/Util.js',
-              'core/Class.js'],
-        desc: 'The core of the library, including OOP, base layer properties, etc.'
+        src: ['lvector.js']
+        desc: 'The core of the library.'
     },
     
     Layer: {

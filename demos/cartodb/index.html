@@ -84,14 +84,11 @@
     singlePopup: true
 });
 
-var customMarker = L.Icon.extend({
-    options: {
-        iconUrl: "../../docs-demo/img/markers/manhole.png",
-        shadowUrl: null,
-        iconSize: new L.Point(16, 16),
-        iconAnchor: new L.Point(8, 8),
-        popupAnchor: new L.Point(1, -8)
-    }
+var customMarker = new L.Icon({
+    iconUrl: "../../docs-demo/img/markers/manhole.png",
+    iconSize: new L.Point(16, 16),
+    iconAnchor: new L.Point(8, 8),
+    popupAnchor: new L.Point(1, -8)
 });
 
 cartodb_man_hole = new lvector.CartoDB({
@@ -101,9 +98,7 @@ cartodb_man_hole = new lvector.CartoDB({
     symbology: {
         type: "single",
         vectorOptions: {
-            icon: new customMarker({
-                iconUrl: "../../docs-demo/img/markers/manhole.png"
-            })
+            icon: customMarker
         }
     },
     popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;Man Hole&lt;/h3&gt;&lt;table class="condensed-table"&gt;&lt;tr&gt;&lt;th&gt;Diameter&lt;/th&gt;&lt;td&gt;{mh_dia} ft.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Depth&lt;/th&gt;&lt;td&gt;{mh_depth} ft.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Address&lt;/th&gt;&lt;td&gt;{street_add}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Flows To&lt;/th&gt;&lt;td&gt;{wwtp} WWTP&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;',
@@ -247,14 +242,11 @@ cartodb_man_hole = new lvector.CartoDB({
                     singlePopup: true
                 });
                 
-                var customMarker = L.Icon.extend({
-                    options: {
+                var customMarker = new L.Icon({
                         iconUrl: "../../docs-demo/img/markers/manhole.png",
-                        shadowUrl: null,
                         iconSize: new L.Point(16, 16),
                         iconAnchor: new L.Point(8, 8),
                         popupAnchor: new L.Point(1, -8)
-                    }
                 });
                 
                 cartodb_man_hole = new lvector.CartoDB({
@@ -264,9 +256,7 @@ cartodb_man_hole = new lvector.CartoDB({
                     symbology: {
                         type: "single",
                         vectorOptions: {
-                            icon: new customMarker({
-                                iconUrl: "../../docs-demo/img/markers/manhole.png"
-                            })
+                            icon: customMarker
                         }
                     },
                     popupTemplate: '<div class="iw-content"><h3>Man Hole</h3><table class="condensed-table"><tr><th>Diameter</th><td>{mh_dia} ft.</td></tr><tr><th>Depth</th><td>{mh_depth} ft.</td></tr><tr><th>Address</th><td>{street_add}</td></tr><tr><th>Flows To</th><td>{wwtp} WWTP</td></tr></table></div>',

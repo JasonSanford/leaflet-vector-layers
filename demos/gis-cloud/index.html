@@ -93,14 +93,11 @@
     singlePopup: true
 });
 
-var manHoleMarker = L.Icon.extend({
-    options: {
-        iconUrl: "../../docs-demo/img/markers/manhole.png",
-        shadowUrl: null,
-        iconSize: new L.Point(16, 16),
-        iconAnchor: new L.Point(8, 8),
-        popupAnchor: new L.Point(1, -8)
-    }
+var manHoleMarker = new L.Icon({
+    iconUrl: "../../docs-demo/img/markers/manhole.png",
+    iconSize: new L.Point(16, 16),
+    iconAnchor: new L.Point(8, 8),
+    popupAnchor: new L.Point(1, -8)
 });
 
 giscloud_man_hole = new lvector.GISCloud({
@@ -110,7 +107,7 @@ giscloud_man_hole = new lvector.GISCloud({
     symbology: {
         type: "single",
         vectorOptions: {
-            icon: new manHoleMarker()
+            icon: manHoleMarker
         }
     },
     popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;Man Hole&lt;/h3&gt;&lt;table class="condensed-table zebra-striped bordered-table"&gt;&lt;tr&gt;&lt;th&gt;Diameter&lt;/th&gt;&lt;td&gt;{mh_dia} ft.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Depth&lt;/th&gt;&lt;td&gt;{mh_depth} ft.&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Address&lt;/th&gt;&lt;td&gt;{street_add}&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;th&gt;Flows To&lt;/th&gt;&lt;td&gt;{wwtp} WWTP&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;',
@@ -190,14 +187,12 @@ giscloud_man_hole = new lvector.GISCloud({
                 <p class="docs"></p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint">var schoolMarker = L.Icon.extend({
-    options: {
+                        <pre class="prettyprint">var schoolMarker = new L.Icon({
         iconUrl: "../../docs-demo/img/markers/school.png",
-        shadowUrl: null,
         iconSize: new L.Point(32, 37),
         iconAnchor: new L.Point(16, 37),
         popupAnchor: new L.Point(0, -35)
-    }
+    
 });
 
 giscloud_elementary_schools = new lvector.GISCloud({
@@ -213,7 +208,7 @@ giscloud_elementary_schools = new lvector.GISCloud({
     symbology: {
         type: "single",
         vectorOptions: {
-            icon: new schoolMarker()
+            icon: schoolMarker
         }
     }
 });</pre>
@@ -232,7 +227,7 @@ giscloud_elementary_schools = new lvector.GISCloud({
                 <p class="docs"></p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
-                        <pre class="prettyprint">var busMarker = L.Icon.extend({
+                        <pre class="prettyprint">var busMarker = new L.Icon({
     options: {
         iconUrl: "../../docs-demo/img/markers/bus.png",
         shadowUrl: null,
@@ -251,7 +246,7 @@ giscloud_bus_stops = new lvector.GISCloud({
     symbology: {
         type: "single",
         vectorOptions: {
-            icon: new busMarker()
+            icon: busMarker
         }
     }
 });</pre>
@@ -367,14 +362,11 @@ giscloud_bus_stops = new lvector.GISCloud({
                     singlePopup: true
                 });
                 
-                var manHoleMarker = L.Icon.extend({
-                    options: {
-                        iconUrl: "../../docs-demo/img/markers/manhole.png",
-                        shadowUrl: null,
-                        iconSize: new L.Point(16, 16),
-                        iconAnchor: new L.Point(8, 8),
-                        popupAnchor: new L.Point(1, -8)
-                    }
+                var manHoleMarker = new L.Icon({
+                    iconUrl: "../../docs-demo/img/markers/manhole.png",
+                    iconSize: new L.Point(16, 16),
+                    iconAnchor: new L.Point(8, 8),
+                    popupAnchor: new L.Point(1, -8)
                 });
 
                 giscloud_man_hole = new lvector.GISCloud({
@@ -384,7 +376,7 @@ giscloud_bus_stops = new lvector.GISCloud({
                     symbology: {
                         type: "single",
                         vectorOptions: {
-                            icon: new manHoleMarker()
+                            icon: manHoleMarker
                         }
                     },
                     popupTemplate: '<div class="iw-content"><h3>Man Hole</h3><table class="condensed-table zebra-striped bordered-table"><tr><th>Diameter</th><td>{mh_dia} ft.</td></tr><tr><th>Depth</th><td>{mh_depth} ft.</td></tr><tr><th>Address</th><td>{street_add}</td></tr><tr><th>Flows To</th><td>{wwtp} WWTP</td></tr></table></div>',
@@ -435,14 +427,11 @@ giscloud_bus_stops = new lvector.GISCloud({
                     singlePopup: true
                 });
                 
-                var schoolMarker = L.Icon.extend({
-                    options: {
-                        iconUrl: "../../docs-demo/img/markers/school.png",
-                        shadowUrl: null,
-                        iconSize: new L.Point(32, 37),
-                        iconAnchor: new L.Point(16, 37),
-                        popupAnchor: new L.Point(0, -35)
-                    }
+                var schoolMarker = new L.Icon({
+                    iconUrl: "../../docs-demo/img/markers/school.png",
+                    iconSize: new L.Point(32, 37),
+                    iconAnchor: new L.Point(16, 37),
+                    popupAnchor: new L.Point(0, -35)
                 });
 
                 giscloud_elementary_schools = new lvector.GISCloud({
@@ -458,19 +447,16 @@ giscloud_bus_stops = new lvector.GISCloud({
                     symbology: {
                         type: "single",
                         vectorOptions: {
-                            icon: new schoolMarker()
+                            icon: schoolMarker
                         }
                     }
                 });
                 
-                var busMarker = L.Icon.extend({
-                    options: {
-                        iconUrl: "../../docs-demo/img/markers/bus.png",
-                        shadowUrl: null,
-                        iconSize: new L.Point(17, 19),
-                        iconAnchor: new L.Point(0, 19),
-                        popupAnchor: new L.Point(9, -19)
-                    }
+                var busMarker = new L.Icon({             
+                    iconUrl: "../../docs-demo/img/markers/bus.png",
+                    iconSize: new L.Point(17, 19),
+                    iconAnchor: new L.Point(0, 19),
+                    popupAnchor: new L.Point(9, -19)
                 });
 
                 giscloud_bus_stops = new lvector.GISCloud({
@@ -482,7 +468,7 @@ giscloud_bus_stops = new lvector.GISCloud({
                     symbology: {
                         type: "single",
                         vectorOptions: {
-                            icon: new busMarker()
+                            icon: busMarker
                         }
                     }
                 });

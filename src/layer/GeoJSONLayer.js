@@ -13,7 +13,12 @@ lvector.GeoJSONLayer = lvector.Layer.extend({
         
         switch (geometry.type) {
             case "Point":
-                vector = new L.Marker(new L.LatLng(geometry.coordinates[1], geometry.coordinates[0]), opts);
+                if (opts.circleMarker) {
+                    vector = new L.CircleMarker(new L.LatLng(geometry.coordinates[1], geometry.coordinates[0]), opts);
+                }
+                else {
+                    vector = new L.Marker(new L.LatLng(geometry.coordinates[1], geometry.coordinates[0]), opts);
+                }
                 break;
             
             case "MultiPoint":

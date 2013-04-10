@@ -6,9 +6,6 @@
     var scripts = [
         'lvector.js',
         
-        'core/Util.js', 
-        'core/Class.js',
-        
         'layer/Layer.js',
         'layer/GeoJSONLayer.js',
         'layer/EsriJSONLayer.js',

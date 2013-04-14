@@ -2,7 +2,7 @@
  * lvector.Layer is a base class for rendering vector layers on a Leaflet map. It's inherited by AGS, A2E, CartoDB, GeoIQ, etc.
  */
 
-lvector.Layer = lvector.Class.extend({
+lvector.Layer = L.Class.extend({
     
     //
     // Default options for all layers
@@ -24,7 +24,7 @@ lvector.Layer = lvector.Class.extend({
     },
 
     initialize: function(options) {
-        lvector.Util.setOptions(this, options);
+        L.Util.setOptions(this, options);
     },
     
     //

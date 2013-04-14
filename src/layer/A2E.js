@@ -18,11 +18,11 @@ lvector.A2E = lvector.AGS.extend({
             options.url += "/";
         }
         
-        this._originalOptions = lvector.Util.extend({}, options);
+        this._originalOptions = L.Util.extend({}, options);
         
         if (options.esriOptions) {
             if (typeof options.esriOptions == "object") {
-                lvector.Util.extend(options, this._convertEsriOptions(options.esriOptions));
+                L.Util.extend(options, this._convertEsriOptions(options.esriOptions));
             } else {
                 // Send to function that request JSON from server
                 // Use a callback to process returned JSON and send back to initialize layer with proper options

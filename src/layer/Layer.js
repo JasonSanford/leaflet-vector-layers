@@ -403,6 +403,12 @@ lvector.Layer = lvector.Class.extend({
                     //
                     for (var key in this.options.symbology.vectorOptions) {
                         vectorOptions[key] = this.options.symbology.vectorOptions[key];
+                        if (vectorOptions.title) {
+                            for (var prop in atts) {
+                                var re = new RegExp("{" + prop + "}", "g");
+                                vectorOptions.title = vectorOptions.title.replace(re, atts[prop]);
+                            }
+                        }
                     }
                     break;
                 case "unique":
@@ -414,6 +420,12 @@ lvector.Layer = lvector.Class.extend({
                         if (atts[att] == this.options.symbology.values[i].value) {
                             for (var key in this.options.symbology.values[i].vectorOptions) {
                                 vectorOptions[key] = this.options.symbology.values[i].vectorOptions[key];
+                                if (vectorOptions.title) {
+                                    for (var prop in atts) {
+                                        var re = new RegExp("{" + prop + "}", "g");
+                                        vectorOptions.title = vectorOptions.title.replace(re, atts[prop]);
+                                    }
+                                }
                             }
                         }
                     }
@@ -427,6 +439,12 @@ lvector.Layer = lvector.Class.extend({
                         if (atts[att] >= this.options.symbology.ranges[i].range[0] && atts[att] <= this.options.symbology.ranges[i].range[1]) {
                             for (var key in this.options.symbology.ranges[i].vectorOptions) {
                                 vectorOptions[key] = this.options.symbology.ranges[i].vectorOptions[key];
+                                if (vectorOptions.title) {
+                                    for (var prop in atts) {
+                                        var re = new RegExp("{" + prop + "}", "g");
+                                        vectorOptions.title = vectorOptions.title.replace(re, atts[prop]);
+                                    }
+                                }
                             }
                         }
                     }

@@ -96,6 +96,10 @@ lvector.Layer = L.Class.extend({
     // Hide the vectors in the layer. This might get called if the layer is still on but out of scaleRange.
     //
     _hideVectors: function() {
+        // If we do not check for null, in some cases (ex: lvector.AGS with option {esriOptions: true}) could lead to 
+        // "Cannot read property 'length' of undefined" - exception
+        if (this._vectors == null) return;
+
         // TODO: There's probably an easier way to first check for "singlePopup" option then just remove the one
         //       instead of checking for "assocatedFeatures"
         for (var i = 0; i < this._vectors.length; i++) {

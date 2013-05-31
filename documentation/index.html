@@ -481,6 +481,8 @@
                 <p class="docs">Symbology for a layer can be defined a few different ways including <code>single</code>, <code>unique</code> and <code>range</code>. If no symbology is defined the default Leaflet vector styles will be used.</p>
                 
                 <p class="docs">When instantiating a new layer, use one of the options below when setting the <code>symbology</code> option value.</p>
+
+                <p class="docs">Note that marker icons may also have a <code>title</code> option for defining a tooltip on mouseover.</p>
                 
                 <h3>single</h3>
                 
@@ -552,14 +554,16 @@
             vectorOptions: { // Use these Leaflet Path options for features with values in this range
                 icon: new customIcon({
                     iconUrl: "../../docs-demo/img/markers/bus-brown.png"
-                })
+                }),
+                title: "{SPEED} mph"
             }
         },{
             range: [21, 100],
             vectorOptions: {
                 icon: new customIcon({
                     iconUrl: "../../docs-demo/img/markers/bus-green.png"
-                })
+                }),
+                title: "{SPEED} mph"
             }
         }
     ]

@@ -136,7 +136,40 @@
                         </div>
                     </div>
                 </div>
+
+                <hr>
                 
+                <h2>Cambridge Neighborhoods</h2>
+                <p class="docs">This example has a simple, single symbology and uses the <code>showAll</code> parameter to fetch all features at once since there are only a handful.</p>
+                <p class="docs">We're also using a simple string based <code>popupTemplate</code> and have <code>singlePopup</code> set to <code>true</code> so that the map isn't too cluttered.</p>
+                <div class="row demo">
+                    <div class="span6 height-controlled">
+                        <pre class="prettyprint">gitspatial_neighborhoods = new lvector.GitSpatial({
+    user: 'JasonSanford',
+    repo: 'cambridgegis_data',
+    featureSet: 'neighborhoods',
+    showAll: true,
+    symbology: {
+        type: 'single',
+        vectorOptions: {
+            fillColor: '#ff7800',
+            color: '#46461f',
+            weight: 3,
+            opacity: 1
+        }
+    },
+    popupTemplate: '&lt;h3&gt;{NAME}&lt;/h3&gt;',
+    singlePopup: true
+});</pre>
+                    </div>
+                    <div class="span10 height-controlled">
+                        <div id="map-container-2" class="map"></div>
+                        <div class="layer-buttons">
+                            <div class="row layer-button-row"><a href="javascript:gitspatial_neighborhoods.setMap(map2);" class="btn success">Layer On</a> <a href="javascript:gitspatial_neighborhoods.setMap(null);" class="btn danger">Layer Off</a></div>
+                        </div>
+                    </div>
+                </div>
+
                 <footer>    
                     <p>&copy; Jason Sanford - geojason.info 2013</p>
                 </footer>
@@ -165,6 +198,18 @@
                     ]
                 });
                 
+                map2 = new L.Map("map-container-2", {
+                    center: new L.LatLng(42.3736, -71.1130),
+                    zoom: 13,
+                    layers: [
+                        new L.TileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
+                            maxZoom: 18,
+                            subdomains: ["otile1", "otile2", "otile3", "otile4"],
+                            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+                        })
+                    ]
+                });
+
                 var customMarker = L.Icon.extend({
                     options: {
                         iconUrl: "../../docs-demo/img/markers/park.png",
@@ -245,6 +290,24 @@
                             }
                         ]
                     }
+                });
+
+                gitspatial_neighborhoods = new lvector.GitSpatial({
+                    user: 'JasonSanford',
+                    repo: 'cambridgegis_data',
+                    featureSet: 'neighborhoods',
+                    showAll: true,
+                    symbology: {
+                        type: 'single',
+                        vectorOptions: {
+                            fillColor: '#ff7800',
+                            color: '#46461f',
+                            weight: 3,
+                            opacity: 1
+                        }
+                    },
+                    popupTemplate: '<h3>{NAME}</h3>',
+                    singlePopup: true
                 });
             });
         </script>

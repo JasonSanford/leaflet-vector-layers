@@ -64,5 +64,12 @@ var deps = {
         desc: 'The GIS Cloud Layer',
         heading: 'GIS Cloud',
         deps: ['GeoJSONLayer']
+    },
+
+    GitSpatial: {
+        src: ['layer/GitSpatial.js'],
+        desc: 'The GitSpatial Layer',
+        heading: 'GitSpatial',
+        deps: ['GeoJSONLayer']
     }
 };

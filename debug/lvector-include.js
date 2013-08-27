@@ -15,7 +15,8 @@
         'layer/GeoIQ.js',
         'layer/CartoDB.js',
         'layer/PRWSF.js',
-        'layer/GISCloud.js'
+        'layer/GISCloud.js',
+        'layer/GitSpatial.js'
     ];
     
     function getSrcUrl() {

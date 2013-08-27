@@ -219,11 +219,6 @@ lvector.AGS = lvector.EsriJSONLayer.extend({
     },
     
     _getFeatures: function() {
-        // If we don't have a uniqueField value it's hard to tell if new features are duplicates so clear them all
-        if (!this.options.uniqueField) {
-            this._clearFeatures();
-        }
-        
         // Build URL
         var url = this.options.url + "query" + // Query this layer
             "?returnGeometry=true" + // Of course we want geometry

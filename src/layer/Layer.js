@@ -543,6 +543,12 @@ lvector.Layer = L.Class.extend({
         // to query the layer again if someone simply turns a layer on/off
         this._lastQueriedBounds = bounds;
 
+        // If we don't have a uniqueField value it's hard to tell if new features are duplicates so clear them all
+        featuresHaveIds = data.features && data.features.length && data.features[0].id ? true : false;
+        if (!(this.options.uniqueField || featuresHaveIds)) {
+            this._clearFeatures();
+        }
+
         // If necessary, convert data to make it look like a GeoJSON FeatureCollection
         // PRWSF returns GeoJSON, but not in a FeatureCollection. Make it one.
         if (this instanceof lvector.PRWSF) {
@@ -588,16 +594,21 @@ lvector.Layer = L.Class.extend({
                 }
 
                 // All objects are assumed to be false until proven true (remember COPS?)
-                var onMap = false;
+                var onMap = false,
+                    featureHasId = data.features[i].id ? true : false;
             
                 // If we have a "uniqueField" for this layer
-                if (this.options.uniqueField) {
+                if (this.options.uniqueField || featureHasId) {
                     
                     // Loop through all of the features currently on the map
                     for (var i2 = 0; i2 < this._vectors.length; i2++) {
-                    
+                        var vectorHasId = this._vectors[i2].id ? true : false;
+
                         // Does the "uniqueField" property for this feature match the feature on the map
-                        if (data.features[i].properties[this.options.uniqueField] == this._vectors[i2].properties[this.options.uniqueField]) {
+                        if (
+                            (featureHasId && vectorHasId && data.features[i].id == this._vectors[i2].id) ||
+                            (this.options.uniqueField && data.features[i].properties[this.options.uniqueField] == this._vectors[i2].properties[this.options.uniqueField])
+                        ) {
                             // The feature is already on the map
                             onMap = true;
                             
@@ -655,7 +666,7 @@ lvector.Layer = L.Class.extend({
                 }
                 
                 // If the feature isn't already or the map OR the "uniqueField" attribute doesn't exist
-                if (!onMap || !this.options.uniqueField) {
+                if (!onMap) {
                     
                     if (this instanceof lvector.GeoJSONLayer) {
                     // Convert GeoJSON to Leaflet vector (Point, Polyline, Polygon)

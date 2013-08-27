@@ -1,4 +1,4 @@
-lvector.GeoIQ = lvector.GeoJSONLayer.extend({
+lvector.GitSpatial = lvector.GeoJSONLayer.extend({
     initialize: function(options) {
         
         // Check for required parameters
@@ -8,12 +8,12 @@ lvector.GeoIQ = lvector.GeoJSONLayer.extend({
             }
         }
         
-        // Extend Layer to create GeoIQ
+        // Extend Layer to create GitSpatial
         lvector.Layer.prototype.initialize.call(this, options);
         
         // _globalPointer is a string that points to a global function variable
         // Features returned from a JSONP request are passed to this function
-        this._globalPointer = "GeoIQ_" + Math.floor(Math.random() * 100000);
+        this._globalPointer = "GitSpatial_" + Math.floor(Math.random() * 100000);
         window[this._globalPointer] = this;
         
         // Create an array to hold the features
@@ -31,21 +31,19 @@ lvector.GeoIQ = lvector.GeoJSONLayer.extend({
     },
     
     options: {
-        dataset: null
+        
     },
     
-    _requiredParams: ["dataset"],
+    _requiredParams: ["user", "repo", "feature_set"],
     
     _getFeatures: function() {
         // Build URL
-        var url = "http://geocommons.com/datasets/" + this.options.dataset + // Geocommons dataset ID
-            "/features.json?" + // JSON please
-            "geojson=1" + // Return GeoJSON formatted data
-            "&callback=" + this._globalPointer + "._processFeatures" + // Need this for JSONP
-            "&limit=999"; // Don't limit our results
+        var url = "http://gitspatial.herokuapp.com/api/v1/" + this.options.user + // The GitHub user name
+            "/" + this.options.repo + // The GitHub repo name
+            "/" + this.options.feature_set + // The GitSpatial feature set name
+            "?callback=" + this._globalPointer + "._processFeatures"; // Need this for JSONP
         if (!this.options.showAll) {
-            url += "&bbox=" + this.options.map.getBounds().toBBoxString() + // Build bbox geometry
-                "&intersect=full"; // Return features that intersect this bbox, not just fully contained
+            url += "&bbox=" + this.options.map.getBounds().toBBoxString(); // Build bbox geometry
         }
         
         // JSONP request

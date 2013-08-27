@@ -8,7 +8,7 @@
 
 (function (root) {
     root.lvector = {
-        VERSION: '1.4.0',
+        VERSION: '1.4.1',
 
         noConflict: function () {
             root.lvector = this._originallvector;

@@ -87,7 +87,7 @@
                 <hr>
 
                 <h2>Fire Hydrants</h2>
-                <p class="docs">This demo uses the <code>unique</code> symbology type so we can view the difference between public and private fire hydrants. There's also a simple <code>popupTemplate</code> to help describe the features.</p>
+                <p class="docs">This demo uses the <code>unique</code> symbology type so we can view the difference between public and private fire hydrants. There's also a simple <code>popupTemplate</code> to help describe the features and a <code>title</code> tooltip when hovering over the marker.</p>
                 <p class="docs">We're also using the <code>scaleRange</code> parameter so that when someone zooms out beyond zoom level 15, no more feature requests are made. This helps keep the map from being too cluttered.</p>
                 <div class="row demo">
                     <div class="span6 height-controlled">
@@ -117,7 +117,8 @@ prwsf_hydrants = new lvector.PRWSF({
             {
                 value: "Public",
                 vectorOptions: {
-                    icon: new customMarker()
+                    icon: new customMarker(),
+                    title: "{tagnumber} ({owner})"
                 }
             },
             {
@@ -125,7 +126,8 @@ prwsf_hydrants = new lvector.PRWSF({
                 vectorOptions: {
                     icon: new customMarker({
                         iconUrl: "../../docs-demo/img/markers/hydrant-red.png"
-                    })
+                    }),
+                    title: "{tagnumber} ({owner})"
                 }
             }
         ]
@@ -355,7 +357,8 @@ prwsf_bus = new lvector.PRWSF({
                             {
                                 value: "Public",
                                 vectorOptions: {
-                                    icon: new customMarker()
+                                    icon: new customMarker(),
+                                    title: "{tagnumber} ({owner})"
                                 }
                             },
                             {
@@ -363,7 +366,8 @@ prwsf_bus = new lvector.PRWSF({
                                 vectorOptions: {
                                     icon: new customMarker({
                                         iconUrl: "../../docs-demo/img/markers/hydrant-red.png"
-                                    })
+                                    }),
+                                    title: "{tagnumber} ({owner})"
                                 }
                             }
                         ]

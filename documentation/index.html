@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <title>Leaflet Vector Layers - Jason Sanford</title>
         <meta name="description" content="Display vector data from ArcGIS Server, GeoIQ, Geocommons, Arc2Earth, CartoDB and others in a Leaflet map">
-        <meta name="author" content="Jason Sanford">
+        <meta name="author" content="Justin Lewis" >
 
         <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
         <!--[if lt IE 9]>
@@ -64,6 +64,7 @@
                     <ul>
                         <li><a href="#docs-symbology">Symbology Options</a></li>
                         <li><a href="#docs-popup">Popup Template</a></li>
+                        <li><a href="#docs-clickevent">Custom clickEvent</a></li>
                         <li><a href="#docs-dynamic">Dynamic Data</a></li>
                     </ul>
                 </div>
@@ -114,6 +115,7 @@
                         <tr><td><code>showAll</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>If true, all features will be fetched and shown once, not after a map extent change. This is helpful for layers with only a handful of features.</td></tr>
                         <tr><td><code>fields</code></td><td><code>String</code></td><td><code>null</code></td><td>A list of comma separated fields to be returned with the features. For example <code>"OBJECTID,OWNER_NAME"</code> returns two fields and <code>"*"</code> returns all fields.</td></tr>
                         <tr><td><code>uniqueField</code></td><td><code>String</code></td><td><code>null</code></td><td>A field in the returned data that can be considered unique. This isn't required but is very helpful in determining which features are already on the map when the map extent changes.</td></tr>
+                        <tr><td><code>clickEvent</code></td><td><code>Function</code></td><td><code>null</code></td><td>A user defined click event. For details check the <a href="#docs-clickevent">Custom clickEvent options documentation</a>.</td></tr>
                     </tbody>
                 </table>
                 
@@ -175,6 +177,7 @@
                         <tr><td><code>fields</code></td><td><code>String</code></td><td><code>null</code></td><td>A list of comma separated fields to be returned with the features. For example <code>"OBJECTID,OWNER_NAME"</code> returns two fields and <code>"*"</code> returns all fields.</td></tr>
                         <tr><td><code>uniqueField</code></td><td><code>String</code></td><td><code>null</code></td><td>A field in the returned data that can be considered unique. This isn't required but is very helpful in determining which features are already on the map when the map extent changes.</td></tr>
                         <tr><td><code>esriOptions</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not to request <code>scaleRange</code> and <code>symbology</code> settings from the Arc2Earth Sync back-end. Layers loaded from ArcGIS Desktop into Arc2Earth Sync will retain <code>scaleRange</code> and <code>symbology</code> settings from ArcGIS Desktop.</td></tr>
+                        <tr><td><code>clickEvent</code></td><td><code>Function</code></td><td><code>null</code></td><td>A user defined click event. For details check the <a href="#docs-clickevent">Custom clickEvent options documentation</a>.</td></tr>
                     </tbody>
                 </table>
                 
@@ -241,6 +244,7 @@
                         <tr><td><code>symbology</code></td><td><code>Object <a href="#docs-symbology">symbology options</a></code></td><td><code>null</code></td><td>The symbology options for the layer. Features can be rendered with a single symbology or can also be symbolized based on an attribute using unique values or a value range. For details check the <a href="#docs-symbology">symbology options documentation</a>.</td></tr>
                         <tr><td><code>showAll</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>If true, all features will be fetched and shown once, not after a map extent change. This is helpful for layers with only a handful of features.</td></tr>
                         <tr><td><code>uniqueField</code></td><td><code>String</code></td><td><code>null</code></td><td>A field in the returned data that can be considered unique. This isn't required but is very helpful in determining which features are already on the map when the map extent changes.</td></tr>
+                        <tr><td><code>clickEvent</code></td><td><code>Function</code></td><td><code>null</code></td><td>A user defined click event. For details check the <a href="#docs-clickevent">Custom clickEvent options documentation</a>.</td></tr>
                     </tbody>
                 </table>
                 
@@ -308,6 +312,7 @@
                         <tr><td><code>symbology</code></td><td><code>Object <a href="#docs-symbology">symbology options</a></code></td><td><code>null</code></td><td>The symbology options for the layer. Features can be rendered with a single symbology or can also be symbolized based on an attribute using unique values or a value range. For details check the <a href="#docs-symbology">symbology options documentation</a>.</td></tr>
                         <tr><td><code>showAll</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>If true, all features will be fetched and shown once, not after a map extent change. This is helpful for layers with only a handful of features.</td></tr>
                         <tr><td><code>fields</code></td><td><code>String</code></td><td><code>"*"</code></td><td>A list of comma separated fields to be returned with the features. By default all fields are returned.</td></tr>
+                        <tr><td><code>clickEvent</code></td><td><code>Function</code></td><td><code>null</code></td><td>A user defined click event. For details check the <a href="#docs-clickevent">Custom clickEvent options documentation</a>.</td></tr>
                     </tbody>
                 </table>
                 
@@ -335,7 +340,7 @@
                 <ul class="docs">
                     <li><a href="http://gisapps.co.union.nc.us/ws/rest/">Union County GeoData API</a> (A .Net port)</li>
                     <li><a href="http://maps.co.mecklenburg.nc.us/rest/">Mecklenburg County GeoPortal</a></li>
-                    <li><a href="http://gis.drcog.org/api_cookbook/">Denver Regional Council of Governments</a></li>
+                    <li><a href="http://gis.drcog.org/datacatalog/cookbook/">Denver Regional Council of Governments</a></li>
                 </ul>
                 
                 <h3>Usage Example</h3>
@@ -393,6 +398,7 @@
                         <tr><td><code>popupOptions</code></td><td><code>Object <a href="http://leaflet.cloudmade.com/reference.html#popup-options">Leaflet Popup options</a></code></td><td><code>null</code></td><td>Controls the width of and the presence of a close button for the Popup and whether the map should be panned when the Popup is opened.</td></tr>
                         <tr><td><code>symbology</code></td><td><code>Object <a href="#docs-symbology">symbology options</a></code></td><td><code>null</code></td><td>The symbology options for the layer. Features can be rendered with a single symbology or can also be symbolized based on an attribute using unique values or a value range. For details check the <a href="#docs-symbology">symbology options documentation</a>.</td></tr>
                         <tr><td><code>showAll</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>If true, all features will be fetched and shown once, not after a map extent change. This is helpful for layers with only a handful of features.</td></tr>
+                        <tr><td><code>clickEvent</code></td><td><code>Function</code></td><td><code>null</code></td><td>A user defined click event. For details check the <a href="#docs-clickevent">Custom clickEvent options documentation</a>.</td></tr>
                     </tbody>
                 </table>
                 
@@ -458,6 +464,7 @@
                         <tr><td><code>popupOptions</code></td><td><code>Object <a href="http://leaflet.cloudmade.com/reference.html#popup-options">Leaflet Popup options</a></code></td><td><code>null</code></td><td>Controls the width of and the presence of a close button for the Popup and whether the map should be panned when the Popup is opened.</td></tr>
                         <tr><td><code>symbology</code></td><td><code>Object <a href="#docs-symbology">symbology options</a></code></td><td><code>null</code></td><td>The symbology options for the layer. Features can be rendered with a single symbology or can also be symbolized based on an attribute using unique values or a value range. For details check the <a href="#docs-symbology">symbology options documentation</a>.</td></tr>
                         <tr><td><code>showAll</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>If true, all features will be fetched and shown once, not after a map extent change. This is helpful for layers with only a handful of features.</td></tr>
+                        <tr><td><code>clickEvent</code></td><td><code>Function</code></td><td><code>null</code></td><td>A user defined click event. For details check the <a href="#docs-clickevent">Custom clickEvent options documentation</a>.</td></tr>
                     </tbody>
                 </table>
                 
@@ -541,6 +548,8 @@
                 <p class="docs">Symbology for a layer can be defined a few different ways including <code>single</code>, <code>unique</code> and <code>range</code>. If no symbology is defined the default Leaflet vector styles will be used.</p>
                 
                 <p class="docs">When instantiating a new layer, use one of the options below when setting the <code>symbology</code> option value.</p>
+
+                <p class="docs">Note that marker icons may also have a <code>title</code> option for defining a tooltip on mouseover.</p>
                 
                 <h3>single</h3>
                 
@@ -612,14 +621,16 @@
             vectorOptions: { // Use these Leaflet Path options for features with values in this range
                 icon: new customIcon({
                     iconUrl: "../../docs-demo/img/markers/bus-brown.png"
-                })
+                }),
+                title: "{SPEED} mph"
             }
         },{
             range: [21, 100],
             vectorOptions: {
                 icon: new customIcon({
                     iconUrl: "../../docs-demo/img/markers/bus-green.png"
-                })
+                }),
+                title: "{SPEED} mph"
             }
         }
     ]
@@ -627,7 +638,7 @@
                 
                 <h2 class="docs" id="docs-popup">Popup Templates</h2>
                 
-                <p class="docs">To create content to show Popups when features are clicked we can use the <code>popupTemplate</code> option. a popupTemplate can be set two ways:</p>
+                <p class="docs">To create content to show Popups when features are clicked we can use the <code>popupTemplate</code> option. A popupTemplate can be set two ways:</p>
                 
                 <ul class="docs">
                     <li>A string with property names wrapped in curly brackets (<code>{road_name}</code>) to act as placeholders for the values</li>
@@ -667,6 +678,33 @@
                 <p class="docs">This function iterates through each property in properties and formats each to Proper Case for better looking output.</p>
                 
                 <pre class="prettyprint docs">"&lt;h3&gt;State Road&lt;/h3&gt;Road Name: S Bemis St&lt;br /&gt;Speed Limit: 25&lt;br /&gt;"</pre>
+
+                <h2 class="docs" id="docs-clickevent">Custom clickEvent</h2>
+                
+                <p class="docs">In addition to opening popups, you may want to define your own click events. This is useful for appending data to a div or opening a modal dialog. To create a custom click event, we can use the <code>clickEvent</code> option and pass a function with <code>feature</code> and <code>event</code> arguments.
+                
+                <h3>Example</h3>
+                
+                <p>The following example will pop up an alert box with the 'name' attribute when the marker is clicked:</p>
+                
+                <pre class="prettyprint docs">prwsf_libraries = new lvector.PRWSF({
+    url: "http://maps.co.mecklenburg.nc.us/rest",
+    geotable: "libraries",
+    fields: "gid,name,address,city",
+    uniqueField: "gid",
+    srid: 2264,
+    scaleRange: [7, 20],
+    showAll: true,
+    symbology: {
+        type: "single",
+        vectorOptions: {
+            icon: new customMarker()
+        }
+    },
+    clickEvent: function (feature, event) {
+        alert(feature.properties.name);
+    }
+});</pre>
                 
                 <h2 class="docs" id="docs-dynamic">Dynamic Data</h2>
                                 

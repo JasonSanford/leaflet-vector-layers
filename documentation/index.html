@@ -496,16 +496,16 @@
                         <tr><td><code>lvector.GitSpatial( &lt;<a href="#docs-gitspatial-options">GitSpatial options</a>&gt; options )</code></td><td>Instantiates a GitSpatial layer with an object literal with GitSpatial options described below.</td></tr>
                     </tbody>
                 </table>
-                
+
                 <h3 id="docs-gitspatial-options">Options</h3>
                 <table class="docs condensed-table zebra-striped">
                     <thead>
                         <tr><th>Option</th><th>Type</th><th>Default Value</th><th>Description</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><code>mapID</code></td><td><code>String|Number</code></td><td><code>null</code></td><td><strong>Required</strong> -  The GIS Cloud Map ID where your layer can be found.</td></tr>
-                        <tr><td><code>layerID</code></td><td><code>String|Number</code></td><td><code>null</code></td><td><strong>Required</strong> -  The GIS Cloud Layer ID for your layer.</td></tr>
-                        <tr><td><code>where</code></td><td><code>String</code></td><td><code>null</code></td><td>Any additional SQL query(ies) to further filter the returned features.</td></tr>
+                        <tr><td><code>user</code></td><td><code>String</code></td><td><code>null</code></td><td><strong>Required</strong> -  The GitHub user id for a GitSpatial feature set.</td></tr>
+                        <tr><td><code>repo</code></td><td><code>String</code></td><td><code>null</code></td><td><strong>Required</strong> -  The GitHub repo name for a GitSpatial feature set.</td></tr>
+                        <tr><td><code>featureSet</code></td><td><code>String</code></td><td><code>null</code></td><td><strong>Required</strong> -  The GitSpatial feature set name.</td></tr>
                         <tr><td><code>map</code></td><td><code>Object <a href="http://leaflet.cloudmade.com/reference.html#map-class">L.Map object</a></code></td><td><code>null</code></td><td>The Leaflet <code>Map</code> object where the layer will be added. The layer can be added to the map later with the <code>setMap</code> method.</td></tr>
                         <tr><td><code>scaleRange</code></td><td><code>Array</code></td><td><code>null</code></td><td>An array with two number values that represent the minimum and maximum scales the layer is visible. For example: <code>[14, 17]</code></td></tr>
                         <tr><td><code>dynamic</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not the layer contains dynamic data. If true, feature geometry and attributes will be checked for changes after extent change and/or after a defined interval. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>

@@ -58,8 +58,9 @@
                 <div class="row demo">
                     <div class="span6 height-controlled">
                         <pre class="prettyprint">gitspatial_parks = new lvector.GitSpatial({
-    dataset: 181235,
-    uniqueField: "prkid",
+    user: 'JasonSanford',
+    repo: 'mecklenburg-gis-opendata',
+    featureSet: 'parks',
     popupTemplate: function(properties) {
         var properCase = function(s) {
             if (s){
@@ -177,7 +178,7 @@
                 gitspatial_parks = new lvector.GitSpatial({
                     user: 'JasonSanford',
                     repo: 'mecklenburg-gis-opendata',
-                    feature_set: 'parks',
+                    featureSet: 'parks',
                     popupTemplate: function(properties) {
                         var properCase = function(s) {
                             if (s){

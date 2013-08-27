@@ -58,6 +58,7 @@
                         <li><a href="#docs-cartodb">lvector.CartoDB</a></li>
                         <li><a href="#docs-prwsf">lvector.PRWSF</a></li>
                         <li><a href="#docs-giscloud">lvector.GISCloud</a></li>
+                        <li><a href="#docs-gitspatial">lvector.GitSpatial</a></li>
                     </ul>
                     <h5>Other Reference</h5>
                     <ul>
@@ -472,6 +473,64 @@
                 </table>
                 
                 <!-- End GIS Cloud -->
+
+                <!-- GitSpatial -->
+                                                
+                <h2 class="docs" id="docs-gitspatial">lvector.GitSpatial <small>GitSpatial</small></h2>
+                
+                <p>This class creates a layer that processes and displays features from a <a href="http://gitspatial.herokuapp.com">GitSpatial feature set</a>.</p>
+                
+                <h3>Usage Example</h3>
+                <pre class="prettyprint docs">my_gitspatial_layer = new lvector.GitSpatial({
+    user: 'JasonSanford',
+    repo: 'mecklenburg-gis-opendata',
+    feature_set: 'parks',
+    popupTemplate: '&lt;div class="iw-content"&gt;&lt;h3&gt;{name}&lt;/h3&gt;Address: {address}&lt;/div&gt;'
+});</pre>
+                <h3>Constructor</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Constructor</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>lvector.GitSpatial( &lt;<a href="#docs-gitspatial-options">GitSpatial options</a>&gt; options )</code></td><td>Instantiates a GitSpatial layer with an object literal with GitSpatial options described below.</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3 id="docs-gitspatial-options">Options</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Option</th><th>Type</th><th>Default Value</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>mapID</code></td><td><code>String|Number</code></td><td><code>null</code></td><td><strong>Required</strong> -  The GIS Cloud Map ID where your layer can be found.</td></tr>
+                        <tr><td><code>layerID</code></td><td><code>String|Number</code></td><td><code>null</code></td><td><strong>Required</strong> -  The GIS Cloud Layer ID for your layer.</td></tr>
+                        <tr><td><code>where</code></td><td><code>String</code></td><td><code>null</code></td><td>Any additional SQL query(ies) to further filter the returned features.</td></tr>
+                        <tr><td><code>map</code></td><td><code>Object <a href="http://leaflet.cloudmade.com/reference.html#map-class">L.Map object</a></code></td><td><code>null</code></td><td>The Leaflet <code>Map</code> object where the layer will be added. The layer can be added to the map later with the <code>setMap</code> method.</td></tr>
+                        <tr><td><code>scaleRange</code></td><td><code>Array</code></td><td><code>null</code></td><td>An array with two number values that represent the minimum and maximum scales the layer is visible. For example: <code>[14, 17]</code></td></tr>
+                        <tr><td><code>dynamic</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not the layer contains dynamic data. If true, feature geometry and attributes will be checked for changes after extent change and/or after a defined interval. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>
+                        <tr><td><code>autoUpdate</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not to auto-update a dynamic layer. If true, feature geometry and attributes will be updated at an interval set by the <code>autoUpdateInterval</code> option. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>
+                        <tr><td><code>autoUpdateInterval</code></td><td><code>Integer</code></td><td><code>null</code></td><td>The interval (in milliseconds) between checks for updated feature geometry and attributes when the <code>autoUpdate</code> option is set to <code>true</code>. For details check the <a href="#docs-dynamic">dynamic data documentation</a>.</td></tr>
+                        <tr><td><code>popupTemplate</code></td><td><code>String|Function</code></td><td><code>null</code></td><td>A template for creating the content of a <a href="http://leaflet.cloudmade.com/reference.html#popup">Leaflet Popup</a> when a feature is clicked. For details check the <a href="#docs-popup">Popup Template documentation</a>.</td></tr>
+                        <tr><td><code>singlePopup</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>Whether or not to show a single Popup for a layer when features are clicked. This keeps the map from getting cluttered when multiple features are clicked.</td></tr>
+                        <tr><td><code>popupOptions</code></td><td><code>Object <a href="http://leaflet.cloudmade.com/reference.html#popup-options">Leaflet Popup options</a></code></td><td><code>null</code></td><td>Controls the width of and the presence of a close button for the Popup and whether the map should be panned when the Popup is opened.</td></tr>
+                        <tr><td><code>symbology</code></td><td><code>Object <a href="#docs-symbology">symbology options</a></code></td><td><code>null</code></td><td>The symbology options for the layer. Features can be rendered with a single symbology or can also be symbolized based on an attribute using unique values or a value range. For details check the <a href="#docs-symbology">symbology options documentation</a>.</td></tr>
+                        <tr><td><code>showAll</code></td><td><code>Boolean</code></td><td><code>false</code></td><td>If true, all features will be fetched and shown once, not after a map extent change. This is helpful for layers with only a handful of features.</td></tr>
+                    </tbody>
+                </table>
+                
+                <h3>Methods</h3>
+                <table class="docs condensed-table zebra-striped">
+                    <thead>
+                        <tr><th>Method</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>setMap( &lt;google.maps.Map&gt; Map )</code></td><td>Adds the layer to a map. Remove the layer by passing <code>null</code>.</td></tr>
+                        <tr><td><code>getMap()</code></td><td>Gets the map (if any) that the layer has been added to.</td></tr>
+                    </tbody>
+                </table>
+                
+                <!-- End GitSpatial -->
                 
                 <hr>
                 

@@ -170,6 +170,59 @@
                     </div>
                 </div>
 
+                <hr>
+
+                <h2>Cambridge Utility Poles</h2>
+                <p class="docs">This example uses a <code>range</code> symbology type to display utility poles with three different ranges of height using different colored markers.</p>
+                <div class="row demo">
+                    <div class="span6 height-controlled">
+                        <pre class="prettyprint">gitspatial_utility_poles = new lvector.GitSpatial({
+    user: 'JasonSanford',
+    repo: 'cambridgegis_data',
+    featureSet: 'utility_poles',
+    scaleRange: [16, 18],
+    popupTemplate: '&lt;h4&gt;Height: {ELEV}\'&lt;/h4&gt;',
+    singlePopup: true,
+    symbology: {
+        type: 'range',
+        property: 'ELEV',
+        ranges: [
+            {
+                range: [0, 12],
+                vectorOptions: {
+                    icon: new customMarker({
+                        iconUrl: '../../docs-demo/img/markers/utility-blue.png'
+                    })
+                }
+            },
+            {
+                range: [12.000001, 20],
+                vectorOptions: {
+                    icon: new customMarker({
+                        iconUrl: '../../docs-demo/img/markers/utility-orange.png'
+                    })
+                }
+            },
+            {
+                range: [20.000001, 100],
+                vectorOptions: {
+                    icon: new customMarker({
+                        iconUrl: '../../docs-demo/img/markers/utility-red.png'
+                    })
+                }
+            }
+        ]
+    }
+});</pre>
+                    </div>
+                    <div class="span10 height-controlled">
+                        <div id="map-container-3" class="map"></div>
+                        <div class="layer-buttons">
+                            <div class="row layer-button-row"><a href="javascript:gitspatial_utility_poles.setMap(map3);" class="btn success">Layer On</a> <a href="javascript:gitspatial_neighborhoods.setMap(null);" class="btn danger">Layer Off</a></div>
+                        </div>
+                    </div>
+                </div>
+
                 <footer>    
                     <p>&copy; Jason Sanford - geojason.info 2013</p>
                 </footer>
@@ -201,6 +254,18 @@
                 map2 = new L.Map("map-container-2", {
                     center: new L.LatLng(42.3736, -71.1130),
                     zoom: 13,
+                    layers: [
+                        new L.TileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
+                            maxZoom: 18,
+                            subdomains: ["otile1", "otile2", "otile3", "otile4"],
+                            attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+                        })
+                    ]
+                });
+
+                map3 = new L.Map("map-container-3", {
+                    center: new L.LatLng(42.3736, -71.1130),
+                    zoom: 16,
                     layers: [
                         new L.TileLayer("http://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
                             maxZoom: 18,
@@ -308,6 +373,45 @@
                     },
                     popupTemplate: '<h3>{NAME}</h3>',
                     singlePopup: true
+                });
+
+                gitspatial_utility_poles = new lvector.GitSpatial({
+                    user: 'JasonSanford',
+                    repo: 'cambridgegis_data',
+                    featureSet: 'utility_poles',
+                    scaleRange: [16, 18],
+                    popupTemplate: '<h4>Height: {ELEV}\'</h4>',
+                    singlePopup: true,
+                    symbology: {
+                        type: 'range',
+                        property: 'ELEV',
+                        ranges: [
+                            {
+                                range: [0, 12],
+                                vectorOptions: {
+                                    icon: new customMarker({
+                                        iconUrl: '../../docs-demo/img/markers/utility-blue.png'
+                                    })
+                                }
+                            },
+                            {
+                                range: [12.000001, 20],
+                                vectorOptions: {
+                                    icon: new customMarker({
+                                        iconUrl: '../../docs-demo/img/markers/utility-orange.png'
+                                    })
+                                }
+                            },
+                            {
+                                range: [20.000001, 100],
+                                vectorOptions: {
+                                    icon: new customMarker({
+                                        iconUrl: '../../docs-demo/img/markers/utility-red.png'
+                                    })
+                                }
+                            }
+                        ]
+                    }
                 });
             });
         </script>

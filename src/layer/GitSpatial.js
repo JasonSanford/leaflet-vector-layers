@@ -38,7 +38,7 @@ lvector.GitSpatial = lvector.GeoJSONLayer.extend({
     
     _getFeatures: function() {
         // Build URL
-        var url = "http://gitspatial.herokuapp.com/api/v1/" + this.options.user + // The GitHub user name
+        var url = "http://gitspatial.com/api/v1/" + this.options.user + // The GitHub user name
             "/" + this.options.repo + // The GitHub repo name
             "/" + this.options.featureSet + // The GitSpatial feature set name
             "?callback=" + this._globalPointer + "._processFeatures"; // Need this for JSONP

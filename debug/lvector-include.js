@@ -1,5 +1,5 @@
 /**
- * @preserve Using portions of Leaflet code (https://github.com/CloudMade/Leaflet)
+ * @preserve Using portions of Leaflet code (http://github.com/Leaflet/Leaflet)
  */
 (function() {
     

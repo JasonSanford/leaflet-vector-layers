@@ -37,6 +37,7 @@ lvector.CartoDB = lvector.GeoJSONLayer.extend({
         fields: "*",
         where: null,
         limit: null,
+        key: null,
         uniqueField: "cartodb_id"
     },
     
@@ -58,7 +59,7 @@ lvector.CartoDB = lvector.GeoJSONLayer.extend({
             where += (where.length ? " " : "") + "limit " + this.options.limit;
         }
         where = (where.length ? " " + where : "");
-        var query = "SELECT " + this.options.fields + " FROM " + this.options.table + (where.length ? " WHERE " + where : "");
+        var query = "SELECT " + this.options.fields + " FROM " + this.options.table + (where.length ? " WHERE " + where : "") + "&api_key="+ this.options.key;
         
         // Build URL
         var url = "http://" + this.options.user + ".cartodb.com/api/v" + this.options.version + "/sql" + // The API entry point

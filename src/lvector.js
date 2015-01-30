@@ -1,5 +1,5 @@
 /**
- * @preserve Copyright (c) 2013, Jason Sanford
+ * @preserve Copyright (c) 2013 - 2015, Jason Sanford
  * Leaflet Vector Layers is a library for showing geometry objects
  * from multiple geoweb services in a Leaflet map
  */
@@ -8,7 +8,7 @@
 
 (function (root) {
     root.lvector = {
-        VERSION: '1.5.1',
+        VERSION: '1.6.0',
 
         noConflict: function () {
             root.lvector = this._originallvector;

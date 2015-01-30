@@ -1,25 +1,24 @@
 lvector.CartoDB = lvector.GeoJSONLayer.extend({
     initialize: function(options) {
-        
+
         // Check for required parameters
         for (var i = 0, len = this._requiredParams.length; i < len; i++) {
             if (!options[this._requiredParams[i]]) {
                 throw new Error("No \"" + this._requiredParams[i] + "\" parameter found.");
             }
         }
-        
+
         // Extend Layer to create CartoDB
         lvector.Layer.prototype.initialize.call(this, options);
-        
+
         // _globalPointer is a string that points to a global function variable
         // Features returned from a JSONP request are passed to this function
         this._globalPointer = "CartoDB_" + Math.floor(Math.random() * 100000);
         window[this._globalPointer] = this;
-        
+
         // Create an array to hold the features
         this._vectors = [];
-        
-        
+
         if (this.options.map) {
             if (this.options.scaleRange && this.options.scaleRange instanceof Array && this.options.scaleRange.length === 2) {
                 var z = this.options.map.getZoom();
@@ -29,7 +28,7 @@ lvector.CartoDB = lvector.GeoJSONLayer.extend({
             this._show();
         }
     },
-    
+
     options: {
         version: 1,
         user: null,
@@ -40,10 +39,10 @@ lvector.CartoDB = lvector.GeoJSONLayer.extend({
         key: null,
         uniqueField: "cartodb_id"
     },
-    
+
     _requiredParams: ["user", "table"],
-    
-    _getFeatures: function() {        
+
+    _getFeatures: function() {
         // Build Query
         var where = this.options.where || "";
         if (!this.options.showAll) {
@@ -59,16 +58,18 @@ lvector.CartoDB = lvector.GeoJSONLayer.extend({
             where += (where.length ? " " : "") + "limit " + this.options.limit;
         }
         where = (where.length ? " " + where : "");
-        var query = "SELECT " + this.options.fields + " FROM " + this.options.table + (where.length ? " WHERE " + where : "") + "&api_key="+ this.options.key;
-        
+        var query = "SELECT " + this.options.fields + " FROM " + this.options.table + (where.length ? " WHERE " + where : "");
+
         // Build URL
         var url = "http://" + this.options.user + ".cartodb.com/api/v" + this.options.version + "/sql" + // The API entry point
             "?q=" + encodeURIComponent(query) + // The SQL statement
             "&format=geojson" + // GeoJSON please
             "&callback=" + this._globalPointer + "._processFeatures"; // Need this for JSONP
-        
+        if (this.options.apiKey) {
+            url += "&api_key=" + this.options.apiKey;
+        }
         // JSONP request
         this._makeJsonpRequest(url);
     }
-    
+
 });

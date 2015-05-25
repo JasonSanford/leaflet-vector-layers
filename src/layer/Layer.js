@@ -581,7 +581,7 @@ lvector.Layer = L.Class.extend({
             }
         }
         
-        // If "data.features" exists and there's more than one feature in the array
+        // If "data.features" exists and there's at least one feature in the array
         if (data && data.features && data.features.length) {
             
             // Loop through the return features

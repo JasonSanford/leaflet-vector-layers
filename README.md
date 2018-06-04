@@ -6,4 +6,4 @@ Prefer Google Maps? Check out [Google Vector Layers](https://github.com/JasonSan
 
 ### Docs + Demos
 
-For details see the [documentation and demos](http://geojason.info/leaflet-vector-layers/) or read a [blog post](http://geojason.info/2012/leaflet-vector-layers/).
+For details see the [documentation and demos](http://jasonsanford.github.io/leaflet-vector-layers/).

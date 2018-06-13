@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+	
+	 <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+	
+	<script src="../src/lvector.js"></script>
+	<script src="../src/core/Util.js"></script>
+	<script src="../src/core/Class.js"></script>
+	<script src="../src/layer/Layer.js"></script>
+	<script src="../src/layer/GeoJSONLayer.js"></script>
+	<script src="../src/layer/EsriJSONLayer.js"></script>
+	<script src="../src/layer/AGS.js"></script>
+	<script src="../src/layer/GISCloud.js"></script>
+	<script src="../src/layer/PRWSF.js"></script>
+	
+	<style type="text/css">
+		#map {
+			height: 400px;
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+	<div id="map">
+	</div>
+	
+	<p>
+		To see example, toggle the endangered species critical habitat layer on and off.
+	</p>
+	
+	<script type="text/javascript">
+		var arcgisServerStreetsUrl = "http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}.png"
+		var arcgisServerWorldImageryUrl = "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}.png"
+		var arcgisServerTopoUrl = "http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}.png"
+		var arcgisSoilSurveyUrl = "http://server.arcgisonline.com/ArcGIS/rest/services/Specialty/Soil_Survey_Map/MapServer/tile/{z}/{y}/{x}.png"
+
+		var baseMaps = {
+			"Streets":L.tileLayer(arcgisServerStreetsUrl, {attribution:"Source: Esri"}),
+			"Imagery":L.tileLayer(arcgisServerWorldImageryUrl, {attribution:"Source: Esri, DigitalGlobe, GeoEye, i-cubed, USDA, USGS, AEX, Getmapping, Aerogrid, IGN, IGP, and the GIS User Community"}),
+			"Topographic":L.tileLayer(arcgisServerTopoUrl, {attribution:"Source: Esri"}),
+			"Soils":L.tileLayer(arcgisSoilSurveyUrl, {attribution:"Source: Esri"})
+		}
+		
+		var serviceUrl = "http://ecos.fws.gov/rest/services/crithab/crithabMapper/MapServer"
+		var overlays = {
+			"Endangered Species Critical Habitat": new L.LayerGroup([
+					new lvector.AGS({
+						url: serviceUrl + "/6",
+						fields: "objectid, entity_id",
+						scaleRange: [1, 11],
+						uniqueField: "objectid",
+						showAll: false,
+						singlePopup: true
+					}),
+					new lvector.AGS({
+						url: serviceUrl + "/7",
+						fields: "objectid, entity_id",
+						scaleRange: [12, 24],
+						uniqueField: "objectid",
+						singlePopup: true
+					})
+				])
+		}
+		var config = {
+			center: new L.LatLng(40.5, -105),
+			zoom: 10,
+			layers: [baseMaps.Streets]
+		}
+		
+
+		window.map = L.map('map', config)
+		
+		var layersControl = L.control.layers(baseMaps, overlays)
+		layersControl.addTo(window.map)
+	</script>
+</body>

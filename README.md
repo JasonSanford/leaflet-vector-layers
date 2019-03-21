@@ -1,3 +1,4 @@
+[![CDNJS](https://img.shields.io/cdnjs/v/wicket.svg)](https://cdnjs.com/libraries/wicket)
 ### About
 
 This library will add Leaflet vector (Point, Polyline, Polygon) layers from multiple geo web services including ArcGIS Server, GeoIQ, Arc2Earth, CartoDB, GIS Cloud, etc.
